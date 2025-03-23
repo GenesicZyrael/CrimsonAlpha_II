@@ -1,0 +1,13 @@
+-- initialize script extensions
+Duel.LoadScript("constant_ext.lua")
+Duel.LoadScript("card_counter_constants_ext.lua")
+Duel.LoadScript("utility_ext.lua")
+Duel.LoadScript("cards_specific_functions_ext.lua")
+Duel.LoadScript("proc_fusion_spell_ext.lua")
+Duel.LoadScript("proc_fusion_ext.lua")
+Duel.LoadScript("proc_ritual_ext.lua")
+Duel.LoadScript("proc_synchro_ext.lua")
+Duel.LoadScript("proc_pendulum_ext.lua")
+Duel.LoadScript("proc_link_ext.lua")
+Duel.LoadScript("custom_set_codes.lua")
+Duel.LoadScript("workaround_ext.lua")
