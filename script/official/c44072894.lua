@@ -1,6 +1,6 @@
 --物資調達員
 --Supply
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Flip

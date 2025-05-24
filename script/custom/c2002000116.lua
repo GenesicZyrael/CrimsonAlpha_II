@@ -1,7 +1,7 @@
 --Volcanic Trigger
 --(This card is always treated as a "Blaze Accelerator" card.)
 --During the Main or Battle Phase (Quick Effect): You can send this card from your hand or field to the GY. If this card is sent to the GY: Inflict 300 damage to your opponent. If this card is sent to the GY by the effect of a "Blaze Accelerator" card: You can send 1 "Volcanic" monster from your hand or Deck to the GY, except "Volcanic Trigger". You can only use this effect of "Volcanic Trigger" once per turn.
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--suicide

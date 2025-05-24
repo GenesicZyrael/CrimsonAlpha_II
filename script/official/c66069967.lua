@@ -1,7 +1,7 @@
 --占術姫ビブリオムーサ
 --Prediction Princess Bibliomuse
 --scripted by Naim
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Special Summon itself if tributed and sent to the GY

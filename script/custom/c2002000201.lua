@@ -1,5 +1,5 @@
 --Mekk-Knight Guardragon Elpy
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--pendulum summon

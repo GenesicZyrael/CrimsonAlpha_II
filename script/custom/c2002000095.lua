@@ -1,5 +1,5 @@
 --Renshaddoll Winda
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 local params={aux.FilterBoolFunction(Card.IsSetCard,SET_SHADDOLL)}
 function s.initial_effect(c)

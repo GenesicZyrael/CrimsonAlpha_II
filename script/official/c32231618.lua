@@ -1,7 +1,7 @@
 --占術姫コインノーマ
 --Prediction Princess Coinorma
 
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Special summon 1 level 3+ flip monster from hand or deck

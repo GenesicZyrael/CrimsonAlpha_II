@@ -1,6 +1,6 @@
 --占術姫コインノーマ (Anime)
 --Prediction Princess Coinorma (Anime)
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Special Summon 1 Level 4 or lower Flip monster

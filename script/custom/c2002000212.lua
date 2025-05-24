@@ -1,6 +1,6 @@
 --Worm Hope
 --Modified for CrimsonRemodels
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Cannot be used as material, except for the Special Summon of a Reptile "Worm" monster

@@ -1,6 +1,6 @@
 --魔導雑貨商人
 --Magical Merchant
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Excavate cards until you find a Spell/Trap

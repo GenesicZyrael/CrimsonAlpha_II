@@ -1,6 +1,6 @@
 --Volcanic Stinger
 --If your opponent adds a card(s) to their hand while you control a "Blaze Accelerator", except during the Draw Phase: You can Special Summon this card from your hand, and if you do, send the added card to the GY, also inflict 300 damage to your opponent. If this card is sent to the GY by the effect of a "Blaze Accelerator" card:  You can send 2 "Volcanic Stingers" from your hand and/or Deck to the GY; banish the top 3 cards of your opponent's Deck. You can only use each effect of "Volcanic Stinger" once per turn.
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--destroy drawn

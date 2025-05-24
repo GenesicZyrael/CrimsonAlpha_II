@@ -1,5 +1,5 @@
 --Amorphageum, the True King of Blight
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Activate

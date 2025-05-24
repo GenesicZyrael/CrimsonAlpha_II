@@ -1,6 +1,6 @@
 --Make Shift Blaze Accelerator
 --Discard 1 card; send 1 "Volcanic" monster from your Deck to the GY. If a "Blaze Accelerator" card(s) you control would be destroyed, you can banish this card from your GY instead. You can only activate 1 "Make Shift Blaze Accelerator" once per turn.
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--send

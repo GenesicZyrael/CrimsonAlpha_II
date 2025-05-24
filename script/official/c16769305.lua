@@ -1,7 +1,7 @@
 --魔界造車－ＧＴ１９
 --Doom-Tune - GT19
 --scripted by Naim
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Register when it's flipped face-up

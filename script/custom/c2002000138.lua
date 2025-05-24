@@ -1,6 +1,6 @@
 --Volcanic Dart
 --If this card is sent to the GY with a card effect: Inflict 300 damage to your opponent. If this card is sent to the GY by the effect of a "Blaze Accelerator" card:  You can add 1 "Volcanic" or "Blaze Accelerator" card from your Deck to your hand, except "Volcanic Dart". You can only use this effect of "Volcanic Dart" once per turn.
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--damage

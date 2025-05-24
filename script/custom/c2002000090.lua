@@ -1,5 +1,5 @@
 --Shenlong, Divinity of the Yang Zing
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	c:SetUniqueOnField(1,0,id)

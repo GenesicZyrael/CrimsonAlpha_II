@@ -1,7 +1,7 @@
 -- 擬態する人喰い虫
 -- Mimetizing Man-Eater Bug
 -- Scripted by Hatter
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	-- Flip

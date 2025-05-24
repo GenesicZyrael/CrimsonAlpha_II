@@ -1,5 +1,5 @@
 --Wynn, Charmer of Gusto
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Set 1 "Gusto" Spell/Trap or "Quill Pen of Gulldos" from your Deck

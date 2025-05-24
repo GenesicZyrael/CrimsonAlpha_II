@@ -1,6 +1,6 @@
 --超魔導破壊剣士－ブラック・パラディン
 --Dark Paladin of the Destruction Sword
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion material

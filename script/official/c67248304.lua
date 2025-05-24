@@ -3,7 +3,7 @@
 --Logical Nonsense
 
 --Substitute ID
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Change as many other monsters to face-down defense

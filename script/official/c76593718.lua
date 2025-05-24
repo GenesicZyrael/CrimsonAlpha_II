@@ -1,7 +1,7 @@
 --強欲なポッド
 --Pod of Greed
 --scripted by Naim
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Aply two effects in sequence when it is flipped

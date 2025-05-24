@@ -1,6 +1,6 @@
 --Worm Yagan
 --Modified for CrimsonRemodels
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Change 1 face-up monster on the field to face-down Defense Position

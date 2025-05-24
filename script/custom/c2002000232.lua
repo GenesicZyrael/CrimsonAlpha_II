@@ -1,5 +1,5 @@
 --Graydle Frog
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Special Summon 1 monster from your opponent's GY to their field, then equip this card to it

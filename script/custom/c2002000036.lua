@@ -1,5 +1,5 @@
 --Gishki Nekrovance
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	local rparams={handler=c,lvtype=RITPROC_GREATER,desc=aux.Stringid(id,1),forcedselection=s.forcedselection,extrafil=s.extrafil,extratg=s.extratg}

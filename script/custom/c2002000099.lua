@@ -1,6 +1,6 @@
 -- Ritual Beast Barrier
 -- When a Spell/Trap Card, or monster effect, is activated: You Banish 1 "Ritual Beast" card in your GY; negate the activation, and if you do, banish it face-down. If this card is banished from your GY: You can return 5 "Ritual Beast" cards into the Deck, from among your cards that are banished cards and/or in the GY, except "Ritual Beast Barrier"; Draw 1 card. You can only use 1 "Ritual Beast Barrier" effect per turn, and only once that turn.
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Activate(effect)

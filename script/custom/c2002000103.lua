@@ -6,7 +6,7 @@
 -- Monster Zones, except during the turn this card was sent to the GY: You can banish this card 
 -- from your GY; Special Summon 2 "Qliphort Tokens" (Machine/EARTH/Level 4/ATK 1800/DEF 1000).
 -- You can only activate 1 "Apoqliphort Advent" once per turn.
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Activate

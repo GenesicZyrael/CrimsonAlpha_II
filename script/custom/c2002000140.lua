@@ -1,7 +1,7 @@
 --Volcanic Mine
 --(This is always treated as a "Blaze Accelerator" card.)
 --If this card is sent from the field to the GY (by battle or card effect): You can send 1 "Volcanic" monster from your hand or Deck to the GY, then inflict 500 damage to your opponent. You can only use this effect of "Volcanic Mine" once per turn.
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--search

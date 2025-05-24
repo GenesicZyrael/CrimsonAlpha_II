@@ -1,5 +1,5 @@
 --Chosen of the Tistina
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Special Summon this card

@@ -1,5 +1,5 @@
 --Symphonic Warrior Tambours
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	-- Add 1 "Symph Amplifier" or a card that mentions it

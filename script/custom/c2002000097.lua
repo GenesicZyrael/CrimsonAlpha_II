@@ -1,5 +1,5 @@
 --Shaddoll Wyvern
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--FLIP: Destroy 1 "Shaddoll" to Special Summon a "Shaddoll" with a different Attribute

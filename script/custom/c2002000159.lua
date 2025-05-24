@@ -2,7 +2,7 @@
 --This card can be used as a substitute for any 1 Fusion Material whose name is specifically listed on the Fusion Monster Card, but the other Fusion Material(s) must be correct. You can reveal 1 "HERO" Fusion Monster from your Extra Deck; Special Summon 1 monster from your Deck whose name is specifically listed on that card as Fusion Material, then you can apply this effect.
 --● Fusion Summon 1 "HERO" Fusion Monster from your Extra Deck, by banishing Fusion Materials you control, including this card.
 --You can only use this effect of "Elemental HERO Prisman Prime" once per turn.
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--fusion substitute

@@ -1,6 +1,6 @@
 --Worm Xex
 --Modified for CrimsonRemodels
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Cannot be used as material for a monster from the Extra Deck, unless all other materials are "Worm" monsters

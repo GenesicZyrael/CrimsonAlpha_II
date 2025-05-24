@@ -7,7 +7,7 @@
 -- Monster you control leaves the field; You can Special Summon the 
 -- Fusion Material Monsters listed on that card from your hand, Deck or 
 -- GY. You can only use this effect of "Hyper Neo Space" once per turn.
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Activate

@@ -4,7 +4,7 @@
 --● Target up to 2 "Qli" cards in your Pendulum Zones; Special Summon them.
 --● Place up to 2 face-up "Qli" Pendulum Monsters from your Extra Deck to your Pendulum Zones.
 --You cannot Special Summon monsters during the turn you activate this card, except "Qli" monsters. You can only activate 1 "Qlient Re-Access" once per turn.
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Activate

@@ -1,6 +1,6 @@
 --赤い忍者
 --Crimson Ninja
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Destroy 1 Set Trap card

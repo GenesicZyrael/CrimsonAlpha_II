@@ -1,6 +1,6 @@
 --聖なる守り手
 --Mysterious Guard
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Return to the top of the Deck or Deck & hand

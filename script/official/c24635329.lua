@@ -1,7 +1,7 @@
 --聖なる影 ケイウス
 --Qadoshaddoll Keios
 --Modified for CrimsonAlpha
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--FLIP: Special summon "Shaddoll" monster from hand

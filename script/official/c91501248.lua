@@ -1,6 +1,6 @@
 --禁忌の壺
 --Pot of The Forbidden
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--FLIP: Activate one of the forbidden effects

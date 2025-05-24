@@ -1,6 +1,6 @@
 --Volcanic Seeker
 --If your opponent takes damage from a card effect while this card is in the GY: You can Special Summon this card from your GY, then inflict 300 damage to your opponent. If this card is sent to the GY by the effect of a "Blaze Accelerator" card:  You can destroy 1 random card in your opponent's hand. You can only use this effect of "Volcanic Seeker" once per turn.
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--special summon

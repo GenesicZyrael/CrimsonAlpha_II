@@ -1,6 +1,6 @@
 --Omega Blaze Accelerator
 --When this card is activated: Add 1 "Volcanic" monster from your Deck to your hand. Each time your opponent takes damage from a card effect, place 1 Blaze Counter on this card. "Volcanic" monsters you control gain 100 ATK for each Blaze Counter on this card. During the Main Phase: You can send this card to the GY; Special Summon 1 "Volcanic" monster from your hand or Deck, whose Level is less than or equal to the number of Blaze Counters this card had on the field, ignoring its Summoning Conditions. You can only activate 1 "Omega Blaze Accelerator" once per turn.
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	c:EnableCounterPermit(COUNTER_BLAZE)

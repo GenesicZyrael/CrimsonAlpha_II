@@ -4,7 +4,7 @@
 -- are negated and it's ATK and DEF becomes 0. You can banish this card and 2 monsters in your 
 -- GY with the same Attribute; Special Summon 1 "Familiar-Possessed" monster from your Deck 
 -- or GY. You can only use each effect of "Charming Spirit Art - Shokan" once per turn.
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Activate

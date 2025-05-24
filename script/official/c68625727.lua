@@ -1,7 +1,7 @@
 --占術姫ペタルエルフ
 --Prediction Princess Petalelf
 
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Change opponent's attack position monsters to defense position

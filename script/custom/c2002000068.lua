@@ -1,5 +1,5 @@
 -- Gem-Knight Angel Quartz
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 local params = {nil,nil,function(e,tp,mg) return Group.CreateGroup(),s.fcheck end}
 function s.initial_effect(c)

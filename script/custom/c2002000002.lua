@@ -2,7 +2,7 @@
 --3+ Pyro Monsters
 --This card is always treated as a "Blaze Accelerator" card.)
 --When your opponent activates a card or effect, while you have a "Volcanic" card on your hand (Quick Effect): You can negate the activation, and if you do that, destroy it, and if you do that, send 1 "Volcanic" card from your hand to the GY. You can only use this effect of "Volcanic Blaze Dragon" once per turn.
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	Link.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsRace,RACE_PYRO),3)

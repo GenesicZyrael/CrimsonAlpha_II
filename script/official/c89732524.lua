@@ -1,6 +1,6 @@
 --魔界発冥界行きバス
 --Tour Bus To Forbidden Realms
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Search 1 non-LIGHT and non-DARK monster

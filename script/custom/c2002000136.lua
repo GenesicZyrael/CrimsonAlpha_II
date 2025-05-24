@@ -1,5 +1,5 @@
 --Odd-Eyes Hyperlink Dragon
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 local TYPES=TYPE_FUSION+TYPE_RITUAL+TYPE_SYNCHRO+TYPE_XYZ+TYPE_PENDULUM
 function s.initial_effect(c)

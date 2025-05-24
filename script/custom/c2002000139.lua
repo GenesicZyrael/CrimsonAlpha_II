@@ -1,6 +1,6 @@
 --Advanced Tactics
 --Special Summon 1 Level 10 monster that requires 3 or more Tributes to be Normal Summoned/Set from your hand in face-down Defense Position, ignoring its Summoning Conditions, and if you do, add 1 monster with the same name from your Deck. You can treat the Summoned monster as 3 Tributes for the Tribute Summon of a monster during this turn. For the rest of this turn after you activate this card, you cannot Special Summon from the Extra Deck. You can only activate 1 "Advanced Tactics" once per turn.
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--

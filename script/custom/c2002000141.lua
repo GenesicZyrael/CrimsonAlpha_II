@@ -1,6 +1,6 @@
 --Terra Firma Magna Slash!
 --When a card or effect is activated, while you control "Elemental HERO Terra Firma": You can negate the activation, and if you do, destroy it, then you can look at your opponent's hand, and if you do that, return 1 card from your opponent's hand, field or GY, to the Deck. You can only activate 1 "Terra Firma Magna Slash!" once per turn
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Activate(effect)

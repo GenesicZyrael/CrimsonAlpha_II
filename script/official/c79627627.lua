@@ -1,7 +1,7 @@
 --Japanese name
 --Conbirdable
 --scripted by Naim
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Special Summon 1 Level 5 or higher Flip monster from your Deck

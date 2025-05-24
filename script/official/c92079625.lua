@@ -1,7 +1,7 @@
 --影依の炎核 ヴォイド
 --Hellshaddoll Void
 --Modified for CrimsonAlpha
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Banish 1 of opponent's monsters

@@ -1,5 +1,5 @@
 --Sorcerer of Chaos Magic
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	-- 2 Level 9 monsters

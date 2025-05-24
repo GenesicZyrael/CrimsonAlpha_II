@@ -1,6 +1,6 @@
 --Worm Gulse
 --Modified for CrimsonRemodels
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Special Summon 1 Reptile "Worm" monster from your hand in face-up or face-down Defense Position, except "Worm Gulse"

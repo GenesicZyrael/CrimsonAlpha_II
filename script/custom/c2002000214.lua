@@ -1,6 +1,6 @@
 --Worm Barses
 --Modified for CrimsonRemodels
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--Negate Spell/Trap or effect

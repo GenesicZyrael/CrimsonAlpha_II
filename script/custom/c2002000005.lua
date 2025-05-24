@@ -1,6 +1,6 @@
 --Volcanic Nemo
 --If this card is sent to the GY with a card effect: Inflict 300 damage to your opponent. If this card is sent to the GY by the effect of a "Blaze Accelerator" card:  You can Special Summon 1 Level 4 or Lower "Volcanic" monster from your Deck, except "Volcanic Nemo". You can only use this effect of "Volcanic Nemo" once per turn.
-Duel.LoadScript("_load_.lua")
+
 local s,id=GetID()
 function s.initial_effect(c)
 	--damage
