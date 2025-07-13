@@ -73,7 +73,6 @@ function s.discost2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_HAND,0,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DISCARD)
 	local g=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_HAND,0,1,1,nil)
-	g:AddCard(e:GetHandler())
 	Duel.SendtoGrave(g,REASON_DISCARD+REASON_COST)
 end
 function s.disop(e,tp,eg,ep,ev,re,r,rp)
