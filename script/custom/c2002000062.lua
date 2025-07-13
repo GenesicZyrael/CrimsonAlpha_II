@@ -72,7 +72,7 @@ function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local sg=aux.SelectUnselectGroup(g,e,tp,3,3,s.tgcheck,1,tp,HINTMSG_ATOHAND)
 	Duel.SetTargetCard(sg)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,sg,3,tp,0)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,sg,1,tp,0)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,sg,2,tp,0)
 end
