@@ -1,5 +1,4 @@
 --Graydle Guardian
-
 local s,id=GetID()
 function s.initial_effect(c)
 	--Special Summon itself from your hand or GY
@@ -25,7 +24,7 @@ function s.initial_effect(c)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetHintTiming(0,TIMINGS_CHECK_MONSTER_E)
 	e2:SetCountLimit(1,{id,1})
-	e2:SetCost(aux.SelfToGraveCost)
+	e2:SetCost(Cost.SelfToGrave)
 	e2:SetTarget(s.eqtg)
 	e2:SetOperation(s.eqop)
 	c:RegisterEffect(e2)

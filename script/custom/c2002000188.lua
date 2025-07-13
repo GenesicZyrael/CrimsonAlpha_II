@@ -1,5 +1,4 @@
 --Sorcerer of Chaos Magic
-
 local s,id=GetID()
 function s.initial_effect(c)
 	-- 2 Level 9 monsters
@@ -94,7 +93,7 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 		r2:SetType(EFFECT_TYPE_IGNITION)
 		r2:SetRange(LOCATION_MZONE)
 		r2:SetCountLimit(1,{id,1})
-		r2:SetCost(aux.AND(aux.dxmcostgen(1,1,nil),s.copycost))
+		r2:SetCost(aux.AND(Cost.Detach(1,1,nil),s.copycost))
 		r2:SetTarget(s.copytg)
 		r2:SetOperation(s.copyop)
 	c:RegisterEffect(r2)

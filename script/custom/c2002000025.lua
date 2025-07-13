@@ -1,5 +1,4 @@
 --Ally of Justice Towers Reqlica
-
 local s,id=GetID()
 function s.initial_effect(c)
 	--synchro summon
@@ -46,7 +45,8 @@ function s.econ(e)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_SYNCHRO)
 end
 function s.efilter(e,te)
-	return (te:IsActiveType(TYPE_MONSTER) and te:GetHandler():IsAttribute(ATTRIBUTE_LIGHT)) 
+	return (te:IsActiveType(TYPE_MONSTER) 
+		and (te:GetHandler():IsAttribute(ATTRIBUTE_LIGHT)) or te:GetHandler():IsType(TYPE_FLIP)))
 		and te:IsActivated() and te:GetOwner()~=e:GetOwner()
 end
 function s.adtg(e,c)

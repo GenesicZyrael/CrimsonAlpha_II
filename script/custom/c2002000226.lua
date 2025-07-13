@@ -1,6 +1,5 @@
 --Worm Victory
 --Modified for CrimsonRemodels
-
 local s,id=GetID()
 function s.initial_effect(c)
 	Xyz.AddProcedure(c,nil,7,2)
@@ -39,7 +38,7 @@ function s.initial_effect(c)
 	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e3:SetRange(LOCATION_MZONE)
 	e3:SetCountLimit(1,id)
-	e3:SetCost(aux.dxmcostgen(1,s.mxmc,s.slwc))
+	e3:SetCost(Cost.Detach(1,s.mxmc,s.slwc))
 	e3:SetTarget(s.destg)
 	e3:SetOperation(s.desop)
 	c:RegisterEffect(e3,false,REGISTER_FLAG_DETACH_XMAT)

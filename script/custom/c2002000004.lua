@@ -1,5 +1,4 @@
 --Toon Mastermillion
-
 local s,id=GetID()
 function s.initial_effect(c)
 	local e0=Toon.CreateProc(c,LOCATION_GRAVE)
@@ -9,7 +8,7 @@ function s.initial_effect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
 	e1:SetType(EFFECT_TYPE_IGNITION)
-	e1:SetRange(LOCATION_MZONE+LOCATION_HAND)
+	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,{id,1})
 	e1:SetCost(s.thcost)
 	e1:SetTarget(s.thtg)

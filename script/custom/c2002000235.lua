@@ -1,5 +1,4 @@
 --Qliphort Compiler
-
 local s,id=GetID()
 function s.initial_effect(c)
 	c:EnableReviveLimit()
@@ -50,7 +49,7 @@ function s.initial_effect(c)
 	e4:SetRange(LOCATION_MZONE)
 	e4:SetHintTiming(0,TIMINGS_CHECK_MONSTER_E)
 	e4:SetCountLimit(1,id)
-	e4:SetCost(aux.dxmcostgen(1,1,nil))
+	e4:SetCost(Cost.Detach(1,1,nil))
 	e4:SetTarget(s.thtg)
 	e4:SetOperation(s.thop)
 	c:RegisterEffect(e4)

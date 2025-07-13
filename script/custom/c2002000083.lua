@@ -1,5 +1,4 @@
 --Zefratorah Metaltron
-
 local s,id=GetID()
 function s.initial_effect(c)
 	local rparams= {handler=c,
@@ -58,6 +57,11 @@ function s.initial_effect(c)
 	c:RegisterEffect(e6)
 end
 s.listed_series={SET_ZEFRA}
+function s.desfilter(c,e,tp)
+	return c:IsSetCard(SET_ZEFRA)
+		and ( c:IsLocation(LOCATION_HAND)
+		  or  c:IsLocation(LOCATION_ONFIELD) and c:IsFaceup() )
+end
 function s.spfilter(c,e,tp)
 	return c:IsSetCard(SET_ZEFRA)
 		and c:IsLevelBelow(6)
@@ -66,9 +70,15 @@ end
 function s.destg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	local loc=LOCATION_HAND+LOCATION_ONFIELD
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then loc=LOCATION_ONFIELD end
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then
+		if Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsSetCard,SET_ZEFRA),tp,LOCATION_MZONE,0,1,nil) then 
+			loc=LOCATION_MZONE 
+		else
+			return
+		end
+	end
 	if chk==0 then 
-		return Duel.IsExistingMatchingCard(nil,tp,loc,0,1,nil)
+		return Duel.IsExistingMatchingCard(s.desfilter,tp,loc,0,1,nil,e,tp)
 			and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_DECK,0,1,nil,e,tp) end
 	local g=Duel.GetMatchingGroup(nil,tp,loc,0,nil)
 	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,1,0,0)
@@ -79,9 +89,15 @@ function s.desop(e,tp,eg,ep,ev,re,r,rp)
 	if not c:IsRelateToEffect(e) then return end
 	local loc=LOCATION_HAND+LOCATION_ONFIELD
 	local op=nil
-	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then loc=LOCATION_ONFIELD end
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then
+		if Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsSetCard,SET_ZEFRA),tp,LOCATION_MZONE,0,1,nil) then 
+			loc=LOCATION_MZONE 
+		else
+			return
+		end
+	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-	local g=Duel.SelectMatchingCard(tp,nil,tp,loc,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,s.desfilter,tp,loc,0,1,1,nil,e,tp)
 	if g:GetCount()>0 and Duel.Destroy(g,REASON_EFFECT)~=0 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 		local tc=Duel.SelectMatchingCard(tp,s.spfilter,tp,LOCATION_DECK,0,1,1,nil,e,tp):GetFirst()

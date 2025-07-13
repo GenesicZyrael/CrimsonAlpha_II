@@ -1,5 +1,4 @@
---Spiritual Beast Gusto Falco
-
+--Spiritual Beast Falco
 local s,id=GetID() 
 function s.initial_effect(c)
 	c:SetSPSummonOnce(id)
@@ -29,16 +28,8 @@ function s.initial_effect(c)
 	local e3=e2:Clone()
 	e3:SetCode(EVENT_SUMMON_SUCCESS)
 	c:RegisterEffect(e3)
-	--Can be treated as level 3 for a Synchro Summon
-	local e4=Effect.CreateEffect(c)
-	e4:SetType(EFFECT_TYPE_SINGLE)
-	e4:SetRange(LOCATION_ONFIELD)
-	e4:SetCode(EFFECT_SYNCHRO_LEVEL)
-	e4:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_CANNOT_NEGATE)
-	e4:SetValue(s.slevel)
-	c:RegisterEffect(e4)
 end
-s.listed_series={SET_RITUAL_BEAST,SET_RITUAL_BEAST_TAMER,SET_GUSTO}
+s.listed_series={SET_RITUAL_BEAST,SET_RITUAL_BEAST_TAMER}
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetFieldGroupCount(tp,LOCATION_MZONE,0)==0
 end
@@ -59,13 +50,13 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.tkntg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsPlayerCanSpecialSummonMonster(tp,2002000109,SET_RITUAL_BEAST_TAMER|SET_GUSTO,0x4011,200,1000,2,RACE_PSYCHIC,ATTRIBUTE_WIND) end
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,2002000109,SET_RITUAL_BEAST_TAMER,0x4011,200,1000,2,RACE_PSYCHIC,ATTRIBUTE_WIND) end
 	Duel.SetOperationInfo(0,CATEGORY_TOKEN,nil,1,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,0,0)
 end
 function s.tknop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsPlayerCanSpecialSummonMonster(tp,2002000109,SET_RITUAL_BEAST_TAMER|SET_GUSTO,0x4011,200,1000,2,RACE_PSYCHIC,ATTRIBUTE_WIND) then
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,2002000109,SET_RITUAL_BEAST_TAMER,0x4011,200,1000,2,RACE_PSYCHIC,ATTRIBUTE_WIND) then
 			local token=Duel.CreateToken(tp,2002000109)
 			Duel.SpecialSummonStep(token,0,tp,tp,false,false,POS_FACEUP_DEFENSE)
 			local e1=Effect.CreateEffect(e:GetHandler())
@@ -98,5 +89,5 @@ function s.slevel(e,c)
 end
 function s.matlimit(e,c)
 	if not c then return false end
-	return not (c:IsSetCard(SET_RITUAL_BEAST) or c:IsSetCard(SET_GUSTO))
+	return not c:IsSetCard(SET_RITUAL_BEAST)
 end
