@@ -28,7 +28,7 @@ function s.initial_effect(c)
 	c2:SetRange(LOCATION_MZONE)
 	c2:SetCountLimit(1,{id,2})
 	c2:SetCondition(aux.NekrozOuroCheck)
-	c2:SetCost(aux.SelfTributeCost)
+	c2:SetCost(Cost.SelfTribute)
 	c:RegisterEffect(c2)
 	--todeck
 	local e3=Effect.CreateEffect(c)

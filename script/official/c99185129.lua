@@ -21,7 +21,7 @@ function s.initial_effect(c)
 	e2:SetRange(LOCATION_HAND)
 	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
 	e2:SetCountLimit(1,id)
-	e2:SetCost(s.thcost)
+	e2:SetCost(Cost.SelfDiscard)
 	e2:SetTarget(s.thtg)
 	e2:SetOperation(s.thop)
 	c:RegisterEffect(e2)
@@ -29,7 +29,7 @@ function s.initial_effect(c)
 	c2:SetRange(LOCATION_MZONE)
 	c2:SetCountLimit(1,{id,2})
 	c2:SetCondition(aux.NekrozOuroCheck)
-	c2:SetCost(aux.SelfTributeCost)
+	c2:SetCost(Cost.SelfTribute)
 	c:RegisterEffect(c2)
 	--Negate effects and decrease ATK
 	local e3=Effect.CreateEffect(c)
@@ -47,10 +47,6 @@ function s.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 s.listed_series={0xb4}
-function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():IsDiscardable() end
-	Duel.SendtoGrave(e:GetHandler(),REASON_COST+REASON_DISCARD)
-end
 function s.thfilter(c)
 	return c:IsSetCard(0xb4) and c:IsSpellTrap() and c:IsAbleToHand()
 end
