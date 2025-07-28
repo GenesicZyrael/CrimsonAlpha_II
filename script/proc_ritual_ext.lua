@@ -57,12 +57,20 @@ function Ritual.UseExtraLocationCountLimit(c,rc,tp)
 		end
 	end
 end
+function Ritual.GetExtraLocation(c,rc,tp)
+	local extra_loc_eff=Ritual.GetExtraLocationEffect(c,rc)
+	local extra_loc=extra_loc_eff:GetTargetRange()
+	if not extra_loc then return LOCATION_NOTHAND end
+	return extra_loc
+end
 function Ritual.ExtraLocFilter(c,filter,_type,e,tp,m,m2,forcedselection,specificmatfilter,lv,requirementfunc,sumpos,booltype,reqfunc)
 	if not (c:IsOriginalType(TYPE_RITUAL) and c:IsOriginalType(TYPE_MONSTER)) or (filter and not filter(c)) or not c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_RITUAL,tp,false,true,sumpos) then return false end
 	local extra_loc_eff,used=Ritual.ExtraLocationOPTCheck(c,e:GetHandler(),tp)
 	if not extra_loc_eff or extra_loc_eff and used then return false end
 	if extra_loc_eff:GetProperty()&EFFECT_FLAG_GAIN_ONLY_ONE_PER_TURN>0 and Duel.HasFlagEffect(tp,EFFECT_FLAG_GAIN_ONLY_ONE_PER_TURN) then return false end
-	
+	local extra_loc=Ritual.GetExtraLocation(c,e:GetHandler(),tp)
+	if not c:IsLocation(extra_loc) then return false end
+
 	local lv=(lv and (type(lv)=="function" and lv(c)) or lv) or c:GetLevel()
 	lv=math.max(1,lv)
 	Ritual.SummoningLevel=lv
