@@ -36,6 +36,8 @@ function s.initial_effect(c)
 	e3:SetOperation(s.spop)
 	c:RegisterEffect(e3)
 end
+s.listed_series={SET_DRAGUNITY}
+s.listed_names={62265044}
 function s.cfilter(c)
 	return c:IsFaceup() and (c:IsSetCard(SET_DRAGUNITY) or c:IsCode(62265044))
 end
