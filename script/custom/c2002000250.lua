@@ -2,7 +2,7 @@
 local s,id=GetID()
 function s.initial_effect(c)
 	--Synchro summon
-	Synchro.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsSetCard,SET_DRAGUNITY),1,1,Synchro.NonTuner(nil),1,99)
+	Synchro.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsSetCard,SET_DRAGUNITY),1,99,Synchro.NonTuner(nil),1,99)
 	c:EnableReviveLimit()
 	--Banish 1 Tuner and non-Tuner to Special Summon a "Dragunity" Synchro
 	local e1=Effect.CreateEffect(c)
