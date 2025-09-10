@@ -130,6 +130,9 @@ end
 function s.mattg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 end
+function s.filter(c)
+	return c:IsFaceup() and c:IsNegatable() and not c:IsSetCard(SET_APOQLIPHORT) 
+end
 function s.matop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=eg:GetFirst()
 	if not tc then return end
@@ -147,7 +150,7 @@ function s.matop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoGrave(sg,REASON_EFFECT)
 	end
 	if ct>=3 then
-		local g=Duel.GetMatchingGroup(Card.IsNegatable,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,c)
+		local g=Duel.GetMatchingGroup(s.filter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)
 		if  #g==0 then return end
 		for tc in g:Iter() do
 			tc:NegateEffects(c,RESET_EVENT|RESETS_STANDARD_PHASE_END,true)
