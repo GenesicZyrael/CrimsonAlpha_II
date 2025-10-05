@@ -1,8 +1,6 @@
 --竜星因士－セフィラツバーン
 --Satellarknight Zefrathuban
 --Modified for CrimsonAlpha
-
-
 local s,id=GetID()
 function s.initial_effect(c)
 	--Pendulum Summon procedure
