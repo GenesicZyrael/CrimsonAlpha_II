@@ -11,7 +11,7 @@ function s.initial_effect(c)
 	e1:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
 	e1:SetOperation(s.valtg)
 	e1:SetOperation(s.valop)
-	c:RegisterEffect(e1,false,CUSTOM_REGISTER_FLIP)
+	c:RegisterEffect(e1)
 	--Gain ATK/DEF + Targeting Immunity
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,1))

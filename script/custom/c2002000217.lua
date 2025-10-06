@@ -35,7 +35,7 @@ function s.initial_effect(c)
 	e3:SetCountLimit(1,{id,1})
 	e3:SetTarget(s.sptg)
 	e3:SetOperation(s.spop)
-	c:RegisterEffect(e3,false,CUSTOM_REGISTER_FLIP)
+	c:RegisterEffect(e3)
 	--Place this card in your Pendulum Zone
 	local e4=Effect.CreateEffect(c)
 	e4:SetDescription(aux.Stringid(id,2))

@@ -14,7 +14,7 @@ function s.initial_effect(c)
 	e1:SetCountLimit(1,id)
 	e1:SetTarget(s.postg)
 	e1:SetOperation(s.posop)
-	c:RegisterEffect(e1,false,CUSTOM_REGISTER_FLIP)
+	c:RegisterEffect(e1)
 	--Send 1 Reptile "Worm" monster from your Deck to the GY
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))

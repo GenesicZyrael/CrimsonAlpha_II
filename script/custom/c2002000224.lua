@@ -12,7 +12,7 @@ function s.initial_effect(c)
 	e1:SetCountLimit(1,id)
 	e1:SetTarget(s.cntg)
 	e1:SetOperation(s.cnop)
-	c:RegisterEffect(e1,false,CUSTOM_REGISTER_FLIP)
+	c:RegisterEffect(e1)
 	--Add 1 "Worm" or "W Nebula" card from your GY to your hand
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
