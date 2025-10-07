@@ -38,8 +38,11 @@ function s.initial_effect(c)
 	e5:SetRange(LOCATION_MZONE)
 	e5:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e5:SetCountLimit(1)
-	e5:SetTarget(s.target(rittg,ritop))
-	e5:SetOperation(s.operation(rittg,ritop))
+	-- e5:SetTarget(s.target(rittg,ritop))
+	-- e5:SetOperation(s.operation(rittg,ritop))
+	-- e5:SetCost(s.applycost)
+	e5:SetTarget(s.applytg)
+	e5:SetOperation(s.applyop)
 	c:RegisterEffect(e5)
 	--to deck
 	local e6=Effect.CreateEffect(c)
@@ -151,77 +154,77 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp,c)
 	g:DeleteGroup()
 end
 
-function s.filter(c,tp)
-	if not (c:IsSetCard(SET_ZEFRA) and c:IsType(TYPE_PENDULUM)
-		and c:IsHasEffect(id)) then
-		return false
-	end
-	if c:IsCode(84388461) and c:IsHasEffect(id) then return true end
-	local eff=c:GetCardEffect(id)
-	local te=eff:GetLabelObject()
-	local con=te:GetCondition()
-	local tg=te:GetTarget()
-	if (not tg or tg(te,tp,Group.CreateGroup(),PLAYER_NONE,0,eff,REASON_EFFECT,PLAYER_NONE,0)) then
-		return true
-	end
-	return false
-end
-function s.target(rittg,ritop)
-	return function(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-		local c=e:GetHandler()
-		if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_GRAVE|LOCATION_DECK,0,1,nil,tp) end
-		local sc=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.filter),tp,LOCATION_GRAVE|LOCATION_DECK,0,1,1,nil,tp):GetFirst()
-		if sc then 
-			Duel.SendtoExtraP(sc,tp,REASON_EFFECT)
-			sc:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD+RESET_CHAIN,0,1)
-			e:SetLabelObject(sc:GetCardEffect(id):GetLabelObject())
-			if sc:IsCode(84388461) and rittg(e,tp,eg,ep,ev,re,r,rp,0) then 
-				e:SetLabel(sc:GetCode())
-				return rittg(e,tp,eg,ep,ev,re,r,rp,0)
-			end
-			local te=e:GetLabelObject()
-			local tg=te and te:GetTarget() or nil
-			if chkc then return tg and tg(e,tp,eg,ep,ev,re,r,rp,0,chkc) end
-			e:SetLabel(te:GetLabel())
-			e:SetLabelObject(te:GetLabelObject())
-			e:SetProperty(te:IsHasProperty(EFFECT_FLAG_CARD_TARGET) and EFFECT_FLAG_CARD_TARGET or 0)
-			if tg then
-				tg(e,tp,eg,ep,ev,re,r,rp,1)
-			end
-			e:SetLabelObject(te)
-			Duel.ClearOperationInfo(0)
-		end 
-	end
-end
-function s.operation(rittg,ritop)
-	return function(e,tp,eg,ep,ev,re,r,rp)
-		local c=e:GetHandler()
-		local tc=e:GetLabel()
-		-- Zefrasaber work-around
-		if tc==84388461 and rittg(e,tp,eg,ep,ev,re,r,rp,0) then 
-			ritop(e,tp,eg,ep,ev,re,r,rp)	
-			return 
-		end
-		local te=e:GetLabelObject()
-		if not te then return end
-		local sc=te:GetHandler()
-		if sc:GetFlagEffect(id)==0 then
-			e:SetLabel(0)
-			e:SetLabelObject(nil)
-			return
-		end
-		e:SetLabel(te:GetLabel())
-		e:SetLabelObject(te:GetLabelObject())
-		local op=te:GetOperation()
-		if op then
-			op(e,tp,Group.CreateGroup(),PLAYER_NONE,0,e,REASON_EFFECT,PLAYER_NONE)
-		end
-		e:SetLabel(0)
-		e:SetLabelObject(nil)
-		-- Deprecated
-		-- s.actlimit(e,tp,eg,ep,ev,re,r,rp)
-	end
-end
+-- function s.filter(c,tp)
+	-- if not (c:IsSetCard(SET_ZEFRA) and c:IsType(TYPE_PENDULUM)
+		-- and c:IsHasEffect(id)) then
+		-- return false
+	-- end
+	-- if c:IsCode(84388461) and c:IsHasEffect(id) then return true end
+	-- local eff=c:GetCardEffect(id)
+	-- local te=eff:GetLabelObject()
+	-- local con=te:GetCondition()
+	-- local tg=te:GetTarget()
+	-- if (not tg or tg(te,tp,Group.CreateGroup(),PLAYER_NONE,0,eff,REASON_EFFECT,PLAYER_NONE,0)) then
+		-- return true
+	-- end
+	-- return false
+-- end
+-- function s.target(rittg,ritop)
+	-- return function(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+		-- local c=e:GetHandler()
+		-- if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_GRAVE|LOCATION_DECK,0,1,nil,tp) end
+		-- local sc=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.filter),tp,LOCATION_GRAVE|LOCATION_DECK,0,1,1,nil,tp):GetFirst()
+		-- if sc then 
+			-- Duel.SendtoExtraP(sc,tp,REASON_EFFECT)
+			-- sc:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD+RESET_CHAIN,0,1)
+			-- e:SetLabelObject(sc:GetCardEffect(id):GetLabelObject())
+			-- if sc:IsCode(84388461) and rittg(e,tp,eg,ep,ev,re,r,rp,0) then 
+				-- e:SetLabel(sc:GetCode())
+				-- return rittg(e,tp,eg,ep,ev,re,r,rp,0)
+			-- end
+			-- local te=e:GetLabelObject()
+			-- local tg=te and te:GetTarget() or nil
+			-- if chkc then return tg and tg(e,tp,eg,ep,ev,re,r,rp,0,chkc) end
+			-- e:SetLabel(te:GetLabel())
+			-- e:SetLabelObject(te:GetLabelObject())
+			-- e:SetProperty(te:IsHasProperty(EFFECT_FLAG_CARD_TARGET) and EFFECT_FLAG_CARD_TARGET or 0)
+			-- if tg then
+				-- tg(e,tp,eg,ep,ev,re,r,rp,1)
+			-- end
+			-- e:SetLabelObject(te)
+			-- Duel.ClearOperationInfo(0)
+		-- end 
+	-- end
+-- end
+-- function s.operation(rittg,ritop)
+	-- return function(e,tp,eg,ep,ev,re,r,rp)
+		-- local c=e:GetHandler()
+		-- local tc=e:GetLabel()
+		-- -- Zefrasaber work-around
+		-- if tc==84388461 and rittg(e,tp,eg,ep,ev,re,r,rp,0) then 
+			-- ritop(e,tp,eg,ep,ev,re,r,rp)	
+			-- return 
+		-- end
+		-- local te=e:GetLabelObject()
+		-- if not te then return end
+		-- local sc=te:GetHandler()
+		-- if sc:GetFlagEffect(id)==0 then
+			-- e:SetLabel(0)
+			-- e:SetLabelObject(nil)
+			-- return
+		-- end
+		-- e:SetLabel(te:GetLabel())
+		-- e:SetLabelObject(te:GetLabelObject())
+		-- local op=te:GetOperation()
+		-- if op then
+			-- op(e,tp,Group.CreateGroup(),PLAYER_NONE,0,e,REASON_EFFECT,PLAYER_NONE)
+		-- end
+		-- e:SetLabel(0)
+		-- e:SetLabelObject(nil)
+		-- -- Deprecated
+		-- -- s.actlimit(e,tp,eg,ep,ev,re,r,rp)
+	-- end
+-- end
 function s.tdcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if not Duel.CheckLocation(1-tp,LOCATION_PZONE,0) 
 		and not Duel.CheckLocation(1-tp,LOCATION_PZONE,1) then return end
@@ -287,4 +290,98 @@ end
 function s.splimfilter(e,c) 
 	return c:IsType(TYPE_PENDULUM) 
 		and not c:IsSetCard(SET_ZEFRA) 
+end
+
+function s.filter(c,e,tp)
+	if not (c:IsSetCard(SET_ZEFRA) and c:IsType(TYPE_MONSTER) and c:IsType(TYPE_PENDULUM)) then return false end
+	local effs={c:GetOwnEffects()}
+	for _,eff in ipairs(effs) do
+		if eff:HasPendulumSummonCondition() then
+		-- if eff:GetCode()==EVENT_SPSUMMON_SUCCESS  then
+			-- local con=eff:GetCondition()
+			local tg=eff:GetTarget()
+			if (con==nil or con(eff,tp,Group.CreateGroup(),PLAYER_NONE,0,e,REASON_EFFECT,PLAYER_NONE,0))
+				and (tg==nil or tg(eff,tp,Group.CreateGroup(),PLAYER_NONE,0,e,REASON_EFFECT,PLAYER_NONE,0)) then
+				return true
+			end
+		end
+	end
+	return false
+end
+
+function s.applytg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_DECK|LOCATION_GRAVE,0,1,nil,e,tp) end
+	local rg=Duel.GetMatchingGroup(s.filter,tp,LOCATION_DECK|LOCATION_GRAVE,0,nil,e,tp)
+	for rc in aux.Next(rg) do
+		local effs={rc:GetOwnEffects()}
+		for _,eff in ipairs(effs) do
+			if eff:HasPendulumSummonCondition() then
+				-- local con=eff:GetCondition()
+				local tg=eff:GetTarget()
+				if (con==nil or con(eff,tp,Group.CreateGroup(),PLAYER_NONE,0,e,REASON_EFFECT,PLAYER_NONE,0))
+					and (tg==nil or tg(eff,tp,Group.CreateGroup(),PLAYER_NONE,0,e,REASON_EFFECT,PLAYER_NONE,0)) then
+					return true
+				end
+			end
+		end
+	end
+	return false
+end
+function s.applyop(e,tp,eg,ep,ev,re,r,rp)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_DECK|LOCATION_GRAVE,0,1,nil,e,tp) end
+	local rc=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.filter),tp,LOCATION_DECK|LOCATION_GRAVE,0,1,1,nil,e,tp):GetFirst()
+	Duel.SendtoExtraP(rc,tp,REASON_EFFECT)
+	local available_effs={}
+	local effs={rc:GetOwnEffects()}
+	for _,eff in ipairs(effs) do
+		if eff:HasPendulumSummonCondition() then
+			-- local con=eff:GetCondition()
+			local tg=eff:GetTarget()
+			if (con==nil or con(eff,tp,Group.CreateGroup(),PLAYER_NONE,0,e,REASON_EFFECT,PLAYER_NONE,0))
+				and (tg==nil or tg(eff,tp,Group.CreateGroup(),PLAYER_NONE,0,e,REASON_EFFECT,PLAYER_NONE,0)) then
+				table.insert(available_effs,eff)
+			end
+		end
+	end
+	-- e:SetLabelObject(available_effs)
+	
+	-- if chkc then
+		-- local eff=e:GetLabelObject()
+		-- return eff and eff:GetTarget() and eff:GetTarget()(e,tp,eg,ep,ev,re,r,rp,0,chkc)
+	-- end
+	local eff=nil
+	-- local available_effs=e:GetLabelObject()
+	if #available_effs>1 then
+		local available_effs_desc={}
+		for _,eff in ipairs(available_effs) do
+			table.insert(available_effs_desc,eff:GetDescription())
+		end
+		local op=Duel.SelectOption(tp,table.unpack(available_effs_desc))
+		eff=available_effs[op+1]
+	else
+		eff=available_effs[1]
+	end
+	Duel.Hint(HINT_OPSELECTED,1-tp,eff:GetDescription())
+	e:SetLabel(eff:GetLabel())
+	e:SetLabelObject(eff:GetLabelObject())
+	e:SetProperty(eff:IsHasProperty(EFFECT_FLAG_CARD_TARGET) and EFFECT_FLAG_CARD_TARGET or 0)
+	local tg=eff:GetTarget()
+	if tg then
+		tg(e,tp,eg,ep,ev,re,r,rp,1)
+	end
+	eff:SetLabel(e:GetLabel())
+	eff:SetLabelObject(e:GetLabelObject())
+	e:SetLabelObject(eff)
+	Duel.ClearOperationInfo(0)
+
+	local eff=e:GetLabelObject()
+	if not eff then return end
+	e:SetLabel(eff:GetLabel())
+	e:SetLabelObject(eff:GetLabelObject())
+	local op=eff:GetOperation()
+	if op then
+		op(e,tp,Group.CreateGroup(),PLAYER_NONE,0,e,REASON_EFFECT,PLAYER_NONE)
+	end
+	e:SetLabel(0)
+	e:SetLabelObject(nil)
 end

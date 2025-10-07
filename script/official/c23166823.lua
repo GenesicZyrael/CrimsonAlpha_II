@@ -2,7 +2,6 @@
 --Ritual Beast Zefrawendi
 --Modified for CrimsonAlpha
 
-
 local s,id=GetID()
 function s.initial_effect(c)
 	c:SetSPSummonOnce(id)
@@ -27,17 +26,14 @@ function s.initial_effect(c)
 	c:RegisterEffect(e3)
 	local e4=e3:Clone()
 	e4:SetCode(EVENT_SPSUMMON_SUCCESS)
-	e4:SetCondition(s.condition)
-	c:RegisterEffect(e4,false,CUSTOM_REGISTER_ZEFRA)
+	e4:SetCondition(Condition.IsPendulumSummoned)
+	c:RegisterEffect(e4)
 end
 s.listed_series={SET_RITUAL_BEAST,SET_ZEFRA}
 s.listed_names={id}
 function s.splimit(e,c,sump,sumtype,sumpos,targetp)
 	if c:IsSetCard(SET_RITUAL_BEAST) or c:IsSetCard(SET_ZEFRA) then return false end
 	return (sumtype&SUMMON_TYPE_PENDULUM)==SUMMON_TYPE_PENDULUM
-end
-function s.condition(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():IsSummonType(SUMMON_TYPE_PENDULUM)
 end
 function s.filter(c)
 	return c:IsFaceup() and c:IsSetCard(SET_ZEFRA) and c:IsType(TYPE_PENDULUM) and not c:IsCode(id) and c:IsAbleToHand()

@@ -273,3 +273,38 @@ function Duel.GetRitualMaterial(p,...)
 
     return original_ritual_mats
 end
+
+
+Condition={}
+
+local self_summon_type={}
+function Condition.IsPendulumSummoned(e,tp,eg,ep,ev,re,r,rp)
+	return e:GetHandler():IsSummonType(SUMMON_TYPE_PENDULUM)
+end
+self_summon_type[Condition.IsPendulumSummoned]=true
+
+local function condition_table_check(t)
+	return function(eff) return t[eff:GetCondition()] end
+end
+
+Effect.HasPendulumSummonCondition=condition_table_check(self_summon_type)
+
+function Condition.AND(...)
+	local fns={...}
+
+	local function full_condition(e,tp,eg,ep,ev,re,r,rp)
+		--when checking, stop at the first falsy value
+		if chk==0 then
+			for _,fn in ipairs(fns) do
+				if not fn(e,tp,eg,ep,ev,re,r,rp,0) then return false end
+			end
+			return true
+		end
+		--when executing, run all functions regardless of what they return
+		for _,fn in ipairs(fns) do
+			fn(e,tp,eg,ep,ev,re,r,rp,1)
+		end
+	end
+
+	return full_condition
+end

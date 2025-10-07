@@ -2,7 +2,6 @@
 --Zefraxi, Treasure of the Yang Zing
 --Modified for CrimsonAlpha
 
-
 local s,id=GetID()
 function s.initial_effect(c)
 	--Enable pendulum summon
@@ -22,10 +21,10 @@ function s.initial_effect(c)
 	e3:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
 	e3:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e3:SetCountLimit(1,id)
-	e3:SetCondition(s.condition)
+	e3:SetCondition(Condition.IsPendulumSummoned)
 	e3:SetTarget(s.target)
 	e3:SetOperation(s.operation)
-	c:RegisterEffect(e3,false,CUSTOM_REGISTER_ZEFRA)
+	c:RegisterEffect(e3)
 end
 s.listed_series={SET_YANG_ZING,SET_ZEFRA}
 s.listed_names={id}
@@ -35,7 +34,7 @@ function s.splimit(e,c,sump,sumtype,sumpos,targetp)
 	return (sumtype&SUMMON_TYPE_PENDULUM)==SUMMON_TYPE_PENDULUM
 end
 function s.condition(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():IsSummonType(SUMMON_TYPE_PENDULUM) or e:GetHandler():IsPreviousLocation(LOCATION_DECK)
+	return e:GetHandler():IsPreviousLocation(LOCATION_DECK)
 end
 function s.filter(c)
 	return c:IsFaceup() and (c:IsSetCard(SET_YANG_ZING) or c:IsSetCard(SET_ZEFRA)) and not c:IsType(TYPE_TUNER) and not c:IsCode(id)

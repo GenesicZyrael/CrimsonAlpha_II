@@ -2,7 +2,6 @@
 --Stellarknight Zefraxciton
 --Modified for CrimsonAlpha
 
-
 local s,id=GetID()
 function s.initial_effect(c)
 	--Pendulum Summon procedure
@@ -32,8 +31,8 @@ function s.initial_effect(c)
 	c:RegisterEffect(e3)
 	local e4=e2:Clone()
 	e4:SetCode(EVENT_SPSUMMON_SUCCESS)
-	e4:SetCondition(function(e) return e:GetHandler():IsSummonType(SUMMON_TYPE_PENDULUM) end)
-	c:RegisterEffect(e4,false,CUSTOM_REGISTER_ZEFRA)
+	e4:SetCondition(Condition.IsPendulumSummoned)
+	c:RegisterEffect(e4)
 end
 s.listed_series={SET_TELLARKNIGHT,SET_ZEFRA}
 function s.splimit(e,c,sump,sumtype,sumpos,targetp)
