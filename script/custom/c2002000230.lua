@@ -66,60 +66,60 @@ end
 function s.atkval(e,c)
 	return Duel.GetMatchingGroupCount(s.atkfilter,0,LOCATION_REMOVED+LOCATION_GRAVE,0,nil)*300
 end
-function s.cfilter(c,e,tp)
-	if not (c:IsFaceup() and c:IsMonster() and c:IsRace(RACE_REPTILE) and c:IsSetCard(SET_WORM)
-		and c:IsHasEffect(TYPE_FLIP) and c:IsAbleToDeckAsCost()) then 
-		return false
-	end
-	local eff=c:GetCardEffect(TYPE_FLIP)
-	local te=eff:GetLabelObject()
-	local con=te:GetCondition()
-	local tg=te:GetTarget()
-	if (not con or con(te,tp,Group.CreateGroup(),PLAYER_NONE,0,eff,REASON_EFFECT,PLAYER_NONE,0))
-		and (not tg or tg(te,tp,Group.CreateGroup(),PLAYER_NONE,0,eff,REASON_EFFECT,PLAYER_NONE,0)) then
-		return true
-	end
-	return false
-end
-function s.applycost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_GRAVE|LOCATION_REMOVED,0,1,nil,e,tp) end
-	local sc=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_GRAVE|LOCATION_REMOVED,0,1,1,nil,e,tp):GetFirst()
-	e:SetLabelObject(sc:GetCardEffect(TYPE_FLIP):GetLabelObject())
-	Duel.SendtoDeck(sc,nil,SEQ_DECKSHUFFLE,REASON_COST)
-	sc:RegisterFlagEffect(id,RESET_EVENT|RESETS_STANDARD|RESET_CHAIN,0,1)
-end
-function s.applytg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	local te=e:GetLabelObject()
-	local tg=te and te:GetTarget() or nil
-	if chkc then return tg and tg(e,tp,eg,ep,ev,re,r,rp,0,chkc) end
-	if chk==0 then return true end
-	e:SetLabel(te:GetLabel())
-	e:SetLabelObject(te:GetLabelObject())
-	e:SetProperty(te:IsHasProperty(EFFECT_FLAG_CARD_TARGET) and EFFECT_FLAG_CARD_TARGET or 0)
-	if tg then
-		tg(e,tp,eg,ep,ev,re,r,rp,1)
-	end
-	e:SetLabelObject(te)
-	Duel.ClearOperationInfo(0)
-end
-function s.applyop(e,tp,eg,ep,ev,re,r,rp)
-	local te=e:GetLabelObject()
-	if not te then return end
-	local sc=te:GetHandler()
-	if sc:GetFlagEffect(id)==0 then
-		e:SetLabel(0)
-		e:SetLabelObject(nil)
-		return
-	end
-	e:SetLabel(te:GetLabel())
-	e:SetLabelObject(te:GetLabelObject())
-	local op=te:GetOperation()
-	if op then
-		op(e,tp,Group.CreateGroup(),PLAYER_NONE,0,e,REASON_EFFECT,PLAYER_NONE)
-	end
-	e:SetLabel(0)
-	e:SetLabelObject(nil)
-end
+-- function s.cfilter(c,e,tp)
+	-- if not (c:IsFaceup() and c:IsMonster() and c:IsRace(RACE_REPTILE) and c:IsSetCard(SET_WORM)
+		-- and c:IsHasEffect(TYPE_FLIP) and c:IsAbleToDeckAsCost()) then 
+		-- return false
+	-- end
+	-- local eff=c:GetCardEffect(TYPE_FLIP)
+	-- local te=eff:GetLabelObject()
+	-- local con=te:GetCondition()
+	-- local tg=te:GetTarget()
+	-- if (not con or con(te,tp,Group.CreateGroup(),PLAYER_NONE,0,eff,REASON_EFFECT,PLAYER_NONE,0))
+		-- and (not tg or tg(te,tp,Group.CreateGroup(),PLAYER_NONE,0,eff,REASON_EFFECT,PLAYER_NONE,0)) then
+		-- return true
+	-- end
+	-- return false
+-- end
+-- function s.applycost(e,tp,eg,ep,ev,re,r,rp,chk)
+	-- if chk==0 then return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_GRAVE|LOCATION_REMOVED,0,1,nil,e,tp) end
+	-- local sc=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_GRAVE|LOCATION_REMOVED,0,1,1,nil,e,tp):GetFirst()
+	-- e:SetLabelObject(sc:GetCardEffect(TYPE_FLIP):GetLabelObject())
+	-- Duel.SendtoDeck(sc,nil,SEQ_DECKSHUFFLE,REASON_COST)
+	-- sc:RegisterFlagEffect(id,RESET_EVENT|RESETS_STANDARD|RESET_CHAIN,0,1)
+-- end
+-- function s.applytg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	-- local te=e:GetLabelObject()
+	-- local tg=te and te:GetTarget() or nil
+	-- if chkc then return tg and tg(e,tp,eg,ep,ev,re,r,rp,0,chkc) end
+	-- if chk==0 then return true end
+	-- e:SetLabel(te:GetLabel())
+	-- e:SetLabelObject(te:GetLabelObject())
+	-- e:SetProperty(te:IsHasProperty(EFFECT_FLAG_CARD_TARGET) and EFFECT_FLAG_CARD_TARGET or 0)
+	-- if tg then
+		-- tg(e,tp,eg,ep,ev,re,r,rp,1)
+	-- end
+	-- e:SetLabelObject(te)
+	-- Duel.ClearOperationInfo(0)
+-- end
+-- function s.applyop(e,tp,eg,ep,ev,re,r,rp)
+	-- local te=e:GetLabelObject()
+	-- if not te then return end
+	-- local sc=te:GetHandler()
+	-- if sc:GetFlagEffect(id)==0 then
+		-- e:SetLabel(0)
+		-- e:SetLabelObject(nil)
+		-- return
+	-- end
+	-- e:SetLabel(te:GetLabel())
+	-- e:SetLabelObject(te:GetLabelObject())
+	-- local op=te:GetOperation()
+	-- if op then
+		-- op(e,tp,Group.CreateGroup(),PLAYER_NONE,0,e,REASON_EFFECT,PLAYER_NONE)
+	-- end
+	-- e:SetLabel(0)
+	-- e:SetLabelObject(nil)
+-- end
 function s.spfilter(c,e,tp)
 	return c:IsFaceup() and c:IsMonster() and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
@@ -137,4 +137,84 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	if tc:IsRelateToEffect(e) then
 		Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)
 	end
+end
+function s.filter(c,e,tp)
+	if not (c:IsFaceup() and c:IsMonster() and c:IsRace(RACE_REPTILE) and c:IsSetCard(SET_WORM)
+		and c:IsHasEffect(TYPE_FLIP) and c:IsAbleToDeckAsCost()) then 
+		return false
+	end
+	local effs={c:GetOwnEffects()}
+	for _,eff in ipairs(effs) do
+		if eff:IsHasType(EFFECT_TYPE_FLIP) then
+			local con=eff:GetCondition()
+			local tg=eff:GetTarget()
+			if (con==nil or con(eff,tp,Group.CreateGroup(),PLAYER_NONE,0,e,REASON_EFFECT,PLAYER_NONE,0))
+				and (tg==nil or tg(eff,tp,Group.CreateGroup(),PLAYER_NONE,0,e,REASON_EFFECT,PLAYER_NONE,0)) then
+				return true
+			end
+		end
+	end
+	return false
+end
+function s.applycost(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_HAND|LOCATION_DECK,0,1,nil,e,tp) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
+	local rc=Duel.SelectMatchingCard(tp,s.filter,tp,LOCATION_HAND|LOCATION_DECK,0,1,1,nil,e,tp):GetFirst()
+	Duel.SendtoDeck(rc,nil,SEQ_DECKSHUFFLE,REASON_COST)
+	local available_effs={}
+	local effs={rc:GetOwnEffects()}
+	for _,eff in ipairs(effs) do
+		if eff:IsHasType(EFFECT_TYPE_FLIP) then
+			local con=eff:GetCondition()
+			local tg=eff:GetTarget()
+			if (con==nil or con(eff,tp,Group.CreateGroup(),PLAYER_NONE,0,e,REASON_EFFECT,PLAYER_NONE,0))
+				and (tg==nil or tg(eff,tp,Group.CreateGroup(),PLAYER_NONE,0,e,REASON_EFFECT,PLAYER_NONE,0)) then
+				table.insert(available_effs,eff)
+			end
+		end
+	end
+	e:SetLabelObject(available_effs)
+end
+function s.applytg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then
+		local eff=e:GetLabelObject()
+		return eff and eff:GetTarget() and eff:GetTarget()(e,tp,eg,ep,ev,re,r,rp,0,chkc)
+	end
+	if chk==0 then return true end
+	local eff=nil
+	local available_effs=e:GetLabelObject()
+	if #available_effs>1 then
+		local available_effs_desc={}
+		for _,eff in ipairs(available_effs) do
+			table.insert(available_effs_desc,eff:GetDescription())
+		end
+		local op=Duel.SelectOption(tp,table.unpack(available_effs_desc))
+		eff=available_effs[op+1]
+	else
+		eff=available_effs[1]
+	end
+	Duel.Hint(HINT_OPSELECTED,1-tp,eff:GetDescription())
+	e:SetLabel(eff:GetLabel())
+	e:SetLabelObject(eff:GetLabelObject())
+	e:SetProperty(eff:IsHasProperty(EFFECT_FLAG_CARD_TARGET) and EFFECT_FLAG_CARD_TARGET or 0)
+	local tg=eff:GetTarget()
+	if tg then
+		tg(e,tp,eg,ep,ev,re,r,rp,1)
+	end
+	eff:SetLabel(e:GetLabel())
+	eff:SetLabelObject(e:GetLabelObject())
+	e:SetLabelObject(eff)
+	Duel.ClearOperationInfo(0)
+end
+function s.applyop(e,tp,eg,ep,ev,re,r,rp)
+	local eff=e:GetLabelObject()
+	if not eff then return end
+	e:SetLabel(eff:GetLabel())
+	e:SetLabelObject(eff:GetLabelObject())
+	local op=eff:GetOperation()
+	if op then
+		op(e,tp,Group.CreateGroup(),PLAYER_NONE,0,e,REASON_EFFECT,PLAYER_NONE)
+	end
+	e:SetLabel(0)
+	e:SetLabelObject(nil)
 end
