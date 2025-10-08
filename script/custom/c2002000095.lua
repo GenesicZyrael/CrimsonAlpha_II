@@ -24,6 +24,7 @@ function s.initial_effect(c)
 		e2:SetOperation(s.effop)
 	c:RegisterEffect(e2)
 end
+s.listed_series={SET_SHADDOLL}
 function s.efffilter(c)
 	return c:IsSetCard(SET_SHADDOLL)
 		and c:IsType(TYPE_FUSION)
