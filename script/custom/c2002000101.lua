@@ -90,7 +90,7 @@ end
 ---
 function s.filter(c)
 	return c:IsType(TYPE_MONSTER) and c:IsAbleToRemove()
-		and c:IsSetCard(SET_RITUAL_BEAST) or c:IsSetCard(SET_ZEFRA)
+		and (c:IsSetCard(SET_RITUAL_BEAST) or c:IsSetCard(SET_ZEFRA))
 end
 function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local rg=Duel.GetMatchingGroup(s.filter,tp,LOCATION_MZONE|LOCATION_GRAVE,0,e:GetHandler())
