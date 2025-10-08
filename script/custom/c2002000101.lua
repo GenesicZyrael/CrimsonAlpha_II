@@ -5,7 +5,7 @@ function s.initial_effect(c)
 	c:SetUniqueOnField(1,0,id)
 	--fusion material
 	c:EnableReviveLimit()
-	Fusion.AddProcMixN(c,true,true,aux.FilterBoolFunctionEx(Card.IsSetCard,SET_RITUAL_BEAST),2)
+	Fusion.AddProcMixN(c,true,true,{aux.FilterBoolFunctionEx(Card.IsSetCard,SET_RITUAL_BEAST),aux.FilterBoolFunctionEx(Card.IsSetCard,SET_ZEFRA)},2)
 	Fusion.AddContactProc(c,s.contactfil,s.contactop,s.splimit)
 	--pos
 	local e1=Effect.CreateEffect(c)
@@ -42,17 +42,17 @@ function s.initial_effect(c)
 	e3:SetOperation(s.rmop)
 	c:RegisterEffect(e3)
 	--pendulum set
-	local e4=Effect.CreateEffect(c)
-	e4:SetDescription(aux.Stringid(id,3))
-	e4:SetType(EFFECT_TYPE_QUICK_O)
-	e4:SetCode(EVENT_FREE_CHAIN)
-	e4:SetRange(LOCATION_MZONE)
-	e4:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e4:SetHintTiming(0,TIMING_END_PHASE)
-	e4:SetCountLimit(1,{id,2})
-	e4:SetTarget(s.pentg)
-	e4:SetOperation(s.penop)
-	c:RegisterEffect(e4)
+	local e5=Effect.CreateEffect(c)
+	e5:SetDescription(aux.Stringid(id,3))
+	e5:SetType(EFFECT_TYPE_QUICK_O)
+	e5:SetCode(EVENT_FREE_CHAIN)
+	e5:SetRange(LOCATION_MZONE)
+	e5:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e5:SetHintTiming(0,TIMING_END_PHASE)
+	e5:SetCountLimit(1,{id,2})
+	e5:SetTarget(s.pentg)
+	e5:SetOperation(s.penop)
+	c:RegisterEffect(e5)
 end
 s.listed_series={SET_RITUAL_BEAST}
 s.material_setcode={SET_RITUAL_BEAST}
@@ -88,13 +88,12 @@ function s.posop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.ChangePosition(g,POS_FACEUP_ATTACK)
 end
 ---
-function s.rmfilter(c)
-	return c:IsSetCard(SET_RITUAL_BEAST) 
-		and c:IsType(TYPE_MONSTER)
-		and c:IsAbleToRemove() 
+function s.filter(c)
+	return c:IsType(TYPE_MONSTER) and c:IsAbleToRemove()
+		and c:IsSetCard(SET_RITUAL_BEAST) or c:IsSetCard(SET_ZEFRA)
 end
 function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	local rg=Duel.GetMatchingGroup(s.rmfilter,tp,LOCATION_MZONE|LOCATION_GRAVE,0,e:GetHandler())
+	local rg=Duel.GetMatchingGroup(s.filter,tp,LOCATION_MZONE|LOCATION_GRAVE,0,e:GetHandler())
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>-2 and #rg>1
 		and aux.SelectUnselectGroup(rg,e,tp,2,2,aux.ChkfMMZ(1),0) end
 	local g=aux.SelectUnselectGroup(rg,e,tp,2,2,aux.ChkfMMZ(1),1,tp,HINTMSG_REMOVE)
@@ -111,6 +110,11 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 ---
+function s.rmfilter(c)
+	return c:IsType(TYPE_MONSTER) 
+		and (c:IsSetCard(SET_RITUAL_BEAST) and c:IsAbleToRemove()
+		  or (c:IsType(TYPE_PENDULUM) and c:IsSetCard(SET_ZEFRA) and not c:IsForbidden()))
+end
 function s.rmtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.rmfilter,tp,LOCATION_DECK,0,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,tp,LOCATION_DECK)
@@ -119,14 +123,21 @@ function s.rmop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 	local g=Duel.SelectMatchingCard(tp,s.rmfilter,tp,LOCATION_DECK,0,1,1,nil)
 	local tc=g:GetFirst()
-	if tc then
+	if tc:IsType(TYPE_PENDULUM) and tc:IsSetCard(SET_ZEFRA) then
+		-- ask first
+		if Duel.SelectYesNo(tp,aux.Stringid(id,4)) then
+			Duel.SendtoExtraP(tc,tp,REASON_EFFECT)
+		else
+			Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)
+		end
+	else
 		Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)
 	end
 end
 ---
 function s.spfilter(c,e,tp)
-	return c:IsSetCard(SET_RITUAL_BEAST) 
-		and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE)
+	return  c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE)
+		and (c:IsSetCard(SET_RITUAL_BEAST) or c:IsSetCard(SET_ZEFRA))
 end
 function s.pentg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chkc then return false end
