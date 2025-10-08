@@ -25,6 +25,11 @@ function s.initial_effect(c)
 	e3:SetTarget(s.target)
 	e3:SetOperation(s.operation)
 	c:RegisterEffect(e3)
+	local e4=e3:Clone()
+	e4:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e4:SetProperty(EFFECT_FLAG_DAMAGE_STEP)
+	e4:SetCondition(s.condition)
+	c:RegisterEffect(e4)
 end
 s.listed_series={SET_YANG_ZING,SET_ZEFRA}
 s.listed_names={id}
