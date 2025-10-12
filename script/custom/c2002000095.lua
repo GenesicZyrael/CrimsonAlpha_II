@@ -11,7 +11,7 @@ function s.initial_effect(c)
 		e1:SetCountLimit(1,id)
 		e1:SetTarget(Fusion.SummonEffTG(table.unpack(params)))
 		e1:SetOperation(Fusion.SummonEffOP(table.unpack(params)))
-	c:RegisterEffect(e1,false,CUSTOM_REGISTER_FLIP)	
+	c:RegisterEffect(e1)	
 	--effect gain
 	local e2=Effect.CreateEffect(c)
 	    e2:SetDescription(aux.Stringid(id,1))
