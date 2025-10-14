@@ -93,8 +93,6 @@ function Xyz.MatFilter2(c,f,lv,xyz,tp)
 		local effs={c:GetCardEffect(EFFECT_XYZ_MATERIAL_CUSTOM)}
         for _,te in ipairs(effs) do
 			local mg=Xyz.GetMaterials(tp,xyz)
-			-- local exg=mg:Filter(Card.IsOriginalLevel,nil,xyz:GetRank())
-			-- mg:Sub(exg) 
 			for tc in mg:Iter() do
 				local tg=te:GetTarget()
 				local val=te:GetValue()
@@ -249,8 +247,6 @@ function Xyz.RecursionChk(c,mg,xyz,tp,min,max,minc,maxc,sg,matg,ct,matct,mustbem
 	local effs={c:GetCardEffect(EFFECT_XYZ_MATERIAL_CUSTOM)}
 	for _,te in ipairs(effs) do
 		local cusmat=Xyz.GetMaterials(tp,xyz)
-		-- local exg=cusmat:Filter(Card.IsOriginalLevel,nil,xyz:GetRank())
-		-- mg:Sub(exg)
 		for tc in cusmat:Iter() do
 			local tg=te:GetTarget()
 			local val=te:GetValue()
@@ -265,10 +261,12 @@ function Xyz.RecursionChk(c,mg,xyz,tp,min,max,minc,maxc,sg,matg,ct,matct,mustbem
 				tc:AssumeProperty(ASSUME_LEVEL,effectivelvl)
 			end
 			if not tg or tg(te,tc) then
-				Duel.AssumeReset()
 				mg:AddCard(tc)
+				Debug.Message('A-'..tc:GetCode()..'-'..tc:GetLevel())
+				Duel.AssumeReset()
 			end
 			Duel.AssumeReset()
+			Debug.Message('B-'..tc:GetCode()..'-'..tc:GetLevel())
 		end
 	end
 	
@@ -414,6 +412,7 @@ function Xyz.Target(f,lv,minc,maxc,mustbemat,exchk)
 						local matct=ct+extra_mats
 						if not ((not max or #matg<max) and (maxc==infToken or matct<maxc)) then break end
 						local selg=mg:Filter(Xyz.RecursionChk,sg,mg,c,tp,min,max,minc,maxc,sg,matg,ct,matct,mustbemat,exchk,f,mustg,lv,eqmg,equips_inverse)
+						-- Debug.Message(#selg)
 						if #selg==0 then break end
 						Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
 						local cancelable=not og and Duel.IsSummonCancelable() and #sg==0
