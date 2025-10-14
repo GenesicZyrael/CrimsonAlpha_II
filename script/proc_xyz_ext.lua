@@ -85,57 +85,6 @@ end
 	-- if lv and not c:IsXyzLevel(xyz,lv) then return false end
 	-- return Xyz.MatFilter3(c,f,lv,xyz,tp) or c:IsCanBeXyzMaterial(xyz,tp)
 -- end
--- function Xyz.MatFilter3(c,f,lv,xyz,tp)
-    -- local effectivelvl=c:GetLevel()
-    -- local mg=Xyz.GetMaterials(tp,xyz)
-    -- for tc in mg:Iter() do
-        -- local effs={tc:GetCardEffect(EFFECT_XYZ_MATERIAL_CUSTOM)}
-        -- for _,te in ipairs(effs) do
-            -- local tg=te:GetTarget()
-			-- local val=te:GetValue()
-			-- if not tg or tg(te,tc) then
-				-- if type(val)=="function" then
-                    -- local newLv=val(te,xyz,mg)
-                    -- if newLv then
-                        -- effectivelvl=newLv
-						-- c:AssumeProperty(ASSUME_LEVEL,effectivelvl)
-                        -- break
-                    -- end
-					
-					-- -- local lv1,lv2=val(te,tc,xyz)
-					-- -- if lv1 and (xyz:GetRank()==lv1 or (lv and lv1==lv)) then
-						-- -- effectivelvl=lv1
-						-- -- break
-					-- -- end
-					-- -- if lv2 and (xyz:GetRank()==lv2 or (lv and lv2==lv)) then
-						-- -- effectivelvl=lv2
-						-- -- break
-					-- -- end
-				-- elseif type(val)=="number" then
-                    -- effectivelvl=val
-					-- c:AssumeProperty(ASSUME_LEVEL,effectivelvl)
-                    -- break
-					
-					-- local lv1=val & 0xffff
-					-- local lv2=(val >> 16) & 0xffff
-					-- if lv2==0 then lv2=nil end
-					-- if lv1 and (xyz:GetRank()==lv1 or (lv and lv1==lv)) then
-						-- effectivelvl=val
-						-- break
-					-- end
-					-- if lv2 and (xyz:GetRank()==lv2 or (lv and lv2==lv)) then
-						-- effectivelvl=val
-						-- break
-					-- end
-				-- end
-            -- end
-        -- end
-    -- end
-    -- if not (xyz:GetRank()==effectivelvl or c:IsXyzLevel(xyz,lv)) then return false end   
-	-- local res=c:IsCanBeXyzMaterial(xyz,tp)
-	-- Duel.AssumeReset()
-	-- return res
--- end
 function Xyz.MatFilter2(c,f,lv,xyz,tp)
     if f and not f(c,xyz,SUMMON_TYPE_XYZ|MATERIAL_XYZ,tp) then return false end
     if not c:HasLevel() and not c:IsHasEffect(EFFECT_XYZ_LEVEL) then return false end
@@ -144,7 +93,8 @@ function Xyz.MatFilter2(c,f,lv,xyz,tp)
 		local effs={c:GetCardEffect(EFFECT_XYZ_MATERIAL_CUSTOM)}
         for _,te in ipairs(effs) do
 			local mg=Xyz.GetMaterials(tp,xyz)
-			mg:Sub(c)
+			-- local exg=mg:Filter(Card.IsOriginalLevel,nil,xyz:GetRank())
+			-- mg:Sub(exg) 
 			for tc in mg:Iter() do
 				local tg=te:GetTarget()
 				local val=te:GetValue()
@@ -152,51 +102,19 @@ function Xyz.MatFilter2(c,f,lv,xyz,tp)
 					local newLv=val(te,xyz,mg)
 					if newLv then
 						effectivelvl=newLv
-						-- c:AssumeProperty(ASSUME_LEVEL,effectivelvl)
 						tc:AssumeProperty(ASSUME_LEVEL,effectivelvl)
-						-- break
 					end
 				elseif type(val)=="number" then
 					effectivelvl=val
-					-- c:AssumeProperty(ASSUME_LEVEL,val)
 					tc:AssumeProperty(ASSUME_LEVEL,effectivelvl)
-					-- break
 				end
 				if not tg or tg(te,tc) then
 					break
-					--tc:AssumeProperty(ASSUME_LEVEL,effectivelvl)
 				end		
 			end
         end
-
-        -- local effectivelvl=c:GetLevel()
-        -- local mg=Xyz.GetMaterials(tp,xyz)
-        -- for tc in mg:Iter() do
-            -- local effs={tc:GetCardEffect(EFFECT_XYZ_MATERIAL_CUSTOM)}
-            -- for _,te in ipairs(effs) do
-                -- local tg=te:GetTarget()
-				-- local val=te:GetValue()
-				-- if not tg or tg(te,c) then
-					-- if type(val)=="function" then
-						-- local newLv=val(te,xyz,mg)
-						-- if newLv then
-							-- effectivelvl=newLv
-							-- c:AssumeProperty(ASSUME_LEVEL,effectivelvl)
-							-- -- Debug.Message(c:GetCode())
-							-- break
-						-- end
-					-- elseif type(val)=="number" then
-						-- effectivelvl=val
-						-- c:AssumeProperty(ASSUME_LEVEL,val)
-						-- -- Debug.Message(c:GetCode())
-						-- break
-					-- end
-                -- end
-            -- end
-        -- end
         if not (xyz:GetRank()==effectivelvl or c:IsXyzLevel(xyz,lv)) then return false end   
     end
-	-- if lv and not c:IsXyzLevel(xyz,lv) then return false end
 	local res=c:IsCanBeXyzMaterial(xyz,tp)
 	Duel.AssumeReset()
 	return res
@@ -273,61 +191,7 @@ function Xyz.MatNumChkF2(tg,lv,xyz)
 	end
 	return true
 end
-function Xyz.MatNumChkF3(tg,lv,xyz)
-	for chkc in tg:Iter() do
-		local rev={}
-		for _,te in ipairs({chkc:GetCardEffect(EFFECT_XYZ_MATERIAL_CUSTOM)}) do
-            local tg=te:GetTarget()
-			local val=te:GetValue()
-			if type(val)=="function" then
-				local lv1,lv2=val(te,tc,xyz)
-				if lv1 and (xyz:GetRank()==lv1 or (lv and lv1==lv)) then
-					effectivelvl=newLv
-					break
-				end
-				if lv2 and (xyz:GetRank()==lv2 or (lv and lv2==lv)) then
-					effectivelvl=newLv
-					break
-				end
-			elseif type(val)=="number" then
-				local lv1=val & 0xffff
-				local lv2=(val >> 16) & 0xffff
-				if lv2==0 then lv2=nil end
-				if lv1 and (xyz:GetRank()==lv1 or (lv and lv1==lv)) then
-					effectivelvl=val
-					break
-				end
-				if lv2 and (xyz:GetRank()==lv2 or (lv and lv2==lv)) then
-					effectivelvl=val
-					break
-				end
-			end
-		-- for _,te in ipairs({chkc:GetCardEffect(EFFECT_SATELLARKNIGHT_CAPELLA)}) do
-			-- local rct=te:GetValue()&0xffff
-			-- local comp=(te:GetValue()>>16)&0xffff
-			-- if not Xyz.MatNumChk(tg:FilterCount(Card.IsMonster,nil),rct,comp) then
-				-- local con=te:GetLabelObject():GetCondition()
-				-- if not con then con=aux.TRUE end
-				-- if not rev[te] then
-					-- table.insert(rev,te)
-					-- rev[te]=con
-					-- te:GetLabelObject():SetCondition(aux.FALSE)
-				-- end
-			-- end
-		end
-		if #rev>0 then
-			local islv=chkc:IsXyzLevel(xyz,lv)
-			for _,te in ipairs(rev) do
-				local con=rev[te]
-				te:GetLabelObject():SetCondition(con)
-			end
-			if not islv then return false end
-		end
-	end
-	return true
-end
 function Xyz.CheckMaterialSet(matg,xyz,tp,exchk,mustg,lv)
-	-- Debug.Message('B')
 	if not matg:Includes(mustg) then return false end
 	if not Xyz.MatNumChkF(matg) then
 		return false
@@ -335,9 +199,6 @@ function Xyz.CheckMaterialSet(matg,xyz,tp,exchk,mustg,lv)
 	if lv and not Xyz.MatNumChkF2(matg,lv,xyz) then
 		return false
 	end
-	-- if lv and not Xyz.MatNumChkF3(matg,lv,xyz) then
-		-- return false
-	-- end
 	if exchk and #matg>0 and not exchk(matg,tp,xyz) then
 		return false
 	end
@@ -388,7 +249,8 @@ function Xyz.RecursionChk(c,mg,xyz,tp,min,max,minc,maxc,sg,matg,ct,matct,mustbem
 	local effs={c:GetCardEffect(EFFECT_XYZ_MATERIAL_CUSTOM)}
 	for _,te in ipairs(effs) do
 		local cusmat=Xyz.GetMaterials(tp,xyz)
-		cusmat:Sub(c)
+		-- local exg=cusmat:Filter(Card.IsOriginalLevel,nil,xyz:GetRank())
+		-- mg:Sub(exg)
 		for tc in cusmat:Iter() do
 			local tg=te:GetTarget()
 			local val=te:GetValue()
@@ -405,7 +267,8 @@ function Xyz.RecursionChk(c,mg,xyz,tp,min,max,minc,maxc,sg,matg,ct,matct,mustbem
 			if not tg or tg(te,tc) then
 				Duel.AssumeReset()
 				mg:AddCard(tc)
-			end		
+			end
+			Duel.AssumeReset()
 		end
 	end
 	
@@ -446,151 +309,6 @@ function Xyz.RecursionChk(c,mg,xyz,tp,min,max,minc,maxc,sg,matg,ct,matct,mustbem
 	mg:Merge(rg)
 	return res
 end
-
--- function Xyz.RecursionChk(c,mg,xyz,tp,min,max,minc,maxc,sg,matg,ct,matct,mustbemat,exchk,f,mustg,lv,eqmg,equips_inverse)
-	-- local addToMatg=true
-	-- if eqmg and eqmg:IsContains(c) then
-		-- if not sg:IsContains(c:GetEquipTarget()) then return false end
-		-- addToMatg=false
-	-- end
-	-- local xct=ct
-	-- local rg=Group.CreateGroup()
-	-- if not c:IsHasEffect(EFFECT_ORICHALCUM_CHAIN) then
-		-- xct=xct+1
-	-- else
-		-- addToMatg=true
-	-- end
-	-- local xmatct=matct+1
-	-- if (max and xct>max) or (maxc~=infToken and xmatct>maxc) then mg:Merge(rg) return false end
-	
-	-- for i,f in ipairs({c:GetCardEffect(EFFECT_XYZ_MAT_RESTRICTION)}) do
-		-- if matg:IsExists(Auxiliary.HarmonizingMagFilter,1,c,f,f:GetValue()) then
-			-- mg:Merge(rg)
-			-- return false
-		-- end
-		-- local sg2=mg:Filter(Auxiliary.HarmonizingMagFilter,nil,f,f:GetValue())
-		-- rg:Merge(sg2)
-		-- mg:Sub(sg2)
-	-- end
-	-- for tc in sg:Iter() do
-		-- for i,f in ipairs({tc:GetCardEffect(EFFECT_XYZ_MAT_RESTRICTION)}) do
-			-- if Auxiliary.HarmonizingMagFilter(c,f,f:GetValue()) then
-				-- mg:Merge(rg)
-				-- return false
-			-- end
-		-- end
-	-- end
-	
-	-- if addToMatg then
-		-- matg:AddCard(c)
-	-- end
-	-- sg:AddCard(c)
-	
-	-- local levelChangeEffects={c:GetCardEffect(EFFECT_XYZ_MATERIAL_CUSTOM)}
-	-- local hasLevelChangeEffect=#levelChangeEffects>0
-	-- local filteredCards=Group.CreateGroup()
-	-- local permanentFilteredCards=Group.CreateGroup()
-	
-	-- if lv and not hasLevelChangeEffect then
-		-- for tc in mg:Iter() do
-			-- Debug.Message(tc:GetCode())
-			-- -- Debug.Message(xyz:GetRank()==tc:GetLevel())
-			-- local effs = {tc:GetCardEffect(EFFECT_XYZ_MATERIAL_CUSTOM)}			
-			-- Debug.Message(#effs)
-			-- local canBeValidWithoutLevelChange=false	
-			-- if tc:HasLevel() then
-				-- -- local tcLevel=tc:GetLevel()
-				-- if xyz:GetRank()==tc:GetLevel() or (lv and tc:IsXyzLevel(xyz,lv)) then
-					-- canBeValidWithoutLevelChange=true
-				-- end
-			-- end
-			
-			-- if not canBeValidWithoutLevelChange then
-				-- local xyzLevelEffects={tc:IsHasEffect(EFFECT_XYZ_LEVEL)}
-				-- for _,te in ipairs(xyzLevelEffects) do
-					-- local tg=te:GetTarget()
-					-- local val=te:GetValue()
-					
-					-- if not tg or tg(te,tc) then
-						-- if type(val)=="function" then
-							-- local lv1,lv2=val(te,tc,xyz)
-							-- if lv1 and (xyz:GetRank()==lv1 or (lv and lv1==lv)) then
-								-- canBeValidWithoutLevelChange=true
-								-- break
-							-- end
-							-- if lv2 and (xyz:GetRank()==lv2 or (lv and lv2==lv)) then
-								-- canBeValidWithoutLevelChange=true
-								-- break
-							-- end
-						-- elseif type(val)=="number" then
-							-- local lv1=val & 0xffff
-							-- local lv2=(val >> 16) & 0xffff
-							-- if lv2==0 then lv2=nil end
-							
-							-- if lv1 and (xyz:GetRank()==lv1 or (lv and lv1==lv)) then
-								-- canBeValidWithoutLevelChange=true
-								-- break
-							-- end
-							-- if lv2 and (xyz:GetRank()==lv2 or (lv and lv2==lv)) then
-								-- canBeValidWithoutLevelChange=true
-								-- break
-							-- end
-						-- end
-					-- end
-				-- end
-				
-				-- if not canBeValidWithoutLevelChange then
-					-- if tc:HasLevel() then
-						-- filteredCards:AddCard(tc)
-					-- else
-						-- permanentFilteredCards:AddCard(tc)
-					-- end
-				-- end
-			-- end
-		-- end
-		-- mg:Sub(filteredCards)
-		-- mg:Sub(permanentFilteredCards)
-	-- end
-	
-	-- local eqg=nil
-	-- local res=(function()
-		-- if (xct>=min and xmatct>=minc) and Xyz.CheckMaterialSet(matg,xyz,tp,exchk,mustg,lv) then return true end
-		-- if equips_inverse then
-			-- eqg=equips_inverse[c]
-			-- if eqg then
-				-- mg:Merge(eqg)
-			-- end
-		-- end
-		-- if mg:IsExists(Xyz.RecursionChk,1,sg,mg,xyz,tp,min,max,minc,maxc,sg,matg,xct,xmatct,mustbemat,exchk,f,mustg,lv,eqmg,equips_inverse) then return true end
-		-- if not mustbemat then
-			-- local retchknum={}
-			-- for i,te in ipairs({c:IsHasEffect(EFFECT_DOUBLE_XYZ_MATERIAL,tp)}) do
-				-- local tgf=te:GetOperation()
-				-- local val=te:GetValue()
-				-- if val>0 and not retchknum[val] and (not maxc or maxc==infToken or xmatct+val<=maxc) and (not tgf or tgf(te,xyz,matg)) then
-					-- retchknum[val]=true
-					-- te:UseCountLimit(tp)
-					-- local chk=(xct+val>=min and xmatct+val>=minc and Xyz.CheckMaterialSet(matg,xyz,tp,exchk,mustg,lv))
-								-- or mg:IsExists(Xyz.RecursionChk,1,sg,mg,xyz,tp,min,max,minc,maxc,sg,matg,xct,xmatct+val,mustbemat,exchk,f,mustg,lv,eqmg,equips_inverse)
-					-- te:RestoreCountLimit(tp)
-					-- if chk then return true end
-				-- end
-			-- end
-		-- end
-		-- return false
-	-- end)()
-	
-	-- if addToMatg then
-		-- matg:RemoveCard(c)
-	-- end
-	-- sg:RemoveCard(c)
-	-- if eqg then
-		-- mg:Sub(eqg)
-	-- end
-	-- mg:Merge(rg)
-	-- mg:Merge(filteredCards)
-	-- return res
--- end
 
 function Auxiliary.HarmonizingMagFilterXyz(c,e,f)
 	return not f or f(e,c) or c:IsHasEffect(EFFECT_ORICHALCUM_CHAIN) or c:IsHasEffect(EFFECT_EQUIP_SPELL_XYZ_MAT)
