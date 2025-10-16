@@ -52,13 +52,6 @@ function s.spop1(e,tp,eg,ep,ev,re,r,rp)
 	if not c:IsRelateToEffect(e) then return end
 	Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
 end
-function s.val(te,xyz,sg)
-    --if you want to do something with `sg` later then you must return the expected level if `sg` is nil 
-    if not sg then return 4 end
-    return sg and sg:IsContains(te:GetHandler()) and 4 or 0
-end
-
-
 function s.spcost2(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return Duel.CheckRemoveOverlayCard(tp,1,0,1,REASON_COST) end
 	Duel.RemoveOverlayCard(tp,1,0,1,1,REASON_COST)
@@ -98,4 +91,9 @@ function s.spop2(e,tp,eg,ep,ev,re,r,rp)
             Duel.ConfirmCards(1-tp,tg)
         end
     end
+end
+function s.val(te,xyz,sg)
+    --if you want to do something with `sg` later then you must return the expected level if `sg` is nil 
+    if not sg then return 4 end
+    return sg and sg:IsContains(te:GetHandler()) and 4 or 0
 end
