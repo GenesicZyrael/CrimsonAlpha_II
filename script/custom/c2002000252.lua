@@ -17,7 +17,7 @@ function s.initial_effect(c)
     c:RegisterEffect(e1)
 	--Special Summon from hand, GY, or face-up Extra Deck
     local e2=Effect.CreateEffect(c)
-    e2:SetDescription(aux.Stringid(id,1))
+    e2:SetDescription(aux.Stringid(id,0))
     e2:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_ATKCHANGE+CATEGORY_TOHAND+CATEGORY_SEARCH)
     e2:SetType(EFFECT_TYPE_IGNITION)
     e2:SetRange(LOCATION_HAND+LOCATION_GRAVE+LOCATION_EXTRA)
@@ -30,7 +30,7 @@ function s.initial_effect(c)
     local e3=Effect.CreateEffect(c)
     e3:SetType(EFFECT_TYPE_SINGLE)
     e3:SetCode(EFFECT_XYZ_MATERIAL_CUSTOM)
-    e3:SetTarget(function(e,c) return c:HasLevel() and (c:IsSetCard(SET_ODD_EYES) or c:IsSetCard(SET_REBELLION) or c:IsSetCard(SET_THE_PHANTOM_KNIGHTS)) end)
+    -- e3:SetTarget(function(e,c) return c:HasLevel() and (c:IsSetCard(SET_ODD_EYES) or c:IsSetCard(SET_REBELLION) or c:IsSetCard(SET_THE_PHANTOM_KNIGHTS)) end)
     e3:SetValue(s.val)
     c:RegisterEffect(e3)
 end
@@ -84,7 +84,7 @@ function s.spop2(e,tp,eg,ep,ev,re,r,rp)
         tc:RegisterEffect(e1)
         -- search Rank-Up-Magic
         local sg=Duel.GetMatchingGroup(s.rumfilter,tp,LOCATION_DECK,0,nil)
-        if #sg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
+        if #sg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
             Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
             local tg=sg:Select(tp,1,1,nil)
             Duel.SendtoHand(tg,nil,REASON_EFFECT)
@@ -92,8 +92,16 @@ function s.spop2(e,tp,eg,ep,ev,re,r,rp)
         end
     end
 end
+function s.chkval(sg)
+	for sc in sg:Iter() do
+		if not (sc:IsSetCard(SET_ODD_EYES) or sc:IsSetCard(SET_REBELLION) or sc:IsSetCard(SET_THE_PHANTOM_KNIGHTS)) then
+			return false
+		end
+	end
+	return true
+end
 function s.val(te,xyz,sg)
     --if you want to do something with `sg` later then you must return the expected level if `sg` is nil 
     if not sg then return 4 end
-    return sg and sg:IsContains(te:GetHandler()) and 4 or 0
+    return s.chkval(sg) and sg and sg:IsContains(te:GetHandler()) and 4 or 0
 end

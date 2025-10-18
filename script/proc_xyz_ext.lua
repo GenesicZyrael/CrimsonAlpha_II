@@ -132,7 +132,5 @@ function Xyz.RecursionChk(c,mg,xyz,tp,min,max,minc,maxc,sg,matg,ct,matct,mustbem
 		mg:Sub(eqg)
 	end
 	mg:Merge(rg)
-	
-	
 	return res and (c:IsXyzLevel(xyz,lv) or mustContainLevelChange) 
 end
