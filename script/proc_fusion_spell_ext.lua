@@ -1,3 +1,16 @@
+--The function generates a default Fusion Summon effect. By default it's usable for Spells/Traps, usage in monsters requires changing type and code afterwards.
+--c				card that uses the effect
+--fusfilter		filter for the monster to be Fusion Summoned
+--matfilter		restriction on the default materials returned by GetFusionMaterial
+--extrafil		function that returns a group of extra cards that can be used as fusion materials, and as second optional parameter the additional filter function
+--extraop		function called right before sending the monsters to the graveyard as material
+--gc			mandatory card or function returning a group to be used (for effects like Soprano)
+--stage2		function called after the monster has been summoned
+--exactcount
+--location		location where to summon fusion monsters from (default LOCATION_EXTRA)
+--chkf			FUSPROC flags for the fusion summon
+--desc			summon effect description
+
 local geff=Effect.GlobalEffect()
 geff:SetType(EFFECT_TYPE_FIELD)
 geff:SetCode(EFFECT_EXTRA_FUSION_MATERIAL)
