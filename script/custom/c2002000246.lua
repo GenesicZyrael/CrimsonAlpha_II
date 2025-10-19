@@ -11,19 +11,7 @@ function s.initial_effect(c)
 	e1:SetCost(s.cost)
 	e1:SetTarget(s.target)
 	e1:SetOperation(s.activate)
-	-- Prevent monster effect chains
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_FIELD)
-	e0:SetCode(EFFECT_CANNOT_ACTIVATE)
-	e0:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e0:SetRange(LOCATION_SZONE)
-	e0:SetTargetRange(0,1)
-	e0:SetValue(function(e,re,tp) return re:IsActiveType(TYPE_MONSTER) end)
-	c:RegisterEffect(e0)
-	c:RegisterEffect(e1)
 end
-
--- Cost: Tribute 1 monster from hand or field
 function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.CheckReleaseGroupCost(tp,nil,1,true,nil,nil) end
 	local g=Duel.SelectReleaseGroupCost(tp,nil,1,1,true,nil,nil)

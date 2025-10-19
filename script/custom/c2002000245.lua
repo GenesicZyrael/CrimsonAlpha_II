@@ -12,8 +12,6 @@ function s.initial_effect(c)
 	e1:SetOperation(s.operation)
 	c:RegisterEffect(e1)
 end
-
--- Cost: Discard 1 valid monster
 function s.cfilter(c,tp)
 	local att,lv,race,code=c:GetAttribute(),c:GetLevel(),c:GetRace(),c:GetCode()
 	if lv<=0 then return false end
@@ -32,13 +30,10 @@ function s.filter2(c,att,lv,race,code1,code2)
 	return c:IsAttribute(att) and c:IsLevel(lv) and c:IsAbleToHand()
 		and not c:IsRace(race) and not c:IsCode(code1) and not c:IsCode(code2)
 end
-
 function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	e:SetLabel(1)
 	if chk==0 then return true end
 end
-
--- Target
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		if e:GetLabel()~=1 then return false end
@@ -51,8 +46,6 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SendtoGrave(g,REASON_COST+REASON_DISCARD)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,2,tp,LOCATION_DECK)
 end
-
--- Operation
 function s.operation(e,tp,eg,ep,ev,re,r,rp)
 	local tc=e:GetLabelObject()
 	local att,lv,race,code1=tc:GetAttribute(),tc:GetLevel(),tc:GetRace(),tc:GetCode()
