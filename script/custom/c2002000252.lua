@@ -89,14 +89,6 @@ function s.spop2(e,tp,eg,ep,ev,re,r,rp)
         e1:SetValue(math.floor(tc:GetAttack()/2))
         e1:SetReset(RESET_EVENT+RESETS_STANDARD)
         tc:RegisterEffect(e1)
-        -- -- search Rank-Up-Magic
-        -- local sg=Duel.GetMatchingGroup(s.rumfilter,tp,LOCATION_DECK,0,nil)
-        -- if #sg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
-            -- Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-            -- local tg=sg:Select(tp,1,1,nil)
-            -- Duel.SendtoHand(tg,nil,REASON_EFFECT)
-            -- Duel.ConfirmCards(1-tp,tg)
-        -- end
     end
 end
 function s.chkval(sg)
