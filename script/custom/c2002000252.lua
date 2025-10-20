@@ -26,12 +26,23 @@ function s.initial_effect(c)
     e2:SetTarget(s.sptg2)
     e2:SetOperation(s.spop2)
     c:RegisterEffect(e2)
+	--to hand
+	local e3=Effect.CreateEffect(c)
+	e3:SetDescription(aux.Stringid(id,0))
+	e3:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e3:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e3:SetProperty(EFFECT_FLAG_DELAY)
+	e3:SetCountLimit(1,{id,2})
+	e3:SetTarget(s.thtg)
+	e3:SetOperation(s.thop)
+	c:RegisterEffect(e3)
 	--Xyz level
-    local e3=Effect.CreateEffect(c)
-    e3:SetType(EFFECT_TYPE_SINGLE)
-    e3:SetCode(EFFECT_XYZ_MATERIAL_CUSTOM)
-    e3:SetValue(s.val)
-    c:RegisterEffect(e3)
+    local e4=Effect.CreateEffect(c)
+    e4:SetType(EFFECT_TYPE_SINGLE)
+    e4:SetCode(EFFECT_XYZ_MATERIAL_CUSTOM)
+    e4:SetValue(s.val)
+    c:RegisterEffect(e4)
 end
 s.listed_series={SET_ODD_EYES,SET_REBELLION,SET_THE_PHANTOM_KNIGHTS,SET_RANK_UP_MAGIC}
 function s.cfilter(c,tp)
@@ -63,9 +74,6 @@ function s.sptg2(e,tp,eg,ep,ev,re,r,rp,chk)
     end
     Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,0,0)
 end
-function s.rumfilter(c)
-    return c:IsSetCard(SET_RANK_UP_MAGIC) and c:IsAbleToHand() 
-end
 function s.spop2(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
     if not c:IsRelateToEffect(e) then return end
@@ -81,14 +89,14 @@ function s.spop2(e,tp,eg,ep,ev,re,r,rp)
         e1:SetValue(math.floor(tc:GetAttack()/2))
         e1:SetReset(RESET_EVENT+RESETS_STANDARD)
         tc:RegisterEffect(e1)
-        -- search Rank-Up-Magic
-        local sg=Duel.GetMatchingGroup(s.rumfilter,tp,LOCATION_DECK,0,nil)
-        if #sg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
-            Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-            local tg=sg:Select(tp,1,1,nil)
-            Duel.SendtoHand(tg,nil,REASON_EFFECT)
-            Duel.ConfirmCards(1-tp,tg)
-        end
+        -- -- search Rank-Up-Magic
+        -- local sg=Duel.GetMatchingGroup(s.rumfilter,tp,LOCATION_DECK,0,nil)
+        -- if #sg>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
+            -- Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+            -- local tg=sg:Select(tp,1,1,nil)
+            -- Duel.SendtoHand(tg,nil,REASON_EFFECT)
+            -- Duel.ConfirmCards(1-tp,tg)
+        -- end
     end
 end
 function s.chkval(sg)
@@ -103,4 +111,19 @@ function s.val(te,xyz,sg)
     --if you want to do something with `sg` later then you must return the expected level if `sg` is nil 
     if not sg then return 4 end
     return s.chkval(sg) and sg and sg:IsContains(te:GetHandler()) and 4 or 0
+end
+function s.rumfilter(c)
+    return c:IsSetCard(SET_RANK_UP_MAGIC) and c:IsAbleToHand() 
+end
+function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
+end
+function s.thop(e,tp,eg,ep,ev,re,r,rp)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+	local g=Duel.SelectMatchingCard(tp,s.rumfilter,tp,LOCATION_DECK,0,1,1,nil)
+	if #g>0 then
+		Duel.SendtoHand(g,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,g)
+	end
 end
