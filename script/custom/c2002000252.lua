@@ -30,8 +30,6 @@ function s.initial_effect(c)
     local e3=Effect.CreateEffect(c)
     e3:SetType(EFFECT_TYPE_SINGLE)
     e3:SetCode(EFFECT_XYZ_MATERIAL_CUSTOM)
-    -- e3:SetTarget(function(e,c) return c:HasLevel() and (c:IsSetCard(SET_ODD_EYES) or c:IsSetCard(SET_REBELLION) or c:IsSetCard(SET_THE_PHANTOM_KNIGHTS)) end)
-    e3:SetCountLimit(1,{id,2})
     e3:SetValue(s.val)
     c:RegisterEffect(e3)
 end
