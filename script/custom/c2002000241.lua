@@ -15,8 +15,20 @@ function s.initial_effect(c)
 	e1:SetTarget(s.rmtg)
 	e1:SetOperation(s.rmop)
 	c:RegisterEffect(e1)
+	--add 1 "Joker's Knight
+	local e2=Effect.CreateEffect(c)
+	e2:SetDescription(aux.Stringid(id,0))
+	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
+	e2:SetCode(EVENT_DESTROYED)
+	-- e2:SetCondition(s.condition)
+	e2:SetCost(s.cost)
+	e2:SetTarget(s.target)
+	e2:SetOperation(s.operation)
+	c:RegisterEffect(e2)
 end
-s.listed_names={CARD_QUEEN_KNIGHT,CARD_KING_KNIGHT,CARD_JACK_KNIGHT}
+s.listed_names={CARD_QUEEN_KNIGHT,CARD_KING_KNIGHT,CARD_JACK_KNIGHT,29284413}
 function s.matfilter(c,scard,sumtype,tp)
 	return c:IsRace(RACE_WARRIOR,scard,sumtype,tp) and c:IsAttribute(ATTRIBUTE_LIGHT,scard,sumtype,tp)
 end
@@ -59,5 +71,42 @@ function s.rmop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 		Duel.HintSelection(sg)
 		Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
+	end
+end
+
+function s.condition(e,tp,eg,ep,ev,re,r,rp)
+	return rp~=tp and e:GetHandler():IsPreviousControler(tp)
+end
+
+function s.cfilter(c)
+	return c:IsAttribute(ATTRIBUTE_LIGHT) and c:IsRace(RACE_WARRIOR) and c:IsAbleToDeckAsCost() 
+		and (c:IsFaceup() or c:IsLocation(LOCATION_HAND))
+end
+function s.check(sg,e,tp,mg)
+	return sg:GetClassCount(Card.GetCode)==#sg
+end
+function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
+	local g=Duel.GetMatchingGroup(s.cfilter,tp,LOCATION_HAND|LOCATION_ONFIELD|LOCATION_GRAVE,0,nil)
+	if chk==0 then 
+		return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_HAND|LOCATION_ONFIELD|LOCATION_GRAVE,0,3,nil)
+			and aux.SelectUnselectGroup(g,e,tp,3,3,s.check,0)
+	end
+	local sg=aux.SelectUnselectGroup(g,e,tp,3,3,s.check,1,tp,HINTMSG_TARGET)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+	Duel.SendtoDeck(sg,nil,SEQ_DECKSHUFFLE,REASON_COST)
+end
+function s.filter(c,e,tp)
+	return c:IsCode(29284413) and c:IsAbleToHand()
+end
+function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_DECK|LOCATION_GRAVE,0,1,nil,e,tp) end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK|LOCATION_GRAVE)
+end
+function s.operation(e,tp,eg,ep,ev,re,r,rp)
+	Duel.Hint(HINT_SELECTMSG,tp,CATEGORY_TOHAND)
+	local g=Duel.SelectMatchingCard(tp,s.filter,tp,LOCATION_DECK|LOCATION_GRAVE,0,1,1,nil,e,tp)
+	if #g>0 then
+		Duel.SendtoHand(g,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,g)
 	end
 end
