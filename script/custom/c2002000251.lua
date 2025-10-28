@@ -112,7 +112,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	local g2=aux.SelectUnselectGroup(mg,e,tp,2,2,s.rescon,1,tp,HINTMSG_TOGRAVE)
 	if #g2>1 then end
 	g1:Merge(g2)
-	if #g1>0 and Duel.SendtoGrave(g1,REASON_EFFECT)>0 and c:IsRelateToEffect(e) then
+	if #g1>2 and Duel.SendtoGrave(g1,REASON_EFFECT)>0 and c:IsRelateToEffect(e) then
 		Duel.SpecialSummon(c,0,tp,tp,false,false,POS_DEFENSE)
 	end
 end
