@@ -30,6 +30,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 s.listed_series={SET_ZEFRA}
+s.listed_names={29432356}
 function s.filter(c,e,tp)
 	return (c:IsSetCard(SET_ZEFRA) 
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_PENDULUM,tp,false,false) 
