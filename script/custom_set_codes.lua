@@ -40,6 +40,9 @@ if not CustomArchetype then
 	
 	CustomArchetype.Pikeru={81383947,75917088,58015506,74270067}
 	Card.IsSetPikeru=MakeCheck({SET_PIKERU},CustomArchetype.Pikeru)
+
+	CustomArchetype.Stellarnova={100447044}
+	Card.IsStellarnova=MakeCheck({SET_STELLARNOVA},CustomArchetype.Stellarnova)
 	
 	CustomArchetype.Curran={46128076,2316186}
 	Card.IsSetCurran=MakeCheck({SET_Curran},CustomArchetype.Curran)
