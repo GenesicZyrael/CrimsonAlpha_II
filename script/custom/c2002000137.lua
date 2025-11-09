@@ -97,7 +97,7 @@ function s.efilter(e,te)
 			-- return ec:GetOriginalLevel()<=lv
 		-- end
 		local ec=te:GetOwner()
-		return ec:IsAttribute(TYPE_DIVINE)
+		return ec:GetAttribute(TYPE_DIVINE)
 	else
 		return false
 	end
