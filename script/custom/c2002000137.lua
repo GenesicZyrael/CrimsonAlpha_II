@@ -1,5 +1,4 @@
 --Obelisk's Disciple
-
 local s,id=GetID()
 function s.initial_effect(c)
 	c:SetLimitOnField(3,id)
@@ -8,11 +7,14 @@ function s.initial_effect(c)
 	c:RegisterEffect(e0)
 	--extra summon
 	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e1:SetCode(EVENT_SUMMON_SUCCESS)
-	e1:SetCondition(s.sumcon)
-	e1:SetTarget(s.sumtg)
-	e1:SetOperation(s.sumop)
+	e1:SetCountLimit(1,id)
+	e1:SetCost(s.cost)
+	e1:SetCondition(s.condition)
+	e1:SetTarget(s.target)
+	e1:SetOperation(s.operation)
 	c:RegisterEffect(e1)
 	local e2=e1:Clone()
 	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
@@ -24,19 +26,33 @@ function s.initial_effect(c)
 	e3:SetCondition(s.regcon)
 	e3:SetOperation(s.regop)
 	c:RegisterEffect(e3)
+	Duel.AddCustomActivityCounter(id,ACTIVITY_SPSUMMON,function(c) return not c:IsSummonLocation(LOCATION_EXTRA) end)
 end
 s.listed_names={74875003,CARD_RA,10000020,10000000}
-function s.sumcon(e,tp,eg,ep,ev,re,r,rp)
+function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.GetCustomActivityCount(id,tp,ACTIVITY_SPSUMMON)==0 end
+	--Cannot Special Summon monsters from the Extra Deck
+	local e1=Effect.CreateEffect(e:GetHandler())
+	e1:SetDescription(aux.Stringid(id,1))
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_OATH+EFFECT_FLAG_CLIENT_HINT)
+	e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
+	e1:SetTargetRange(1,0)
+	e1:SetTarget(function(_,c) return c:IsLocation(LOCATION_EXTRA) end)
+	e1:SetReset(RESET_PHASE|PHASE_END)
+	Duel.RegisterEffect(e1,tp)
+end
+function s.condition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsPlayerCanAdditionalSummon(tp)
 end
-function s.sumtg(e,tp,eg,ep,ev,re,r,rp,chk)
+function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsPlayerCanSummon(tp) end
 end
 function s.extg(e,c)
 	return c:IsCode(CARD_RA,10000020,10000000) 
 		or c:ListsCode(CARD_RA,10000020,10000000)
 end
-function s.sumop(e,tp,eg,ep,ev,re,r,rp)
+function s.operation(e,tp,eg,ep,ev,re,r,rp)
 	local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetType(EFFECT_TYPE_FIELD)
@@ -57,7 +73,7 @@ function s.regop(e,tp,eg,ep,ev,re,r,rp)
 	--immune
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetDescription(aux.Stringid(id,1))
+	e1:SetDescription(aux.Stringid(id,2))
 	e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_CLIENT_HINT)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCode(EFFECT_IMMUNE_EFFECT)
@@ -71,15 +87,17 @@ function s.immcon(e)
 end
 function s.efilter(e,te)
 	if te:IsActiveType(TYPE_MONSTER) and te:IsActivated() and te:GetHandler()~=e:GetHandler() then
-		local lv=e:GetHandler():GetLevel()
+		-- local lv=e:GetHandler():GetLevel()
+		-- local ec=te:GetOwner()
+		-- if ec:IsType(TYPE_LINK) then
+			-- return ec:GetLink()<=lv
+		-- elseif ec:IsType(TYPE_XYZ) then
+			-- return ec:GetOriginalRank()<=lv
+		-- else
+			-- return ec:GetOriginalLevel()<=lv
+		-- end
 		local ec=te:GetOwner()
-		if ec:IsType(TYPE_LINK) then
-			return ec:GetLink()<=lv
-		elseif ec:IsType(TYPE_XYZ) then
-			return ec:GetOriginalRank()<=lv
-		else
-			return ec:GetOriginalLevel()<=lv
-		end
+		return ec:IsAttribute(TYPE_DIVINE)
 	else
 		return false
 	end

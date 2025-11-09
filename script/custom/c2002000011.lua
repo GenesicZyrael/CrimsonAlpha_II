@@ -1,5 +1,4 @@
 --Slifer's Disciple
-
 local s,id=GetID()
 function s.initial_effect(c)
 	c:SetLimitOnField(3,id)
@@ -12,10 +11,10 @@ function s.initial_effect(c)
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e1:SetCode(EVENT_SUMMON_SUCCESS)
-	e1:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
 	e1:SetCountLimit(1,id)
-	e1:SetTarget(s.thtg)
-	e1:SetOperation(s.thop)
+	e1:SetCost(s.cost)
+	e1:SetTarget(s.target)
+	e1:SetOperation(s.operation)
 	c:RegisterEffect(e1)
 	local e2=e1:Clone()
 	e2:SetCode(EVENT_FLIP_SUMMON_SUCCESS)
@@ -30,17 +29,32 @@ function s.initial_effect(c)
 	e4:SetCondition(s.regcon)
 	e4:SetOperation(s.regop)
 	c:RegisterEffect(e4)
+	Duel.AddCustomActivityCounter(id,ACTIVITY_SPSUMMON,function(c) return not c:IsSummonLocation(LOCATION_EXTRA) end)
+
 end
 s.listed_names={74875003,CARD_RA,10000020,10000000}
+function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.GetCustomActivityCount(id,tp,ACTIVITY_SPSUMMON)==0 end
+	--Cannot Special Summon monsters from the Extra Deck
+	local e1=Effect.CreateEffect(e:GetHandler())
+	e1:SetDescription(aux.Stringid(id,1))
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_OATH+EFFECT_FLAG_CLIENT_HINT)
+	e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
+	e1:SetTargetRange(1,0)
+	e1:SetTarget(function(_,c) return c:IsLocation(LOCATION_EXTRA) end)
+	e1:SetReset(RESET_PHASE|PHASE_END)
+	Duel.RegisterEffect(e1,tp)
+end
 function s.thfilter(c)
 	return (c:IsCode(CARD_RA,10000020,10000000) or c:ListsCode(CARD_RA,10000020,10000000))
 		and c:IsAbleToHand() and not c:IsOriginalCode(id)
 end
-function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
+function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
-function s.thop(e,tp,eg,ep,ev,re,r,rp)
+function s.operation(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e) then return end
 	local g=Duel.GetMatchingGroup(s.thfilter,tp,LOCATION_DECK,0,nil)
 	if #g>0 then
@@ -58,17 +72,19 @@ end
 function s.regop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local rc=c:GetReasonCard()
-	if rc:IsSummonType(SUMMON_TYPE_TRIBUTE) and rc:IsAttribute(ATTRIBUTE_DIVINE) 
-	and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
-		local g=rc:GetMaterial()
-		local atk=0
-		local def=0
-		for gc in aux.Next(g) do
-			atk=atk+gc:GetBaseAttack()
-			def=def+gc:GetBaseDefense()
-		end
-		if atk>4000 then atk=4000 end
-		if def>4000 then def=4000 end
+	if rc:IsSummonType(SUMMON_TYPE_TRIBUTE) and rc:IsAttribute(ATTRIBUTE_DIVINE) then
+	-- and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
+		-- local g=rc:GetMaterial()
+		-- local atk=0
+		-- local def=0
+		-- for gc in aux.Next(g) do
+			-- atk=atk+gc:GetBaseAttack()
+			-- def=def+gc:GetBaseDefense()
+		-- end
+		-- if atk>4000 then atk=4000 end
+		-- if def>4000 then def=4000 end
+		local atk=rc:GetBaseAttack()+4000
+		local def=rc:GetBaseDefense()+4000
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetDescription(aux.Stringid(id,1))
