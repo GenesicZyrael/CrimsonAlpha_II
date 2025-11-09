@@ -87,7 +87,7 @@ function s.regop(e,tp,eg,ep,ev,re,r,rp)
 		local def=rc:GetBaseDefense()+4000
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetDescription(aux.Stringid(id,1))
+		e1:SetDescription(aux.Stringid(id,2))
 		e1:SetProperty(EFFECT_FLAG_CLIENT_HINT)
 		e1:SetCode(EFFECT_SET_BASE_ATTACK)
 		e1:SetValue(atk)
