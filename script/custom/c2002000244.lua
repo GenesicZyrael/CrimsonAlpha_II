@@ -60,7 +60,7 @@ function s.checkop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.condition(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetFlagEffect(1-tp,id)>=1 and Duel.IsMainPhase()
+	return Duel.GetFlagEffect(1-tp,id)>=3 and Duel.IsMainPhase()
 end
 function s.plfilter(c,tp)
 	return c:IsCode(CARD_DESTINY_BOARD) 

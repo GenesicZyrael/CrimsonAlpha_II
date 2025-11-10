@@ -70,6 +70,7 @@ function s.plop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Group.CreateGroup()
 	local sg=Group.CreateGroup()
 	local list={}
+	if ct>4 then ct=4 end
 	for i=1,ct do
 		cid=CARDS_SPIRIT_MESSAGE[c:GetFlagEffect(id)+i]
 		g=Duel.SelectMatchingCard(tp,s.plfilter,tp,LOCATION_DECK|LOCATION_HAND,0,1,1,nil,cid)
@@ -98,8 +99,10 @@ function s.extraop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Group.CreateGroup()
 	local sg=Group.CreateGroup()
 	local list={}
+	if ct>4 then ct=4 end
 	for i=1,ct do
 		cid=CARDS_SPIRIT_MESSAGE[c:GetFlagEffect(id)+i]
+		Debug.Message(cid)
 		g=Duel.SelectMatchingCard(tp,s.plfilter,tp,LOCATION_DECK|LOCATION_HAND,0,1,1,nil,cid)
 		if #g>0 then 
 			sg:AddCard(g:GetFirst())
@@ -107,8 +110,8 @@ function s.extraop(e,tp,eg,ep,ev,re,r,rp)
 		end
 	end
 	if #sg>0 then
-		cid=CARDS_SPIRIT_MESSAGE[c:GetFlagEffect(id)+1]
 		for i=1,ct do
+			cid=CARDS_SPIRIT_MESSAGE[c:GetFlagEffect(id)+1]
 			tc=list[i]
 			if Duel.IsPlayerCanSpecialSummonMonster(tp,cid,0,TYPE_MONSTER|TYPE_NORMAL,0,0,1,RACE_FIEND,ATTRIBUTE_DARK,POS_FACEUP,tp,181)
 			and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
