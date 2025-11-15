@@ -40,6 +40,7 @@ function s.initial_effect(c)
 	e2:SetHintTiming(TIMING_SPSUMMON,TIMING_BATTLE_START|TIMING_BATTLE_END)
 	e2:SetCountLimit(1,{id,0})
 	e2:SetCost(aux.CostWithReplace(Cost.DetachFromSelf(2),CARD_CONSTELLARKNIGHT_TROIVERNUM))
+	e2:SetCondition(s.descon)
 	e2:SetTarget(s.destg)
 	e2:SetOperation(s.desop)
 	c:RegisterEffect(e2)
@@ -91,6 +92,9 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.HintSelection(g)
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 	end
+end
+function s.descon(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.IsTurnPlayer(1-tp) and Duel.IsMainPhase()
 end
 function s.destg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(nil,tp,0,LOCATION_ONFIELD,nil)
