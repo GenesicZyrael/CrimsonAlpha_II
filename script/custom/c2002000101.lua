@@ -69,12 +69,10 @@ end
 ---
 function s.posfilter(c,e)
 	return c:IsRelateToEffect(e)
-		and c:IsSetCard(SET_RITUAL_BEAST)
 		and c:IsPosition(POS_DEFENSE)
 end
 function s.poscon(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(aux.FaceupFilter(Card.IsSetCard,SET_RITUAL_BEAST),1,nil)
-		and eg:IsExists(aux.FilterBoolFunctionEx(Card.IsPosition,POS_DEFENSE),1,nil)
+	return eg:IsExists(aux.FilterBoolFunctionEx(Card.IsPosition,POS_DEFENSE),1,nil)
 end
 function s.postg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsRelateToEffect(e) end
