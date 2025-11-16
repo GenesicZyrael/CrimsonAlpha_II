@@ -131,30 +131,29 @@ end
 function s.tdcon(e,tp,eg,ep,ev,re,r,rp)
 	return not eg:IsContains(e:GetHandler()) and eg:IsExists(s.desfilter,1,nil,tp)
 end
-function s.tdfilter(c)
-	return c:IsAbleToDeck() and (c:IsSetCard(SET_YANG_ZING) or c:IsSetCard(SET_ZEFRA)) 
+function s.rescon(sg)
+	return #sg==1 or (sg:IsExists(Card.IsSetCard,1,nil,SET_YANG_ZING) and sg:IsExists(Card.IsSetCard,1,nil,SET_ZEFRA))
+end
+function s.tdfilter(c,e)
+	return c:IsAbleToDeck() and c:IsSetCard({SET_YANG_ZING,SET_ZEFRA}) and c:IsCanBeEffectTarget(e)
 end
 function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.tdfilter(chkc) end
-	if chk==0 then return Duel.IsExistingTarget(s.tdfilter,tp,LOCATION_GRAVE,0,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectTarget(tp,s.tdfilter,tp,LOCATION_GRAVE,0,1,1,nil)
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,1,0,0)
+	local g=Duel.GetMatchingGroup(s.tdfilter,tp,LOCATION_GRAVE,0,nil,e)
+	if chk==0 then return #g>0 end
+	local tg=aux.SelectUnselectGroup(g,e,tp,1,2,s.rescon,1,tp,HINTMSG_TODECK)
+	Duel.SetTargetCard(tg)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,tg,#tg,tp,0)
 end
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
-	-- local tg=Duel.GetTargetCards(e)
-	if not tg or tg:FilterCount(Card.IsRelateToEffect,nil,e)~=1 then return end
-	Duel.SendtoDeck(tg,nil,SEQ_DECKTOP,REASON_EFFECT)
-	local g=Duel.GetOperatedGroup()
-	if g:IsExists(Card.IsLocation,1,nil,LOCATION_DECK) then Duel.ShuffleDeck(tp) end
-	local ct=g:FilterCount(Card.IsLocation,nil,LOCATION_DECK|LOCATION_EXTRA)
-	if ct==1 and Duel.Draw(tp,2,REASON_EFFECT)>0 and Duel.IsExistingTarget(Card.IsDestructable,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil) then
-		local g=Duel.GetMatchingGroup(Card.IsDestructable,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-		local sg=g:Select(tp,1,1,nil)
-		Duel.HintSelection(sg)
-		Duel.Destroy(sg,REASON_EFFECT)
+	local tg=Duel.GetTargetCards(e)
+	if #tg>0 and Duel.SendtoDeck(tg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT) then
+		if Duel.IsExistingTarget(Card.IsDestructable,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil) then
+			local g=Duel.GetMatchingGroup(Card.IsDestructable,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)
+			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
+			local sg=g:Select(tp,1,1,nil)
+			Duel.HintSelection(sg)
+			Duel.Destroy(sg,REASON_EFFECT)
+		end
 	end
 end
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
