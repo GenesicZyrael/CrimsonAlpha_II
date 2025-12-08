@@ -1,10 +1,11 @@
 --El Shaddoll Zefracoreaver
 local s,id=GetID()
 function s.initial_effect(c)
-    --Pendulum
+    c:EnableReviveLimit()
+	c:AddMustFirstBeFusionSummoned()
+	--Pendulum
     Pendulum.AddProcedure(c)
 	--Fusion
-	c:AddMustFirstBeFusionSummoned()
 	Fusion.AddProcMixN(c,true,true,s.ffilter1,1,s.ffilter2,1,s.ffilter3,1)
 	--Negate 1 face-up card, then change the scales of your "Zefra" cards in the Pendulum Zone to 0 & 12
 	local e1=Effect.CreateEffect(c)
@@ -33,12 +34,11 @@ function s.initial_effect(c)
 	--Set 1 "Shaddoll" or "Zefra" Spell/Trap, then place this card in the Pendulum Zone
 	local e3a=Effect.CreateEffect(c)
 	e3a:SetDescription(aux.Stringid(id,2))
-	e3a:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e3a:SetCode(EVENT_TO_DECK)
+	e3a:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e3a:SetProperty(EFFECT_FLAG_DELAY)
-	e3a:SetRange(LOCATION_EXTRA)
+	e3a:SetCode(EVENT_TO_DECK)
 	e3a:SetCountLimit(1,{id,2})
-	e3a:SetCondition(function(e) return e:GetHandler():IsLocation(LOCATION_EXTRA) end)
+	e3a:SetCondition(function(e) return e:GetHandler():IsLocation(LOCATION_EXTRA) and e:GetHandler():IsFaceup() end)
 	e3a:SetTarget(s.plctg)
 	e3a:SetOperation(s.plcop)
 	c:RegisterEffect(e3a)
