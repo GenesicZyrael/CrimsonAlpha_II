@@ -29,9 +29,26 @@ function s.initial_effect(c)
 	e2:SetTarget(s.Target)
 	e2:SetOperation(s.Operation)
 	c:RegisterEffect(e2)
+	--Set 1 "Shaddoll" or "Zefra" Spell/Trap, then place this card in the Pendulum Zone
+	local e3a=Effect.CreateEffect(c)
+	e3a:SetDescription(aux.Stringid(id,2))
+	e3a:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e3a:SetCode(EVENT_TO_DECK)
+	e3a:SetProperty(EFFECT_FLAG_DELAY)
+	e3a:SetRange(LOCATION_EXTRA)
+	e3a:SetCountLimit(1,{id,2})
+	e3a:SetCondition(function(e) return e:GetHandler():IsLocation(LOCATION_EXTRA) end)
+	e3a:SetTarget(s.plctg)
+	e3a:SetOperation(s.plcop)
+	c:RegisterEffect(e3a)
+	local e3b=e3a:Clone()
+	e3b:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e3b:SetRange(LOCATION_MZONE)
+	e3b:SetCondition(function(e) return e:GetHandler():IsFusionSummoned() end)
+	c:RegisterEffect(e3b)
 end
 s.listed_series={SET_SHADDOLL,SET_ZEFRA}
-
+--Material Check
 function s.ffilter1(c,fc,sumtype,sp,sub,mg,sg,set)
 	return c:IsSetCard(SET_SHADDOLL,fc,sumtype,sp) 
 		and (not sg or sg:FilterCount(aux.TRUE,c)==0 or not sg:IsExists(Card.IsAttribute,1,c,c:GetAttribute(),fc,sumtype,sp))
@@ -43,7 +60,7 @@ end
 function s.ffilter3(c,fc,sumtype,sp,sub,mg,sg)
 	return (not sg or sg:FilterCount(aux.TRUE,c)==0 or not sg:IsExists(Card.IsAttribute,1,c,c:GetAttribute(),fc,sumtype,sp))
 end
-
+--E1: Negate 1 face-up card, then change the scales of your "Zefra" cards in the Pendulum Zone to 0 & 12
 function s.disfilter(c)
 	return c:IsSetCard({SET_SHADDOLL,SET_ZEFRA}) and c:IsMonster() and c:IsReason(REASON_EFFECT)
 end
@@ -107,7 +124,7 @@ function s.scval(val)
 		end
 	end
 end
-
+--E2: Lingering Floodgate
 function s.mtfilter(c)
 	return c:IsSetCard(SET_ZEFRA) 
 		and c:IsType(TYPE_MONSTER)
@@ -159,6 +176,25 @@ function s.sumlimit(ctype)
 			return c:IsType(ctype)
 		else
 			return c:IsOriginalType(ctype)
+		end
+	end
+end
+--E3: Set 1 "Shaddoll" or "Zefra" Spell/Trap, then place this card in the Pendulum Zone
+function s.plcfilter(c,tp)
+	return c:IsSetCard({SET_SHADDOLL,SET_ZEFRA}) and c:IsSpellTrap() and c:IsSSetable()
+end
+function s.plctg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.plcfilter,tp,LOCATION_DECK,0,1,nil) end
+end
+function s.plcop(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
+	local g=Duel.SelectMatchingCard(tp,s.plcfilter,tp,LOCATION_DECK,0,1,1,nil)
+	if #g>0 and Duel.SSet(tp,g)>0 then
+		if aux.GetPendulumZoneCount(tp)>0 and Duel.SelectYesNo(tp,aux.Stringid(id,3)) then
+			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOFIELD)
+			Duel.BreakEffect()
+			Duel.MoveToField(c,tp,tp,LOCATION_PZONE,POS_FACEUP,true) 
 		end
 	end
 end
