@@ -70,7 +70,40 @@ function s.getmats(c,tp)
 	return c:GetMaterial():IsExists(s.mtfilter,1,nil) and c:GetControler()==tp
 end
 function s.pzcon(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.getmats,1,nil,tp) and
+	if not eg:IsExists(s.getmats,1,nil,tp) then return end
+	local tribute_chk=eg:IsExists(s.getmats,1,nil,tp) and eg:GetFirst():IsSummonType(SUMMON_TYPE_TRIBUTE)
+	local ritual_chk=eg:IsExists(s.getmats,1,nil,tp) and eg:GetFirst():IsSummonType(SUMMON_TYPE_RITUAL)
+	local extra_chk=eg:IsExists(s.getmats,1,nil,tp) and eg:GetFirst():IsPreviousLocation(LOCATION_EXTRA)
+	local synchro_chk,xyz_chk,link_chk,fusion_chk,special_chk=false,false,false,false,false
+	if not (tribute_chk or ritual_chk or extra_chk) then return end
+	if extra_chk or extra_chk~=false then
+		-- Extra Deck Mechanics
+		synchro_chk= eg:GetFirst():IsSummonType(SUMMON_TYPE_SYNCHRO)
+		xyz_chk=eg:GetFirst():IsSummonType(SUMMON_TYPE_XYZ)
+		link_chk=eg:GetFirst():IsSummonType(SUMMON_TYPE_LINK)
+		fusion_chk=eg:GetFirst():IsSummonType(SUMMON_TYPE_FUSION)
+		-- Contact Fusion
+		if not fusion_chk and eg:GetFirst():IsType(TYPE_FUSION) then
+			fusion_chk=extra_chk
+		end
+		-- Special Summon from Extra Deck using Zefras as fodders
+		if not synchro_chk and eg:GetFirst():IsType(TYPE_SYNCHRO) then
+			synchro_chk=extra_chk
+		end
+		if not xyz_chk and eg:GetFirst():IsType(TYPE_XYZ) then
+			xyz_chk=extra_chk
+		end
+		if not link_chk and eg:GetFirst():IsType(TYPE_LINK) then
+			link_chk=extra_chk
+		end
+		-- Zefraath / Zefratorah Metaltron / Odd-Eyes Raging Dragon Tyrant / etc...
+		-- 		Main Deck Pendulum Monsters that are Special Summoned from the Extra Deck 
+		if not fusion_chk and not synchro_chk and not xyz_chk and not link_chk then
+			special_chk=extra_chk
+		end
+	end
+	return tribute_chk or ritual_chk or special_chk
+		or fusion_chk or synchro_chk or xyz_chk or link_chk
 end
 function s.tgfilter(c,tp)
 	return c:IsSetCard(SET_ZEFRA) 
