@@ -166,7 +166,7 @@ function s.Operation(e,tp,eg,ep,ev,re,r,rp)
 			r1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
 			r1:SetTargetRange(0,1)
 			r1:SetTarget(s.sumlimit(ctype))
-			r1:SetReset(RESET_PHASE|PHASE_END)
+			r1:SetReset(RESET_EVENT|RESETS_STANDARD_DISABLE|RESET_PHASE|PHASE_STANDBY,2)
 			c:RegisterEffect(r1)
 		end
 	end
