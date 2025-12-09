@@ -1,5 +1,4 @@
 --Spiritual Beast Tamers of Valor and Shade
-
 local s,id=GetID()
 function s.initial_effect(c)
 	c:SetUniqueOnField(1,0,id)
@@ -7,6 +6,8 @@ function s.initial_effect(c)
 	c:EnableReviveLimit()
 	Fusion.AddProcMixN(c,true,true,{aux.FilterBoolFunctionEx(Card.IsSetCard,SET_RITUAL_BEAST),aux.FilterBoolFunctionEx(Card.IsSetCard,SET_ZEFRA)},2)
 	Fusion.AddContactProc(c,s.contactfil,s.contactop,s.splimit)
+	--pendulum
+	Pendulum.AddProcedure(c)
 	--pos
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))

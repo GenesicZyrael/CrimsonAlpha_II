@@ -1,5 +1,4 @@
 --Zefra Marshalling
-
 local s,id=GetID()
 function s.initial_effect(c)
 	--spsummon
@@ -71,7 +70,7 @@ function s.getmats(c,tp)
 	return c:GetMaterial():IsExists(s.mtfilter,1,nil) and c:GetControler()==tp
 end
 function s.pzcon(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.getmats,1,nil,tp)
+	return eg:IsExists(s.getmats,1,nil,tp) and
 end
 function s.tgfilter(c,tp)
 	return c:IsSetCard(SET_ZEFRA) 

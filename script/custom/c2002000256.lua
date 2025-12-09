@@ -6,6 +6,8 @@ function s.initial_effect(c)
 	--Synchro summon
 	Synchro.AddProcedure(c,nil,1,1,Synchro.NonTunerEx(Card.IsSetCard,{SET_YANG_ZING,SET_ZEFRA}),1,99)
 	c:EnableReviveLimit()
+	--pendulum
+	Pendulum.AddProcedure(c)
 	--register effect
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_SINGLE)

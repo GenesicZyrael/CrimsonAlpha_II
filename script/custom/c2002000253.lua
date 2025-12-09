@@ -138,7 +138,7 @@ function s.Condition(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.tgfilter(c,tp)
 	return (c:IsLocation(LOCATION_HAND) or (c:IsLocation(LOCATION_EXTRA) and c:IsPublic() and c:IsMonster())) 
-		and c:IsSetCard(SET_ZEFRA) or c:IsSetCard(SET_SHADDOLL) and c:IsAbleToGrave() 
+		and (c:IsSetCard(SET_ZEFRA) or c:IsSetCard(SET_SHADDOLL)) and c:IsAbleToGrave() 
 end
 function s.Target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.tgfilter,tp,LOCATION_HAND|LOCATION_EXTRA,0,1,nil) end
