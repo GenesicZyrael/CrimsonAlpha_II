@@ -1,12 +1,13 @@
 --El Shaddoll Zefracoreaver
 local s,id=GetID()
 function s.initial_effect(c)
-    c:EnableReviveLimit()
-	c:AddMustFirstBeFusionSummoned()
-	--Pendulum
-    Pendulum.AddProcedure(c)
-	--Fusion
+	c:EnableReviveLimit()
+	c:SetUniqueOnField(1,0,id)
+	--Pendulum Summon procedure
+	Pendulum.AddProcedure(c)
+	--Fusion Summon procedure
 	Fusion.AddProcMixN(c,true,true,s.ffilter1,1,s.ffilter2,1,s.ffilter3,1)
+	c:AddMustFirstBeFusionSummoned()
 	--Negate 1 face-up card, then change the scales of your "Zefra" cards in the Pendulum Zone to 0 & 12
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))

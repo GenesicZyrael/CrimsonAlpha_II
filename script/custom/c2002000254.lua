@@ -5,6 +5,7 @@ function s.initial_effect(c)
 	c:SetUniqueOnField(1,0,id)
 	--Pendulum Summon procedure
 	Pendulum.AddProcedure(c)
+	--Ritual Summon
 	c:AddMustFirstBeRitualSummoned()	
 	--Banish 1 Spell/Trap on the field
 	local e1=Effect.CreateEffect(c)

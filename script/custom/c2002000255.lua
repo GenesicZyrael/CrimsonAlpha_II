@@ -3,9 +3,9 @@ local s,id=GetID()
 function s.initial_effect(c)	
 	c:EnableReviveLimit()
 	c:SetUniqueOnField(1,0,id)
-	--Pendulum Summon Procedure
+	--Pendulum Summon procedure
 	Pendulum.AddProcedure(c)
-	--Xyz Summon Procedure
+	--Xyz Summon procedure
 	Xyz.AddProcedure(c,nil,8,2,nil,nil,Xyz.InfiniteMats,nil,nil,s.xyzcheck)
 	c:AddMustFirstBeXyzSummoned()	
 	--Treat "tellarknight" & "Zefra" monsters as Level 8 for this card's Xyz Summon

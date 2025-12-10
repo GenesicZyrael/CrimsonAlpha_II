@@ -1,13 +1,13 @@
 --Shenlong, Divine Yang Zing of Zefra
 local s,id=GetID()
 function s.initial_effect(c)
-	Pendulum.AddProcedure(c,false)
-	c:SetUniqueOnField(1,0,id)
-	--Synchro summon
-	Synchro.AddProcedure(c,nil,1,1,Synchro.NonTunerEx(Card.IsSetCard,{SET_YANG_ZING,SET_ZEFRA}),1,99)
 	c:EnableReviveLimit()
-	--pendulum
+	c:SetUniqueOnField(1,0,id)
+	--Pendulum Summon procedure
 	Pendulum.AddProcedure(c)
+	--Synchro Summon procedure
+	Synchro.AddProcedure(c,nil,1,1,Synchro.NonTunerEx(Card.IsSetCard,{SET_YANG_ZING,SET_ZEFRA}),1,99)
+	c:AddMustFirstBeSynchroSummoned()
 	--register effect
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_SINGLE)
