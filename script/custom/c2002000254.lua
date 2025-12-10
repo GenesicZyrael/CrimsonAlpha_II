@@ -98,7 +98,6 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 and Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	and Duel.IsExistingMatchingCard(aux.AND(Card.IsAttackPos,Card.IsCanChangePosition),tp,0,LOCATION_MZONE,1,nil) 
 	and Duel.SelectYesNo(tp,aux.Stringid(id,3)) then
-		Duel.BreakEffect()
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_POSCHANGE)
 		local posg=Duel.SelectMatchingCard(tp,aux.AND(Card.IsAttackPos,Card.IsCanChangePosition),tp,0,LOCATION_MZONE,1,1,nil)
 		if #posg==0 then return end

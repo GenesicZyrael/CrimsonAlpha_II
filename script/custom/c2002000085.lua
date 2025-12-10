@@ -1,5 +1,4 @@
 --Zefra Divine Mirror
-
 local s,id=GetID()
 function s.initial_effect(c)	
 	--Activate
@@ -14,6 +13,7 @@ function s.initial_effect(c)
 	e2:SetCategory(CATEGORY_TOHAND)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_GRAVE)
+	e2:SetCountLimit(1,{id,0})
 	e2:SetCost(s.thcost)
 	e2:SetTarget(s.thtg)
 	e2:SetOperation(s.thop)
@@ -33,16 +33,14 @@ function s.cfilter(c)
 	return c:IsSetCard(SET_ZEFRA) and c:IsPublic() and c:IsAbleToDeckAsCost()
 end
 function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_REMOVED|LOCATION_EXTRA,0,1,nil) end
-	local tc=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_REMOVED|LOCATION_EXTRA,0,1,1,nil):GetFirst()
+	if chk==0 then return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_GRAVE|LOCATION_REMOVED|LOCATION_EXTRA,0,1,nil) end
+	local tc=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_GRAVE|LOCATION_REMOVED|LOCATION_EXTRA,0,1,1,nil):GetFirst()
 	Duel.SendtoDeck(tc,nil,SEQ_DECKSHUFFLE,REASON_COST)
 end
-
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then return c:IsAbleToHand() end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,c,1,tp,LOCATION_GRAVE)
-
 end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

@@ -5,7 +5,7 @@ function s.initial_effect(c)
 	c:SetUniqueOnField(1,0,id)
 	--Pendulum Summon procedure
 	Pendulum.AddProcedure(c)
-	--Fusion Summon procedure
+	--Fusion
 	Fusion.AddProcMixN(c,true,true,s.ffilter1,1,s.ffilter2,1,s.ffilter3,1)
 	c:AddMustFirstBeFusionSummoned()
 	--Negate 1 face-up card, then change the scales of your "Zefra" cards in the Pendulum Zone to 0 & 12
@@ -95,7 +95,6 @@ function s.disop(e,tp,eg,ep,ev,re,r,rp)
 		e2:SetValue(RESET_TURN_SET)
 		e2:SetReset(RESETS_STANDARD_PHASE_END)
 		tc:RegisterEffect(e2)
-		Duel.BreakEffect()
 		local e3=Effect.CreateEffect(c)
 		e3:SetType(EFFECT_TYPE_FIELD)
 		e3:SetCode(EFFECT_CHANGE_LSCALE)
@@ -135,7 +134,23 @@ function s.getmats(c,tp)
 	return c:GetMaterial():IsExists(s.mtfilter,1,nil) and c:GetControler()==tp
 end
 function s.Condition(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.getmats,1,nil,tp) and not eg:IsContains(e:GetHandler())
+	if not eg:IsExists(s.getmats,1,nil,tp) or eg:IsContains(e:GetHandler()) then return end
+	local ritual_chk=eg:IsExists(s.getmats,1,nil,tp) and eg:GetFirst():IsSummonType(SUMMON_TYPE_RITUAL)
+	local extra_chk=eg:IsExists(s.getmats,1,nil,tp) and eg:GetFirst():IsPreviousLocation(LOCATION_EXTRA)
+	local synchro_chk,xyz_chk,link_chk,fusion_chk,special_chk=false,false,false,false,false
+	if not (ritual_chk or extra_chk) then return end
+	if extra_chk or extra_chk~=false then
+		-- Extra Deck Mechanics
+		synchro_chk= eg:GetFirst():IsSummonType(SUMMON_TYPE_SYNCHRO)
+		xyz_chk=eg:GetFirst():IsSummonType(SUMMON_TYPE_XYZ)
+		link_chk=eg:GetFirst():IsSummonType(SUMMON_TYPE_LINK)
+		fusion_chk=eg:GetFirst():IsSummonType(SUMMON_TYPE_FUSION)
+		-- Contact Fusion
+		if not fusion_chk and eg:GetFirst():IsType(TYPE_FUSION) then
+			fusion_chk=extra_chk
+		end
+	end
+	return ritual_chk or fusion_chk or synchro_chk or xyz_chk or link_chk
 end
 function s.tgfilter(c,tp)
 	return (c:IsLocation(LOCATION_HAND) or (c:IsLocation(LOCATION_EXTRA) and c:IsPublic() and c:IsMonster())) 
