@@ -2,7 +2,7 @@
 local s,id=GetID()
 function s.initial_effect(c)
 	c:EnableReviveLimit()
-	c:SetUniqueOnField(1,0,id)
+	-- c:SetUniqueOnField(1,0,id)
 	--Pendulum Summon procedure
 	Pendulum.AddProcedure(c)
 	--Fusion
@@ -38,16 +38,17 @@ function s.initial_effect(c)
 	e3a:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e3a:SetProperty(EFFECT_FLAG_DELAY)
 	e3a:SetCode(EVENT_TO_DECK)
-	e3a:SetCountLimit(1,{id,2})
-	e3a:SetCondition(function(e) return e:GetHandler():IsLocation(LOCATION_EXTRA) and e:GetHandler():IsFaceup() end)
+	e3a:SetRange(LOCATION_EXTRA)
+	-- e3a:SetCountLimit(1,{id,2})
+	e3a:SetCondition(function(e) return e:GetHandler():IsPreviousLocation(LOCATION_MZONE) and e:GetHandler():IsFaceup() end)
 	e3a:SetTarget(s.plctg)
 	e3a:SetOperation(s.plcop)
 	c:RegisterEffect(e3a)
-	local e3b=e3a:Clone()
-	e3b:SetCode(EVENT_SPSUMMON_SUCCESS)
-	e3b:SetRange(LOCATION_MZONE)
-	e3b:SetCondition(function(e) return e:GetHandler():IsFusionSummoned() end)
-	c:RegisterEffect(e3b)
+	-- local e3b=e3a:Clone()
+	-- e3b:SetCode(EVENT_SPSUMMON_SUCCESS)
+	-- e3b:SetRange(LOCATION_MZONE)
+	-- e3b:SetCondition(function(e) return e:GetHandler():IsFusionSummoned() end)
+	-- c:RegisterEffect(e3b)
 end
 s.listed_series={SET_SHADDOLL,SET_ZEFRA}
 --Material Check
@@ -149,21 +150,27 @@ function s.Condition(e,tp,eg,ep,ev,re,r,rp)
 		if not fusion_chk and eg:GetFirst():IsType(TYPE_FUSION) then
 			fusion_chk=extra_chk
 		end
+		-- Zefraath / Zefratorah Metaltron / Odd-Eyes Raging Dragon Tyrant / etc...
+		-- 		Main Deck Pendulum Monsters that are Special Summoned from the Extra Deck 
+		if not fusion_chk and not synchro_chk and not xyz_chk and not link_chk then
+			special_chk=extra_chk
+		end
 	end
-	return ritual_chk or fusion_chk or synchro_chk or xyz_chk or link_chk
+	return ritual_chk or special_chk
+		or fusion_chk or synchro_chk or xyz_chk or link_chk
 end
 function s.tgfilter(c,tp)
 	return (c:IsLocation(LOCATION_HAND) or (c:IsLocation(LOCATION_EXTRA) and c:IsPublic() and c:IsMonster())) 
 		and (c:IsSetCard(SET_ZEFRA) or c:IsSetCard(SET_SHADDOLL)) and c:IsAbleToGrave() 
 end
 function s.Target(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.tgfilter,tp,LOCATION_HAND|LOCATION_EXTRA,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_HAND|LOCATION_EXTRA)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.tgfilter,tp,LOCATION_HAND,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_HAND)
 end
 function s.Operation(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local tc=Duel.SelectMatchingCard(tp,s.tgfilter,tp,LOCATION_HAND|LOCATION_EXTRA,0,1,1,c):GetFirst()
+	local tc=Duel.SelectMatchingCard(tp,s.tgfilter,tp,LOCATION_HAND,0,1,1,c):GetFirst()
 	if tc and Duel.SendtoGrave(tc,REASON_EFFECT)>0 then
 		local ctype=nil
 		local sid=0
