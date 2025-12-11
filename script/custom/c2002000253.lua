@@ -2,7 +2,7 @@
 local s,id=GetID()
 function s.initial_effect(c)
 	c:EnableReviveLimit()
-	-- c:SetUniqueOnField(1,0,id)
+	c:SetUniqueOnField(1,0,id)
 	--Pendulum Summon procedure
 	Pendulum.AddProcedure(c)
 	--Fusion
