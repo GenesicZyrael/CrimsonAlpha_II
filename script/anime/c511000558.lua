@@ -1,6 +1,5 @@
 --ライフ・ストリーム・ドラゴン
 --Life Stream Dragon
-
 local s,id=GetID()
 function s.initial_effect(c)
 	--synchro summon
