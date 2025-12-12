@@ -1,6 +1,4 @@
 # CrimsonAlpha_II
-back-up repo incase things goes south.
-
 Put this in your user_configs. Please take note of the load order of the repos. This one requires the Project Ignis core, so it must be listed first before CrimsonAlpha_II is loaded. 
 
 
