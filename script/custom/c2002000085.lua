@@ -33,8 +33,8 @@ function s.cfilter(c)
 	return c:IsSetCard(SET_ZEFRA) and c:IsPublic() and c:IsAbleToDeckAsCost()
 end
 function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_GRAVE|LOCATION_REMOVED|LOCATION_EXTRA,0,1,nil) end
-	local tc=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_GRAVE|LOCATION_REMOVED|LOCATION_EXTRA,0,1,1,nil):GetFirst()
+	if chk==0 then return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_GRAVE|LOCATION_REMOVED|LOCATION_EXTRA,0,1,e:GetHandler()) end
+	local tc=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_GRAVE|LOCATION_REMOVED|LOCATION_EXTRA,0,1,1,e:GetHandler()):GetFirst()
 	Duel.SendtoDeck(tc,nil,SEQ_DECKSHUFFLE,REASON_COST)
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)

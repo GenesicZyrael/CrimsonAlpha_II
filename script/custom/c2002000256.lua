@@ -63,12 +63,16 @@ function s.setcheck(c)
 	return c:IsSetCard(SET_YANG_ZING) or c:IsSetCard(SET_ZEFRA)
 end
 function s.valcheck(e,c)
-	local ct=c:GetMaterial():Filter(Card.IsSetCard,nil,{SET_YANG_ZING,SET_ZEFRA}):GetClassCount(Card.GetAttribute)
+	local ct=c:GetMaterial():Filter(Card.IsSetCard,nil,{SET_YANG_ZING,SET_ZEFRA}):GetClassCount(Card.GetAttribute) + 1
 	e:GetLabelObject():SetLabel(ct)
 end
 function s.regcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return c:IsSummonType(SUMMON_TYPE_SYNCHRO) and e:GetLabel()>0
+	if c:IsSummonType(SUMMON_TYPE_SYNCHRO) then
+		return c:IsSummonType(SUMMON_TYPE_SYNCHRO) and e:GetLabel()>0
+	else
+		return c:IsSummonType(SUMMON_TYPE_SPECIAL) and e:GetLabel()>0
+	end
 end
 function s.chkfilter(c,label)
 	return c:GetFlagEffect(label)>0
