@@ -135,7 +135,7 @@ function s.getmats(c,tp)
 	return c:GetMaterial():IsExists(s.mtfilter,1,nil) and c:GetControler()==tp
 end
 function s.Condition(e,tp,eg,ep,ev,re,r,rp)
-	if not eg:IsExists(s.getmats,1,nil,tp) or eg:IsContains(e:GetHandler()) then return end
+	if not eg:IsExists(s.getmats,1,nil,tp) then return end
 	local ritual_chk=eg:IsExists(s.getmats,1,nil,tp) and eg:GetFirst():IsSummonType(SUMMON_TYPE_RITUAL)
 	local extra_chk=eg:IsExists(s.getmats,1,nil,tp) and eg:GetFirst():IsPreviousLocation(LOCATION_EXTRA)
 	local synchro_chk,xyz_chk,link_chk,fusion_chk,special_chk=false,false,false,false,false
