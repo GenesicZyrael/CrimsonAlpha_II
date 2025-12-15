@@ -283,11 +283,17 @@ function Condition.IsPendulumSummoned(e,tp,eg,ep,ev,re,r,rp)
 end
 self_summon_type[Condition.IsPendulumSummoned]=true
 
+function Condition.IsLinkSummoned(e,tp,eg,ep,ev,re,r,rp)
+	return e:GetHandler():IsSummonType(SUMMON_TYPE_LINK)
+end
+self_summon_type[Condition.IsLinkSummoned]=true
+
 local function condition_table_check(t)
 	return function(eff) return t[eff:GetCondition()] end
 end
 
 Effect.HasPendulumSummonCondition=condition_table_check(self_summon_type)
+Effect.HasLinkSummonCondition=condition_table_check(self_summon_type)
 
 function Condition.AND(...)
 	local fns={...}
