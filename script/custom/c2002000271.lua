@@ -74,16 +74,16 @@ function s.thfilter1(c)
 end
 function s.thtg1(e,tp,eg,ep,ev,re,r,rp,chk)
     local c=e:GetHandler()
-    if chk==0 then return Duel.IsExistingMatchingCard(s.desfilter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,c)
+    if chk==0 then return Duel.IsExistingMatchingCard(s.desfilter,tp,LOCATION_HAND|LOCATION_ONFIELD,0,1,c)
         and Duel.IsExistingMatchingCard(s.thfilter1,tp,LOCATION_DECK,0,1,nil) end
-    Duel.SetOperationInfo(0,CATEGORY_DESTROY,nil,1,tp,LOCATION_HAND+LOCATION_ONFIELD)
+    Duel.SetOperationInfo(0,CATEGORY_DESTROY,nil,1,tp,LOCATION_HAND|LOCATION_ONFIELD)
     Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 function s.thop1(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
     if not c:IsRelateToEffect(e) then return end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-    local g=Duel.SelectMatchingCard(tp,s.desfilter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,1,c)
+    local g=Duel.SelectMatchingCard(tp,s.desfilter,tp,LOCATION_HAND|LOCATION_ONFIELD,0,1,1,c)
     if #g>0 and Duel.Destroy(g,REASON_EFFECT)>0 then
         Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
         local tg=Duel.SelectMatchingCard(tp,s.thfilter1,tp,LOCATION_DECK,0,1,1,nil)
@@ -110,13 +110,13 @@ function s.spfilter(c,e,tp)
 end
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-        and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,nil,e,tp) end
-    Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND+LOCATION_GRAVE)
+        and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_HAND|LOCATION_GRAVE,0,1,nil,e,tp) end
+    Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND|LOCATION_GRAVE)
 end
 function s.spop(e,tp,eg,ep,ev,re,r,rp)
     if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-    local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.spfilter),tp,LOCATION_HAND+LOCATION_GRAVE,0,1,1,nil,e,tp)
+    local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.spfilter),tp,LOCATION_HAND|LOCATION_GRAVE,0,1,1,nil,e,tp)
     if #g>0 then
         Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
     end
