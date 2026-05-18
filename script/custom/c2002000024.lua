@@ -1,8 +1,9 @@
 --Winged Serpent of the Mist Valley
-
 local s,id=GetID()
 function s.initial_effect(c)
-	Link.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_WIND),2,2)
+	-- Link.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_WIND),2,2)
+	Fusion.AddProcMixN(c,true,true,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_WIND),2)
+	Fusion.AddContactProc(c,s.contactfil,s.contactop,s.splimit)
 	c:EnableReviveLimit()
 	--addtohand
 	local e1=Effect.CreateEffect(c)
@@ -29,10 +30,20 @@ function s.initial_effect(c)
 	e2:SetOperation(s.thop)
 	c:RegisterEffect(e2)
 end
-s.listed_series={0x37}
+s.listed_series={SET_MIST_VALLEY}
 s.listed_names={id}
+function s.contactfil(tp)
+	return Duel.GetMatchingGroup(Card.IsAbleToDeckOrExtraAsCost,tp,LOCATION_ONFIELD,0,nil)
+end
+function s.contactop(g,tp)
+	Duel.ConfirmCards(1-tp,g)
+	Duel.SendtoDeck(g,nil,SEQ_DECKSHUFFLE,REASON_COST|REASON_MATERIAL)
+end
+function s.splimit(e,se,sp,st)
+	return not e:GetHandler():IsLocation(LOCATION_EXTRA)
+end
 function s.filter(c)
-	return c:IsSetCard(0x37) and c:IsAbleToHand()
+	return c:IsSetCard(SET_MIST_VALLEY) and c:IsAbleToHand()
 end
 function s.condition(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_LINK)
