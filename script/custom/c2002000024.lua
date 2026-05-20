@@ -32,11 +32,10 @@ end
 s.listed_series={SET_MIST_VALLEY}
 s.listed_names={id}
 function s.contactfil(tp)
-	return Duel.GetMatchingGroup(Card.IsAbleToDeckOrExtraAsCost,tp,LOCATION_ONFIELD,0,nil)
+	return Duel.GetReleaseGroup(tp)
 end
-function s.contactop(g,tp)
-	Duel.ConfirmCards(1-tp,g)
-	Duel.SendtoDeck(g,nil,SEQ_DECKSHUFFLE,REASON_COST|REASON_MATERIAL)
+function s.contactop(g)
+	Duel.Release(g,REASON_COST+REASON_MATERIAL)
 end
 function s.splimit(e,se,sp,st)
 	return not e:GetHandler():IsLocation(LOCATION_EXTRA)
