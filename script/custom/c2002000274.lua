@@ -75,7 +75,6 @@ end
 
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
-    
     -- Apply Extra Deck Lock
     local e1=Effect.CreateEffect(c)
     e1:SetType(EFFECT_TYPE_FIELD)
@@ -86,7 +85,6 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
     e1:SetTarget(s.splimit)
     e1:SetReset(RESET_PHASE+PHASE_END)
     Duel.RegisterEffect(e1,tp)
-    
     -- Proceed with Search
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
     local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.thfilter),tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil)
