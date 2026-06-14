@@ -7,7 +7,7 @@ function s.initial_effect(c)
     e1:SetType(EFFECT_TYPE_SINGLE)
     e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
     e1:SetCode(EFFECT_CHANGE_CODE)
-    e1e1:SetRange(LOCATION_HAND+LOCATION_DECK+LOCATION_MZONE+LOCATION_GRAVE)
+    e1:SetRange(LOCATION_HAND+LOCATION_DECK+LOCATION_MZONE+LOCATION_GRAVE)
     e1:SetValue(alias)
     c:RegisterEffect(e1)
     -- Reveal 1 Fusion Monster, Special Summon this card and 1 other material
