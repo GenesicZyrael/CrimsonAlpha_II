@@ -38,7 +38,7 @@ function s.edfilter(c)
     return c.material and c:ListsCodeAsMaterial(alias)
 end
 function s.tgfilter(c)
-    return c:IsType(TYPE_MONSTER) and c:IsAbleToGrave()
+    return c:IsType(TYPE_MONSTER) and c:IsSetCard(SET_ELEMENTAL_HERO) and c:IsAbleToGrave()
 end
 function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return Duel.IsExistingMatchingCard(s.edfilter,tp,LOCATION_EXTRA,0,1,nil) end
