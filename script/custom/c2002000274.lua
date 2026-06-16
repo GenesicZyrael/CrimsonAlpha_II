@@ -10,48 +10,26 @@ function s.initial_effect(c)
     e1:SetRange(LOCATION_HAND+LOCATION_DECK+LOCATION_MZONE+LOCATION_GRAVE)
     e1:SetValue(alias)
     c:RegisterEffect(e1)
-    -- Special Summon this card (from your hand or GY)
-    local e2=Effect.CreateEffect(c)
-    e2:SetDescription(aux.Stringid(id,0))
-    e2:SetType(EFFECT_TYPE_FIELD)
-    e2:SetProperty(EFFECT_FLAG_UNCOPYABLE)
-    e2:SetCode(EFFECT_SPSUMMON_PROC)
-    e2:SetRange(LOCATION_HAND+LOCATION_GRAVE)
-    e2:SetCountLimit(1,{id,0})
-    e2:SetCondition(s.spcon)
-    c:RegisterEffect(e2)
     -- Reveal 1 Fusion Monster; add 1 "Polymerization", apply Extra Deck lock
-    local e3=Effect.CreateEffect(c)
-    e3:SetDescription(aux.Stringid(id,1))
-    e3:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
-    e3:SetType(EFFECT_TYPE_IGNITION)
-    e3:SetRange(LOCATION_MZONE)
-    e3:SetCountLimit(1,{id,1})
-    e3:SetCost(s.thcost)
-    e3:SetTarget(s.thtg)
-    e3:SetOperation(s.thop)
-    c:RegisterEffect(e3)
+    local e2=Effect.CreateEffect(c)
+    e2:SetDescription(aux.Stringid(id,1))
+    e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+    e2:SetType(EFFECT_TYPE_IGNITION)
+    e2:SetRange(LOCATION_MZONE)
+    e2:SetCountLimit(1,{id,1})
+    e2:SetCost(s.thcost)
+    e2:SetTarget(s.thtg)
+    e2:SetOperation(s.thop)
+    c:RegisterEffect(e2)
     -- "Elemental HERO" Fusion Monsters using this card as material gains this effect
-    local e4=Effect.CreateEffect(c)
-    e4:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
-    e4:SetCode(EVENT_BE_MATERIAL)
-    e4:SetCondition(s.efcon)
-    e4:SetOperation(s.efop)
-    c:RegisterEffect(e4)
+    local e3=Effect.CreateEffect(c)
+    e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
+    e3:SetCode(EVENT_BE_MATERIAL)
+    e3:SetCondition(s.efcon)
+    e3:SetOperation(s.efop)
+    c:RegisterEffect(e3)
 end
 s.listed_names={CARD_POLYMERIZATION,alias}
--- ==========================================
--- Effect 2: Inherent Special Summon
--- ==========================================
-function s.cfilter(c)
-    return c:IsFaceup() and c:IsSetCard(SET_ELEMENTAL_HERO) and not c:IsAttribute(ATTRIBUTE_FIRE)
-end
-function s.spcon(e,c)
-    if c==nil then return true end
-    local tp=c:GetControler()
-    return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-        and Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_MZONE,0,1,nil)
-end
 -- ==========================================
 -- Effect 3: Search Polymerization & Lock
 -- ==========================================

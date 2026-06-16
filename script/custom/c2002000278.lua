@@ -69,10 +69,10 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
     -- Proceed with Summoning
     if c:IsRelateToEffect(e) and Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)~=0 then
         -- Optional Add to Hand
-        if Duel.IsExistingMatchingCard(aux.NecroValleyFilter(s.thfilter),tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil) 
+        if Duel.IsExistingMatchingCard(aux.NecroValleyFilter(s.thfilter),tp,LOCATION_GRAVE,0,1,nil) 
             and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
             Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-            local sg=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.thfilter),tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil)
+            local sg=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.thfilter),tp,LOCATION_GRAVE,0,1,1,nil)
             if #sg>0 then
                 Duel.BreakEffect()
                 Duel.SendtoHand(sg,nil,REASON_EFFECT)
