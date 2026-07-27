@@ -33,26 +33,42 @@ s.listed_names={alias}
 -- ==========================================
 -- Effect 2: Revive, Search & Extra Deck Lock
 -- ==========================================
-function s.edfilter(c)
+function s.edfilter(c,e,tp)
     if not c:IsType(TYPE_FUSION) then return false end
-    return c.material and c:ListsCodeAsMaterial(alias)
+    local mats=c.material
+    if not mats then return false end
+    local alias_is_mat=c:ListsCodeAsMaterial(alias)
+    local other_mats={}
+    for _,code in ipairs(mats) do
+        if code~=alias then
+            table.insert(other_mats,code)
+        end
+    end
+    if not alias_is_mat or #other_mats==0 then return false end
+    return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_GRAVE,0,1,nil,other_mats)
+    -- if not c:IsType(TYPE_FUSION) then return false end
+    -- return c.material and c:ListsCodeAsMaterial(alias)
 end
-function s.thfilter(c)
-    return c:IsSetCard(SET_ELEMENTAL_HERO) and c:IsType(TYPE_MONSTER) 
-        and not c:IsAttribute(ATTRIBUTE_DARK) and c:IsAbleToHand()
+function s.thfilter(c,other_mats)
+    return c:IsType(TYPE_MONSTER) and c:IsAbleToHand()
+        and c:IsCode(table.unpack(other_mats))
+    -- return c:IsSetCard(SET_ELEMENTAL_HERO) and c:IsType(TYPE_MONSTER) 
+        -- and not c:IsAttribute(ATTRIBUTE_DARK) and c:IsAbleToHand()
 end
 function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return Duel.IsExistingMatchingCard(s.edfilter,tp,LOCATION_EXTRA,0,1,nil) end
+    if chk==0 then return Duel.IsExistingMatchingCard(s.edfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONFIRM)
-    local g=Duel.SelectMatchingCard(tp,s.edfilter,tp,LOCATION_EXTRA,0,1,1,nil)
+    local g=Duel.SelectMatchingCard(tp,s.edfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp)
     Duel.ConfirmCards(1-tp,g)
+    -- Store the revealed Fusion Monster's ID to parse materials at resolution
+    e:SetLabel(g:GetFirst():GetCode())
 end
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
     local c=e:GetHandler()
     if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
         and c:IsCanBeSpecialSummoned(e,0,tp,false,false) end
     Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,0,0)
-    Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
+    Duel.SetPossibleOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_GRAVE)
 end
 function s.spop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()   
@@ -68,18 +84,42 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
     Duel.RegisterEffect(e1,tp)   
     -- Proceed with Summoning
     if c:IsRelateToEffect(e) and Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)~=0 then
-        -- Optional Add to Hand
-        if Duel.IsExistingMatchingCard(aux.NecroValleyFilter(s.thfilter),tp,LOCATION_GRAVE,0,1,nil) 
-            and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
-            Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-            local sg=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.thfilter),tp,LOCATION_GRAVE,0,1,1,nil)
-            if #sg>0 then
-                Duel.BreakEffect()
-                Duel.SendtoHand(sg,nil,REASON_EFFECT)
-                Duel.ConfirmCards(1-tp,sg)
+        -- Retrieve the revealed Fusion Monster's ID
+        local code=e:GetLabel()
+        local tc=Duel.GetFirstMatchingCard(Card.IsCode,tp,LOCATION_EXTRA,0,nil,code)
+        if tc and tc.material then
+            -- Collect the explicitly listed materials that are not Sparkman
+            local other_mats={}
+            for _,mcode in ipairs(tc.material) do
+                if mcode~=alias then
+                    table.insert(other_mats,mcode)
+                end
+            end
+            -- Search for the listed material
+            if #other_mats>0 then
+                Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+				local sg=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.thfilter),tp,LOCATION_GRAVE,0,1,1,nil,other_mats)
+                if #sg>0 then
+					Duel.BreakEffect()
+					Duel.SendtoHand(sg,nil,REASON_EFFECT)
+					Duel.ConfirmCards(1-tp,sg)
+                end
             end
         end
     end
+    -- if c:IsRelateToEffect(e) and Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)~=0 then
+        -- -- Optional Add to Hand
+        -- if Duel.IsExistingMatchingCard(aux.NecroValleyFilter(s.thfilter),tp,LOCATION_GRAVE,0,1,nil) 
+            -- and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
+            -- Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+            -- local sg=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.thfilter),tp,LOCATION_GRAVE,0,1,1,nil)
+            -- if #sg>0 then
+                -- Duel.BreakEffect()
+                -- Duel.SendtoHand(sg,nil,REASON_EFFECT)
+                -- Duel.ConfirmCards(1-tp,sg)
+            -- end
+        -- end
+    -- end
 end
 function s.splimit(e,c,sump,sumtype,sumpos,targetp,se)
     return c:IsLocation(LOCATION_EXTRA) and not c:IsType(TYPE_FUSION)
