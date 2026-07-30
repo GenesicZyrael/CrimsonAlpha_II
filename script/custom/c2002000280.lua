@@ -29,6 +29,7 @@ function s.fcheck(tp,sg,fc)
     end
 	return fc:IsSetCard(SET_ELEMENTAL_HERO) 
 		and sg:FilterCount(Card.IsLocation,nil,LOCATION_DECK)<=2
+		and sg:FilterCount(Card.IsLocation,nil,LOCATION_DECK)>0
 		and matcount == #mats
 end
 function s.fextra(e,tp,mg)
