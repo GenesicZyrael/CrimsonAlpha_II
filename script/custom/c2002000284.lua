@@ -20,6 +20,17 @@ function s.initial_effect(c)
     e1:SetValue(s.atg)
     c:RegisterEffect(e1)
 
+	-- Your opponent cannot target monsters with effects, except this one
+    local e1b=Effect.CreateEffect(c)
+    e1b:SetType(EFFECT_TYPE_FIELD)
+    e1b:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
+    e1b:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
+    e1b:SetRange(LOCATION_MZONE)
+    e1b:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
+    e1b:SetTarget(s.atg)
+    e1b:SetValue(function(e,re,rp) return rp==1-e:GetHandlerPlayer() end)
+    c:RegisterEffect(e1b)
+	
     -- If this card battles, opponent cannot activate cards/effects until the end of the Damage Step
     local e2=Effect.CreateEffect(c)
     e2:SetType(EFFECT_TYPE_FIELD)
@@ -60,7 +71,7 @@ end
 s.material_setcode={SET_HERO,SET_ELEMENTAL_HERO}
 
 -- ==========================================
--- Effect 1: Attack Target Restriction
+-- Effect 1 & 1b: Attack/Effect Target Restriction
 -- ==========================================
 function s.atg(e,c)
     return c~=e:GetHandler()
