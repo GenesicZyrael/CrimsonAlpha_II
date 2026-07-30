@@ -1,7 +1,6 @@
 -- Elemental HERO's Clarity of Water
 local s,id=GetID()
 local alias=79979666 -- Elemental HERO Bubbleman
-
 function s.initial_effect(c)
     -- This card's name becomes "Elemental HERO Bubbleman" while in hand, Deck, field, or GY.
     local e1=Effect.CreateEffect(c)
@@ -11,7 +10,6 @@ function s.initial_effect(c)
     e1:SetRange(LOCATION_HAND+LOCATION_DECK+LOCATION_MZONE+LOCATION_GRAVE)
     e1:SetValue(alias)
     c:RegisterEffect(e1)
-    
     -- Reveal 1 Fusion Monster; add 1 Spell/Trap mentioning its materials
     local e2=Effect.CreateEffect(c)
     e2:SetDescription(aux.Stringid(id,0))
@@ -23,7 +21,6 @@ function s.initial_effect(c)
     e2:SetTarget(s.thtg)
     e2:SetOperation(s.thop)
     c:RegisterEffect(e2)
-    
     -- "Elemental HERO" Fusion Monsters using this card as material gains this effect
     local e3=Effect.CreateEffect(c)
     e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
@@ -33,7 +30,7 @@ function s.initial_effect(c)
     c:RegisterEffect(e3)
 end
 s.listed_names={alias}
-
+s.listed_series={SET_ELEMENTAL_HERO}
 -- ==========================================
 -- Effect 2: Search & Extra Deck Lock
 -- ==========================================
@@ -45,14 +42,12 @@ function s.thfilter(c,mats)
     end
     return false
 end
-
 function s.edfilter(c,tp)
     -- Check if it is a Fusion that explicitly lists Bubbleman and has a material list
     if not (c:IsType(TYPE_FUSION) and c.material and c:ListsCodeAsMaterial(alias)) then return false end
     -- Only valid if there is at least 1 corresponding Spell/Trap to grab
     return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil,c.material)
 end
-
 function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return Duel.IsExistingMatchingCard(s.edfilter,tp,LOCATION_EXTRA,0,1,nil,tp) end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONFIRM)
@@ -66,7 +61,6 @@ function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return Duel.IsExistingMatchingCard(s.edfilter,tp,LOCATION_EXTRA,0,1,nil,tp) end
     Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
 end
-
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
     -- Apply Extra Deck Lock
@@ -93,11 +87,9 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
         end
     end
 end
-
 function s.splimit(e,c,sump,sumtype,sumpos,targetp,se)
     return c:IsLocation(LOCATION_EXTRA) and not c:IsType(TYPE_FUSION)
 end
-
 -- ==========================================
 -- Effect 3: Grant Once Per Turn Indestructibility
 -- ==========================================
@@ -106,7 +98,6 @@ function s.efcon(e,tp,eg,ep,ev,re,r,rp)
     local rc=c:GetReasonCard()
     return r==REASON_FUSION and rc:IsSetCard(SET_ELEMENTAL_HERO) and rc:IsType(TYPE_FUSION)
 end
-
 function s.efop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
     local rc=c:GetReasonCard()
@@ -121,7 +112,6 @@ function s.efop(e,tp,eg,ep,ev,re,r,rp)
     e1:SetReset(RESET_EVENT+RESETS_STANDARD)
     rc:RegisterEffect(e1,true)
 end
-
 function s.indct(e,re,r,rp)
     if (r&REASON_EFFECT)==REASON_EFFECT then
         return 1

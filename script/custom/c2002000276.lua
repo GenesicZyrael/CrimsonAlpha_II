@@ -30,6 +30,7 @@ function s.initial_effect(c)
     c:RegisterEffect(e3)
 end
 s.listed_names={alias}
+s.listed_series={SET_ELEMENTAL_HERO}
 -- ==========================================
 -- Effect 2: Revive, Send & Extra Deck Lock
 -- ==========================================
@@ -46,14 +47,10 @@ function s.edfilter(c,e,tp)
     end
     if not alias_is_mat or #other_mats==0 then return false end
     return Duel.IsExistingMatchingCard(s.tgfilter,tp,LOCATION_DECK,0,1,nil,other_mats)
-    -- if not c:IsType(TYPE_FUSION) then return false end
-    -- return c.material and c:ListsCodeAsMaterial(alias)
 end
 function s.tgfilter(c,other_mats)
     return c:IsType(TYPE_MONSTER) and c:IsAbleToGrave() 
         and c:IsCode(table.unpack(other_mats))
-    -- return c:IsType(TYPE_MONSTER) and c:IsSetCard(SET_ELEMENTAL_HERO) 
-		-- and c:IsAbleToGrave() and not c:IsAttribute(ATTRIBUTE_EARTH)
 end
 function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return Duel.IsExistingMatchingCard(s.edfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
@@ -106,18 +103,6 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
             end
         end
     end
-    -- if c:IsRelateToEffect(e) and Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)~=0 then
-        -- -- Optional Send to GY (Any 1 monster)
-        -- if Duel.IsExistingMatchingCard(s.tgfilter,tp,LOCATION_DECK,0,1,nil) 
-            -- and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
-            -- Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-            -- local sg=Duel.SelectMatchingCard(tp,s.tgfilter,tp,LOCATION_DECK,0,1,1,nil)
-            -- if #sg>0 then
-                -- Duel.BreakEffect()
-                -- Duel.SendtoGrave(sg,REASON_EFFECT)
-            -- end
-        -- end
-    -- end
 end
 function s.splimit(e,c,sump,sumtype,sumpos,targetp,se)
     return c:IsLocation(LOCATION_EXTRA) and not c:IsType(TYPE_FUSION)

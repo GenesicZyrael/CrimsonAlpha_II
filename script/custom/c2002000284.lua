@@ -10,7 +10,6 @@ function s.initial_effect(c)
     e0:SetCode(EFFECT_SPSUMMON_CONDITION)
     e0:SetValue(aux.fuslimit)
     c:RegisterEffect(e0)
-
     -- Your opponent cannot target monsters for attacks, except this one
     local e1=Effect.CreateEffect(c)
     e1:SetType(EFFECT_TYPE_FIELD)
@@ -19,7 +18,6 @@ function s.initial_effect(c)
     e1:SetTargetRange(0,LOCATION_MZONE)
     e1:SetValue(s.atg)
     c:RegisterEffect(e1)
-
 	-- Your opponent cannot target monsters with effects, except this one
     local e1b=Effect.CreateEffect(c)
     e1b:SetType(EFFECT_TYPE_FIELD)
@@ -30,7 +28,6 @@ function s.initial_effect(c)
     e1b:SetTarget(s.atg)
     e1b:SetValue(function(e,re,rp) return rp==1-e:GetHandlerPlayer() end)
     c:RegisterEffect(e1b)
-	
     -- If this card battles, opponent cannot activate cards/effects until the end of the Damage Step
     local e2=Effect.CreateEffect(c)
     e2:SetType(EFFECT_TYPE_FIELD)
@@ -41,7 +38,6 @@ function s.initial_effect(c)
     e2:SetValue(1)
     e2:SetCondition(s.actcon)
     c:RegisterEffect(e2)
-
     -- [Quick Effect] Banish 1 "Elemental HERO" to gain DEF equal to ATK
     local e3=Effect.CreateEffect(c)
     e3:SetDescription(aux.Stringid(id,0))
@@ -56,7 +52,6 @@ function s.initial_effect(c)
     e3:SetCost(s.defcost)
     e3:SetOperation(s.defop)
     c:RegisterEffect(e3)
-
     -- After damage calculation: Negate the opponent's monster's effects
     local e4=Effect.CreateEffect(c)
     e4:SetDescription(aux.Stringid(id,1))
@@ -69,14 +64,13 @@ function s.initial_effect(c)
     c:RegisterEffect(e4)
 end
 s.material_setcode={SET_HERO,SET_ELEMENTAL_HERO}
-
+s.listed_series={SET_ELEMENTAL_HERO}
 -- ==========================================
 -- Effect 1 & 1b: Attack/Effect Target Restriction
 -- ==========================================
 function s.atg(e,c)
     return c~=e:GetHandler()
 end
-
 -- ==========================================
 -- Effect 2: Armades-style Lockdown
 -- ==========================================
@@ -84,21 +78,18 @@ function s.actcon(e)
     local c=e:GetHandler()
     return Duel.GetAttacker()==c or Duel.GetAttackTarget()==c
 end
-
 -- ==========================================
 -- Effect 3: Banish to Gain DEF
 -- ==========================================
 function s.cfilter(c)
     return c:IsSetCard(SET_ELEMENTAL_HERO) and c:IsMonster() and c:IsAbleToRemoveAsCost()
 end
-
 function s.defcost(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_GRAVE,0,1,nil) end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
     local g=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_GRAVE,0,1,1,nil)
     Duel.Remove(g,POS_FACEUP,REASON_COST)
 end
-
 function s.defop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
     if c:IsRelateToEffect(e) and c:IsFaceup() then
@@ -110,7 +101,6 @@ function s.defop(e,tp,eg,ep,ev,re,r,rp)
         c:RegisterEffect(e1)
     end
 end
-
 -- ==========================================
 -- Effect 4: Post-Battle Negation
 -- ==========================================
@@ -119,13 +109,11 @@ function s.negcon(e,tp,eg,ep,ev,re,r,rp)
     local bc=c:GetBattleTarget()
     return bc and bc:IsControler(1-tp) and bc:IsRelateToBattle() and not bc:IsDisabled()
 end
-
 function s.negtg(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return true end
     local bc=e:GetHandler():GetBattleTarget()
     Duel.SetOperationInfo(0,CATEGORY_DISABLE,bc,1,0,0)
 end
-
 function s.negop(e,tp,eg,ep,ev,re,r,rp)
     local bc=e:GetHandler():GetBattleTarget()
     if bc and bc:IsRelateToBattle() and bc:IsFaceup() and not bc:IsDisabled() then

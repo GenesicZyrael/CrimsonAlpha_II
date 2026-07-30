@@ -30,6 +30,7 @@ function s.initial_effect(c)
     c:RegisterEffect(e3)
 end
 s.listed_names={alias}
+s.listed_series={SET_ELEMENTAL_HERO}
 -- ==========================================
 -- Effect 2: Special Summon, Search & Extra Deck Lock
 -- ==========================================

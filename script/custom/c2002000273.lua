@@ -1,6 +1,6 @@
 -- Elemental HERO's Rush of Wind
 local s,id=GetID()
-local alias=21844576
+local alias=21844576 -- Elemental HERO Avian
 function s.initial_effect(c)
     -- This card's name becomes "Elemental HERO Avian" while in hand, Deck, or on the field.
     local e1=Effect.CreateEffect(c)
@@ -30,6 +30,7 @@ function s.initial_effect(c)
     c:RegisterEffect(e3)
 end
 s.listed_names={alias}
+s.listed_series={SET_ELEMENTAL_HERO}
 -- ==========================================
 -- Effect 2: Special Summon & Extra Deck Lock
 -- ==========================================

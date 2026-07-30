@@ -30,6 +30,7 @@ function s.initial_effect(c)
     c:RegisterEffect(e3)
 end
 s.listed_names={CARD_POLYMERIZATION,alias}
+s.listed_series={SET_ELEMENTAL_HERO}
 -- ==========================================
 -- Effect 3: Search Polymerization & Lock
 -- ==========================================

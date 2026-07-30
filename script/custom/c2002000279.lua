@@ -40,7 +40,7 @@ function s.initial_effect(c)
     c:RegisterEffect(e4)
 end
 s.material_setcode={SET_HERO,SET_ELEMENTAL_HERO}
-
+s.listed_series={SET_ELEMENTAL_HERO}
 function s.atkcon(e)
 	if Duel.GetCurrentPhase()~=PHASE_DAMAGE_CAL then return false end
     local c=e:GetHandler()
