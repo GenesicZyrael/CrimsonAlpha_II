@@ -9,9 +9,12 @@ function s.initial_effect(c)
 	e0:SetValue(CARD_POLYMERIZATION)
 	c:RegisterEffect(e0)
     -- Activate: Fusion Summon 1 "Elemental HERO"
-	local e1=Fusion.CreateSummonEff(c,aux.FilterBoolFunction(Card.IsSetCard,SET_ELEMENTAL_HERO),nil,s.fextra,nil,nil,s.stage2,nil,nil,nil,nil,nil,nil,nil,s.extratg)
-	e1:SetCountLimit(1,{id,0})
+	local e1=Fusion.CreateSummonEff(c,aux.FilterBoolFunction(Card.IsSetCard,SET_ELEMENTAL_HERO))
 	c:RegisterEffect(e1)
+	local e2=Fusion.CreateSummonEff(c,aux.FilterBoolFunction(Card.IsSetCard,SET_ELEMENTAL_HERO),nil,s.fextra,nil,nil,s.stage2,nil,nil,nil,nil,nil,nil,nil,s.extratg)
+	e2:SetDescription(aux.Stringid(id,0))
+	e2:SetCountLimit(1,{id,0})
+	c:RegisterEffect(e2)
 end
 s.listed_names={20721928,21844576,79979666,84327329,89252153,58932615}
 s.listed_series={SET_ELEMENTAL_HERO}
