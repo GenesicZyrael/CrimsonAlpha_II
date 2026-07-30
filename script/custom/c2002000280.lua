@@ -9,7 +9,7 @@ function s.initial_effect(c)
 	e0:SetValue(CARD_POLYMERIZATION)
 	c:RegisterEffect(e0)
     -- Activate: Fusion Summon 1 "Elemental HERO"
-	local e1=Fusion.CreateSummonEff(c,aux.FilterBoolFunction(Card.IsSetCard,SET_ELEMENTAL_HERO))
+	local e1=Fusion.CreateSummonEff(c,aux.FilterBoolFunction(Card.IsSetCard,SET_ELEMENTAL_HERO),nil,nil,nil,nil,s.stage2,nil,nil,nil,nil,nil,nil,nil,nil)
 	c:RegisterEffect(e1)
 	local e2=Fusion.CreateSummonEff(c,aux.FilterBoolFunction(Card.IsSetCard,SET_ELEMENTAL_HERO),nil,s.fextra,nil,nil,s.stage2,nil,nil,nil,nil,nil,nil,nil,s.extratg)
 	e2:SetDescription(aux.Stringid(id,0))
