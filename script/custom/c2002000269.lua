@@ -36,7 +36,8 @@ function s.wl_filter(c)
 		and c:IsLevelAbove(5) and c:IsAbleToRemove()
 end
 function s.spfilter(c,e,tp)
-	return c:IsCode(LCARD_LIB) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsCode(CARD_LIB) and Duel.GetLocationCountFromEx(tp,tp,nil,c)>0 
+		and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
