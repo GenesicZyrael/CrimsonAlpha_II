@@ -46,8 +46,7 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then
         return #avida_g>0 and aux.SelectUnselectGroup(wl_g,e,tp,7,7,aux.dncheck,0)
             and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp)
-            and Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_LINK)>0
-    end
+     end
     Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,8,tp,LOCATION_MZONE+LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE)
     Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
