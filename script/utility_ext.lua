@@ -314,3 +314,7 @@ function Condition.AND(...)
 
 	return full_condition
 end
+
+function Auxiliary.GetDefaultRitualSummonLocation()
+	return Duel.IsDuelType(DUEL_EXTRA_DECK_RITUAL) and LOCATION_EXTRA or LOCATION_HAND
+end
