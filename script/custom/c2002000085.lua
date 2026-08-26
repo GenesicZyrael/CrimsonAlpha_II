@@ -4,7 +4,7 @@ function s.initial_effect(c)
 	--Activate
 	local e1=Ritual.AddProcGreater({handler=c,
 									matfilter=aux.FilterBoolFunction(Card.IsType,TYPE_PENDULUM),
-									location=LOCATION_HAND|LOCATION_GRAVE|LOCATION_DECK,
+									location=aux.GetDefaultRitualSummonLocation()|LOCATION_GRAVE|LOCATION_DECK,
 									forcedselection=s.forcedselection,
 									requirementfunc=Card.GetScale})
 	c:RegisterEffect(e1)

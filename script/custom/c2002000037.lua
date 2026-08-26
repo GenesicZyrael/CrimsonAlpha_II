@@ -27,7 +27,7 @@ function s.extramat(e,tp,eg,ep,ev,re,r,rp,chk)
 	return Duel.GetMatchingGroup(function(c) return c:IsControler(1-tp) and eg:IsContains(c) end,tp,0,LOCATION_MZONE,nil)
 end
 function s.entirefilter(c,e,tp,eg,ep,ev,re,r,rp)
-	local params={handler=e:GetHandler(),_type=RITPROC_EQUAL,lv=s.GetLevelRankLink,location=LOCATION_HAND|LOCATION_GRAVE,extrafil=s.extramat,requirementfunc=s.GetLevelRankLink}
+	local params={handler=e:GetHandler(),_type=RITPROC_EQUAL,lv=s.GetLevelRankLink,location=aux.GetDefaultRitualSummonLocation()|LOCATION_GRAVE,extrafil=s.extramat,requirementfunc=s.GetLevelRankLink}
 	local e1=Ritual.AddWholeLevelTribute(c,aux.TRUE)
 	e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
 	e1:SetRange(LOCATION_MZONE)
@@ -41,14 +41,14 @@ function s.condition(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND|LOCATION_GRAVE)
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,aux.GetDefaultRitualSummonLocation()|LOCATION_GRAVE)
 end
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
 	local entire=eg:FilterSelect(tp,s.entirefilter,1,1,nil,e,tp,eg,ep,ev,re,r,rp):GetFirst()
 	if not entire then return end
 	local c=e:GetHandler()
-	local params={handler=c,_type=RITPROC_EQUAL,lv=s.GetLevelRankLink,location=LOCATION_HAND|LOCATION_GRAVE,extrafil=s.extramat,requirementfunc=s.GetLevelRankLink}
+	local params={handler=c,_type=RITPROC_EQUAL,lv=s.GetLevelRankLink,location=aux.GetDefaultRitualSummonLocation()|LOCATION_GRAVE,extrafil=s.extramat,requirementfunc=s.GetLevelRankLink}
 	local e1=Ritual.AddWholeLevelTribute(entire,aux.TRUE)
 	e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
 	e1:SetRange(LOCATION_MZONE)
