@@ -15,6 +15,9 @@ local function ForceExtraRelease(mg)
 		return g:Includes(mg)
 	end
 end
+local function GetDefaultSummonFromLocation()
+	return Duel.IsDuelType(DUEL_EXTRA_DECK_RITUAL) and LOCATION_EXTRA or LOCATION_HAND
+end
 local function WrapTableReturn(func)
 	if func then
 		return function(...)
@@ -92,7 +95,7 @@ function Ritual.ExtraLocFilter(c,filter,_type,e,tp,m,m2,forcedselection,specific
 end
 Ritual.Target = aux.FunctionWithNamedArgs(
 function(filter,_type,lv,extrafil,extraop,matfilter,stage2,location,forcedselection,specificmatfilter,requirementfunc,sumpos,extratg)
-	location = location or LOCATION_HAND
+	location = location or GetDefaultSummonFromLocation()
 	sumpos = sumpos or POS_FACEUP
 	return	function(e,tp,eg,ep,ev,re,r,rp,chk)
 				if chk==0 then
@@ -137,7 +140,7 @@ function(filter,_type,lv,extrafil,extraop,matfilter,stage2,location,forcedselect
 end,"filter","lvtype","lv","extrafil","extraop","matfilter","stage2","location","forcedselection","specificmatfilter","requirementfunc","sumpos","extratg")
 Ritual.Operation = aux.FunctionWithNamedArgs(
 function(filter,_type,lv,extrafil,extraop,matfilter,stage2,location,forcedselection,customoperation,specificmatfilter,requirementfunc,sumpos)
-	location = location or LOCATION_HAND
+	location = location or GetDefaultSummonFromLocation()
 	sumpos = sumpos or POS_FACEUP
 	return	function(e,tp,eg,ep,ev,re,r,rp)
 				local mg=Duel.GetRitualMaterial(tp,not requirementfunc)
