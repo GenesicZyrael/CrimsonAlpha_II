@@ -47,6 +47,10 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 				{ct1,aux.Stringid(id,1)},
 				{ct2,aux.Stringid(id,2)})
 			if op~=nil then
+				local turn=1
+				if Duel.GetTurnPlayer()==tp then
+					turn=2
+				end
 				local dis=Duel.SelectDisableField(tp,op,0,LOCATION_MZONE,0)
 				Duel.Hint(HINT_ZONE,tp,dis)
 				e:SetLabel(dis)
@@ -56,7 +60,7 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 				e1:SetCode(EFFECT_DISABLE_FIELD)
 				e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 				e1:SetOperation(function(e) return e:GetLabel() end)
-				e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,3)
+				e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,turn)
 				e1:SetLabel(dis)
 				Duel.RegisterEffect(e1,tp)
 			end
