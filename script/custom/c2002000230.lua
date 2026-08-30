@@ -139,7 +139,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.filter(c,e,tp)
 	if not (c:IsFaceup() and c:IsMonster() and c:IsRace(RACE_REPTILE) and c:IsSetCard(SET_WORM)
-		and c:IsHasEffect(TYPE_FLIP) and c:IsAbleToDeckAsCost()) then 
+		and c:IsType(TYPE_FLIP) and c:IsAbleToDeckAsCost()) then 
 		return false
 	end
 	local effs={c:GetOwnEffects()}
@@ -156,9 +156,9 @@ function s.filter(c,e,tp)
 	return false
 end
 function s.applycost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_HAND|LOCATION_DECK,0,1,nil,e,tp) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local rc=Duel.SelectMatchingCard(tp,s.filter,tp,LOCATION_HAND|LOCATION_DECK,0,1,1,nil,e,tp):GetFirst()
+	if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_GRAVE|LOCATION_REMOVED,0,1,nil,e,tp) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+	local rc=Duel.SelectMatchingCard(tp,s.filter,tp,LOCATION_GRAVE|LOCATION_REMOVED,0,1,1,nil,e,tp):GetFirst()
 	Duel.SendtoDeck(rc,nil,SEQ_DECKSHUFFLE,REASON_COST)
 	local available_effs={}
 	local effs={rc:GetOwnEffects()}
