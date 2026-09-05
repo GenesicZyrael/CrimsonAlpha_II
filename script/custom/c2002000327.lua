@@ -20,7 +20,7 @@ function s.initial_effect(c)
     e1:SetCategory(CATEGORY_EQUIP)
     e1:SetType(EFFECT_TYPE_IGNITION)
     e1:SetRange(LOCATION_MZONE)
-    -- e1:SetCountLimit(1)
+    e1:SetCountLimit(1)
     e1:SetTarget(s.eqtg)
     e1:SetOperation(s.eqop)
     c:RegisterEffect(e1)
@@ -41,7 +41,8 @@ s.listed_series={SET_SABER, SET_X_SABER, SET_INFERNOBLE_KNIGHT, SET_FLAMVELL}
 
 -- EFFECT 1 (Equip and Copy)
 function s.eqfilter(c)
-    return c:IsSetCard(SET_SABER) and c:IsType(TYPE_EFFECT) and c:IsMonster() and not c:IsForbidden()
+    return c:IsType(TYPE_EFFECT) and c:IsMonster() and not c:IsForbidden()
+		and (c:IsSetCard(SET_SABER) or  c:IsSetCard(SET_FLAMVELL))
 end
 function s.check_equipped(c)
     return c:GetFlagEffect(id)>0
