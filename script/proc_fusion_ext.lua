@@ -1,3 +1,10 @@
+local ForcedUseZone=nil
+local function GetForcedZone(chkfnf)
+	local zone=(chkfnf>>40)&0xff
+	if zone==0 then zone=0xff end
+	return zone
+end
+
 --Ensure that when a pseudo material is selected, `sg` must have the sum of pseudo materials+original card with the same uid equal to the material count
 local function FusionMaterialCountCheck(tp,sg,fc)
 	for c in sg:Iter() do
@@ -72,6 +79,7 @@ function Fusion.OperationMix(insf,sub,...)
 	return	function(e,tp,eg,ep,ev,re,r,rp,gc,chkfnf,summonEff)
 				Fusion.SummonEffect=summonEff
 				local chkf=chkfnf&0xff
+				ForcedUseZone=GetForcedZone(chkfnf)
 				local c=e:GetHandler()
 				local tp=c:GetControler()
 				local notfusion=(chkfnf&FUSPROC_NOTFUSION)~=0
@@ -131,6 +139,7 @@ function Fusion.OperationMixRep(insf,sub,fun1,minc,maxc,...)
 	return	function(e,tp,eg,ep,ev,re,r,rp,gc,chkfnf,summonEff)
 				Fusion.SummonEffect=summonEff
 				local chkf=chkfnf&0xff
+				ForcedUseZone=GetForcedZone(chkfnf)
 				local c=e:GetHandler()
 				local tp=c:GetControler()
 				local notfusion=(chkfnf&FUSPROC_NOTFUSION)~=0

@@ -14,7 +14,7 @@
 local geff=Effect.GlobalEffect()
 geff:SetType(EFFECT_TYPE_FIELD)
 geff:SetCode(EFFECT_EXTRA_FUSION_MATERIAL)
-geff:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
+geff:SetProperty(EFFECT_FLAG_SET_AVAILABLE+EFFECT_FLAG_IGNORE_IMMUNE)
 geff:SetTargetRange(0xff,0xff)
 geff:SetTarget(function(e,c)
 	return Fusion.ExtraGroup and Fusion.ExtraGroup:IsContains(c)
@@ -23,17 +23,17 @@ geff:SetValue(aux.TRUE)
 Duel.RegisterEffect(geff,0)
 
 --Returns the first EFFECT_EXTRA_FUSION_MATERIAL applied on Card c.
---If fc is provided, it will also check if the effect's value function applies to that card.
+--If summon_card is provided, it will also check if the effect's value function applies to that card.
 --Card.IsHasEffect alone cannot be used because it would return the above effect as well.
-local function GetExtraMatEff(c,fc)
+local function GetExtraMatEff(c,summon_card)
 	local effs={c:IsHasEffect(EFFECT_EXTRA_FUSION_MATERIAL)}
 	for _,eff in ipairs(effs) do
 		if eff~=geff then
-			if not fc then
+			if not summon_card then
 				return eff
 			end
 			local val=eff:GetValue()
-			if (type(val)=="function" and val(eff,fc)) or val==1 then
+			if (type(val)=="function" and val(eff,summon_card)) or val==1 then
 				return eff
 			end
 		end
@@ -475,7 +475,9 @@ function (fusfilter,matfilter,extrafil,extraop,gc2,stage2,exactcount,value,locat
 				--Make sure there are always pseudo materials, because EVENT_ADJUST sometimes doesn't get raised right away when a new EFFECT_FUSION_MATERIAL_COUNT is applied
 				Fusion.CreatePseudoMaterials(e,tp)
 				location=location or LOCATION_EXTRA
-				chkf = chkf and chkf|tp or tp
+				if not chkf or ((chkf&PLAYER_NONE)~=PLAYER_NONE) then
+					chkf = chkf and chkf|tp or tp
+				end
 				if not preselect then chkf=chkf|FUSPROC_CANCELABLE end
 				local sumlimit=(chkf&(FUSPROC_NOTFUSION|FUSPROC_NOLIMIT))~=0
 				local notfusion=(chkf&FUSPROC_NOTFUSION)~=0
@@ -495,6 +497,9 @@ function (fusfilter,matfilter,extrafil,extraop,gc2,stage2,exactcount,value,locat
 				local efmg=fmg_all:Filter(GetExtraMatEff,nil)
 				local extragroup=nil
 				local repl_flag=false
+				local function filter_material_immunity_and_necrovalley(card,fvalue,feffect)
+					return card:IsCanBeFusionMaterial(nil,fvalue) and not card:IsImmuneToEffect(feffect) and aux.nvfilter(card)
+				end
 				if #efmg>0 then
 					local extra_feff=GetExtraMatEff(efmg:GetFirst())
 					if extra_feff and extra_feff:GetLabelObject() then

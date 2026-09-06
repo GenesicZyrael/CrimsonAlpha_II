@@ -1,7 +1,8 @@
-Xyz.InfiniteMats=98
+local infToken={}
+Xyz.InfiniteMats=infToken
 function Xyz.MatFilter2(c,f,lv,xyz,tp)
     if f and not f(c,xyz,SUMMON_TYPE_XYZ|MATERIAL_XYZ,tp) then return false end
-    if not c:HasLevel() and not c:IsHasEffect(EFFECT_XYZ_LEVEL) then return fasle end
+    if not c:HasLevel() and not c:IsHasEffect(EFFECT_XYZ_LEVEL) then return false end
     if lv then
         local effectivelvl=c:GetLevel()
         local mg=Xyz.GetMaterials(tp,xyz)

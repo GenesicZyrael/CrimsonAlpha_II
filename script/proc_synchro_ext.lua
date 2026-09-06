@@ -15,9 +15,9 @@ function Synchro.Condition(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,req2,reqm)
 				local g
 				local mgchk
 				if sub1 then
-					sub1=aux.OR(sub1,function(_c) return _c:IsHasEffect(30765615) and (not f1 or f1(_c,c,SUMMON_TYPE_SYNCHRO|MATERIAL_SYNCHRO,tp)) end)
+					sub1=aux.OR(sub1,function(_c) return _c:IsHasEffect(EFFECT_CAN_BE_TUNER) and (not f1 or f1(_c,c,SUMMON_TYPE_SYNCHRO|MATERIAL_SYNCHRO,tp)) end)
 				else
-					sub1=function(_c) return _c:IsHasEffect(30765615) and (not f1 or f1(_c,c,SUMMON_TYPE_SYNCHRO|MATERIAL_SYNCHRO,tp)) end
+					sub1=function(_c) return _c:IsHasEffect(EFFECT_CAN_BE_TUNER) and (not f1 or f1(_c,c,SUMMON_TYPE_SYNCHRO|MATERIAL_SYNCHRO,tp)) end
 				end
 				if mg then
 					dg=mg
@@ -36,6 +36,7 @@ function Synchro.Condition(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,req2,reqm)
 					g=dg:Filter(Card.IsCanBeSynchroMaterial,nil,c)
 					mgchk=false
 				end
+				g:Remove(function(c,sc)return c:GetSynchroLevel(sc) < 1 end,nil,c)
 				local pg=Auxiliary.GetMustBeMaterialGroup(tp,dg,tp,c,g,REASON_SYNCHRO)
 				if not g:Includes(pg) or pg:IsExists(aux.NOT(Card.IsCanBeSynchroMaterial),1,nil,c) then return false end
 				if smat then
@@ -396,9 +397,9 @@ function Synchro.Target(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,req2,reqm)
 				local g
 				local dg
 				if sub1 then
-					sub1=aux.OR(sub1,function(_c) return _c:IsHasEffect(30765615) and (not f1 or f1(_c,c,SUMMON_TYPE_SYNCHRO|MATERIAL_SYNCHRO,tp)) end)
+					sub1=aux.OR(sub1,function(_c) return _c:IsHasEffect(EFFECT_CAN_BE_TUNER) and (not f1 or f1(_c,c,SUMMON_TYPE_SYNCHRO|MATERIAL_SYNCHRO,tp)) end)
 				else
-					sub1=function(_c) return _c:IsHasEffect(30765615) and (not f1 or f1(_c,c,SUMMON_TYPE_SYNCHRO|MATERIAL_SYNCHRO,tp)) end
+					sub1=function(_c) return _c:IsHasEffect(EFFECT_CAN_BE_TUNER) and (not f1 or f1(_c,c,SUMMON_TYPE_SYNCHRO|MATERIAL_SYNCHRO,tp)) end
 				end
 				if mg then
 					mgchk=true
@@ -417,6 +418,7 @@ function Synchro.Target(f1,min1,max1,f2,min2,max2,sub1,sub2,req1,req2,reqm)
 					dg=Duel.GetMatchingGroup(synchmatfilter,tp,LOCATION_MZONE|LOCATION_HAND|LOCATION_SZONE,LOCATION_MZONE,c)
 					g=dg:Filter(Card.IsCanBeSynchroMaterial,nil,c)
 				end
+				g:Remove(function(c,sc)return c:GetSynchroLevel(sc) < 1 end,nil,c)
 				local pg=Auxiliary.GetMustBeMaterialGroup(tp,dg,tp,c,g,REASON_SYNCHRO)
 				if smat then
 					pg:Merge(smat)
@@ -821,6 +823,7 @@ function Synchro.MajesticCondition(f1,cbt1,f2,cbt2,f3,cbt3,...)
 					dg=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and (mc:IsControler(tp) or mc:IsCanBeSynchroMaterial(c)) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
 					g=dg:Filter(Card.IsCanBeSynchroMaterial,nil,c)
 				end
+				g:Remove(function(c,sc)return c:GetSynchroLevel(sc) < 1 end,nil,c)
 				local pg=Auxiliary.GetMustBeMaterialGroup(tp,dg,tp,c,g,REASON_SYNCHRO)
 				if not g:Includes(pg) or pg:IsExists(aux.NOT(Card.IsCanBeSynchroMaterial),1,nil,c) then return false end
 				if smat then
@@ -866,6 +869,7 @@ function Synchro.MajesticTarget(f1,cbt1,f2,cbt2,f3,cbt3,...)
 					dg=Duel.GetMatchingGroup(function(mc) return mc:IsFaceup() and (mc:IsControler(tp) or mc:IsCanBeSynchroMaterial(c)) end,tp,LOCATION_MZONE,LOCATION_MZONE,c)
 					g=dg:Filter(Card.IsCanBeSynchroMaterial,nil,c)
 				end
+				g:Remove(function(c,sc)return c:GetSynchroLevel(sc) < 1 end,nil,c)
 				local pg=Auxiliary.GetMustBeMaterialGroup(tp,dg,tp,c,g,REASON_SYNCHRO)
 				if smat then
 					pg:Merge(smat)

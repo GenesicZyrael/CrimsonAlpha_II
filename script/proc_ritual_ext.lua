@@ -7,17 +7,6 @@ if not Ritual then
 end
 
 --required functions
-local function ExtraReleaseFilter(c,tp)
-	return c:IsControler(1-tp) and c:IsHasEffect(EFFECT_EXTRA_RELEASE)
-end
-local function ForceExtraRelease(mg)
-	return function(e,tp,g,c)
-		return g:Includes(mg)
-	end
-end
-local function GetDefaultSummonFromLocation()
-	return Duel.IsDuelType(DUEL_EXTRA_DECK_RITUAL) and LOCATION_EXTRA or LOCATION_HAND
-end
 local function WrapTableReturn(func)
 	if func then
 		return function(...)
@@ -93,8 +82,19 @@ function Ritual.ExtraLocFilter(c,filter,_type,e,tp,m,m2,forcedselection,specific
 	Ritual.SummoningLevel=nil
 	return res
 end
+local function ExtraReleaseFilter(c,tp)
+	return c:IsControler(1-tp) and c:IsHasEffect(EFFECT_EXTRA_RELEASE)
+end
+local function ForceExtraRelease(mg)
+	return function(e,tp,g,c)
+		return g:Includes(mg)
+	end
+end
+local function GetDefaultSummonFromLocation()
+	return Duel.IsDuelType(DUEL_EXTRA_DECK_RITUAL) and LOCATION_EXTRA or LOCATION_HAND
+end
 Ritual.Target = aux.FunctionWithNamedArgs(
-function(filter,_type,lv,extrafil,extraop,matfilter,stage2,location,forcedselection,specificmatfilter,requirementfunc,sumpos,extratg)
+function(filter,_type,lv,extrafil,extraop,matfilter,stage2,location,forcedselection,specificmatfilter,requirementfunc,sumpos,extratg,self)
 	location = location or GetDefaultSummonFromLocation()
 	sumpos = sumpos or POS_FACEUP
 	return	function(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -137,12 +137,14 @@ function(filter,_type,lv,extrafil,extraop,matfilter,stage2,location,forcedselect
 				if extratg then extratg(e,tp,eg,ep,ev,re,r,rp,chk) end
 				Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,location)
 			end
-end,"filter","lvtype","lv","extrafil","extraop","matfilter","stage2","location","forcedselection","specificmatfilter","requirementfunc","sumpos","extratg")
+end,"filter","lvtype","lv","extrafil","extraop","matfilter","stage2","location","forcedselection","specificmatfilter","requirementfunc","sumpos","extratg","self")
 Ritual.Operation = aux.FunctionWithNamedArgs(
-function(filter,_type,lv,extrafil,extraop,matfilter,stage2,location,forcedselection,customoperation,specificmatfilter,requirementfunc,sumpos)
+function(filter,_type,lv,extrafil,extraop,matfilter,stage2,location,forcedselection,customoperation,specificmatfilter,requirementfunc,sumpos,self)
 	location = location or GetDefaultSummonFromLocation()
 	sumpos = sumpos or POS_FACEUP
 	return	function(e,tp,eg,ep,ev,re,r,rp)
+				local c=e:GetHandler()
+				if self and not c:IsRelateToEffect(e) then return end
 				local mg=Duel.GetRitualMaterial(tp,not requirementfunc)
 				local mg2=extrafil and extrafil(e,tp,eg,ep,ev,re,r,rp) or Group.CreateGroup()
 				--if an EFFECT_EXTRA_RITUAL_MATERIAL effect has a forcedselection of its own
@@ -170,21 +172,30 @@ function(filter,_type,lv,extrafil,extraop,matfilter,stage2,location,forcedselect
 				end
 				Ritual.CheckMatFilter(matfilter,e,tp,mg,mg2)
 				local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
-				-- custom ----
 				local tg=Group.CreateGroup()
-				local final_group=Group.CreateGroup()
-				local base_ritual_group=Duel.GetMatchingGroup(aux.NecroValleyFilter(Ritual.Filter),tp,location,0,nil,filter,_type,e,tp,mg,mg2,func,specificmatfilter,lv,requirementfunc,sumpos)
-				local extra_loc_group=Duel.GetMatchingGroup(aux.NecroValleyFilter(Ritual.ExtraLocFilter),tp,LOCATION_NOTHAND,0,nil,filter,_type,e,tp,mg,mg2,func,specificmatfilter,lv,requirementfunc,sumpos)
-				final_group:Merge(base_ritual_group)
-				final_group:Merge(extra_loc_group)
-				if #final_group>0 then
+				if not self then
 					Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-					tg=final_group:Select(tp,1,1,nil)
+					-- custom start ----
+					local final_group=Group.CreateGroup()
+					local base_ritual_group=Duel.GetMatchingGroup(aux.NecroValleyFilter(Ritual.Filter),tp,location,0,nil,filter,_type,e,tp,mg,mg2,func,specificmatfilter,lv,requirementfunc,sumpos)
+					local extra_loc_group=Duel.GetMatchingGroup(aux.NecroValleyFilter(Ritual.ExtraLocFilter),tp,LOCATION_NOTHAND,0,nil,filter,_type,e,tp,mg,mg2,func,specificmatfilter,lv,requirementfunc,sumpos)
+					final_group:Merge(base_ritual_group)
+					final_group:Merge(extra_loc_group)
+					if #final_group>0 then
+						Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+						tg=final_group:Select(tp,1,1,nil)
+		   
+					 
+					end
+					-- custom end ----
+				elseif Ritual.Filter(c,filter,_type,e,tp,mg,mg2,func,specificmatfilter,lv,requirementfunc,sumpos) and not c:IsHasEffect(EFFECT_NECRO_VALLEY) then
+					tg:AddCard(c)
 				end
 				if #tg>0 then
 					local tc=tg:GetFirst()
+					-- custom start ----
 					Ritual.UseExtraLocationCountLimit(tc,e:GetHandler(),tp)
-				--------
+					-- custom end ----
 					local lv=(lv and (type(lv)=="function" and lv(tc)) or lv) or tc:GetLevel()
 					lv=math.max(1,lv)
 					Ritual.SummoningLevel=lv
@@ -251,4 +262,4 @@ function(filter,_type,lv,extrafil,extraop,matfilter,stage2,location,forcedselect
 					Ritual.SummoningLevel=nil
 				end
 			end
-end,"filter","lvtype","lv","extrafil","extraop","matfilter","stage2","location","forcedselection","customoperation","specificmatfilter","requirementfunc","sumpos")
+end,"filter","lvtype","lv","extrafil","extraop","matfilter","stage2","location","forcedselection","customoperation","specificmatfilter","requirementfunc","sumpos","self")
