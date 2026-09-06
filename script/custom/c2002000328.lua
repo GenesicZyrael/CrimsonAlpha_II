@@ -42,7 +42,7 @@ function s.initial_effect(c)
     e3:SetValue(s.efilter)
     c:RegisterEffect(e3)
 end
-s.listed_series={SET_X_SABER, SET_GOTTOMS}
+s.listed_series={SET_X_SABER}
 
 function s.splimit(e,se,sp,st)
     return e:GetHandler():IsLocation(LOCATION_EMZONE)
@@ -116,7 +116,7 @@ function s.tdcon(e,tp,eg,ep,ev,re,r,rp)
     return e:GetHandler():IsSummonType(SUMMON_TYPE_LINK)
 end
 function s.gyfilter(c)
-    return (c:IsSetCard(SET_X_SABER) or c:IsSetCard(SET_GOTTOMS)) and c:IsType(TYPE_SYNCHRO)
+    return c:IsSetCard(SET_X_SABER) and c:IsType(TYPE_SYNCHRO)
 end
 function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
     if chkc then return chkc:IsOnField() and chkc:IsAbleToDeck() end
