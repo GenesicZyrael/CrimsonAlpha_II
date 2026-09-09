@@ -190,3 +190,22 @@ function Fusion.OperationMixRep(insf,sub,fun1,minc,maxc,...)
 				Fusion.SummonEffect=nil
 			end
 end
+-- -- Global Fusion Check Override for Starving Venom Pendulum Dragon package requirement
+-- local old_check_additional = Fusion.CheckAdditional
+-- Fusion.CheckAdditional = function(tp,sg,fc,sumtype,tp_ref)
+    -- if old_check_additional and not old_check_additional(tp,sg,fc,sumtype,tp_ref) then
+        -- return false
+    -- end
+	-- Debug.Message(fc:GetCode())
+    -- -- Replace with the actual card code of Odd-Eyes Venom Dragon if different
+    -- -- Check if we are summoning Odd-Eyes Venom Dragon
+    -- if fc and fc:IsCode(2002000334) then
+        -- local svpd = Duel.FindFirstMatchingCard(Card.IsCode, tp, LOCATION_MZONE, 0, nil, 2002000334)
+        -- -- If Starving Venom Pendulum Dragon is face-up on the field, it MUST be included in the selected materials (sg)
+        -- if svpd and svpd:IsFaceup() then
+            -- return sg:IsContains(svpd)
+        -- end
+    -- end
+    
+    -- return true
+-- end
