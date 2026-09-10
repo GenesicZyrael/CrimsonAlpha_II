@@ -190,22 +190,43 @@ function Fusion.OperationMixRep(insf,sub,fun1,minc,maxc,...)
 				Fusion.SummonEffect=nil
 			end
 end
--- -- Global Fusion Check Override for Starving Venom Pendulum Dragon package requirement
--- local old_check_additional = Fusion.CheckAdditional
--- Fusion.CheckAdditional = function(tp,sg,fc,sumtype,tp_ref)
-    -- if old_check_additional and not old_check_additional(tp,sg,fc,sumtype,tp_ref) then
-        -- return false
-    -- end
-	-- Debug.Message(fc:GetCode())
-    -- -- Replace with the actual card code of Odd-Eyes Venom Dragon if different
-    -- -- Check if we are summoning Odd-Eyes Venom Dragon
-    -- if fc and fc:IsCode(2002000334) then
-        -- local svpd = Duel.FindFirstMatchingCard(Card.IsCode, tp, LOCATION_MZONE, 0, nil, 2002000334)
-        -- -- If Starving Venom Pendulum Dragon is face-up on the field, it MUST be included in the selected materials (sg)
-        -- if svpd and svpd:IsFaceup() then
-            -- return sg:IsContains(svpd)
-        -- end
-    -- end
-    
-    -- return true
--- end
+
+function Fusion.CheckMixGoal(tp,sg,fc,sub,sub2,contact,sumtype,chkf,...)
+    local g=Group.CreateGroup()
+    local res = sg:IsExists(Fusion.CheckMix,1,nil,sg,g,fc,sub,sub2,contact,sumtype,tp,...) and
+        (chkf==PLAYER_NONE or (fc:IsLocation(LOCATION_EXTRA) and Duel.GetLocationCountFromEx(chkf,tp,sg,fc,ForcedUseZone) or Duel.GetMZoneCount(chkf,sg,tp))>0)
+        and (not Fusion.CheckAdditional or Fusion.CheckAdditional(tp,sg,fc,sumtype,tp))
+    -- CUSTOM INJECTION: Verify Starving Venom Pendulum Dragon (CARD_STARVING_VENOM_PENDULUM_DRAGON)    
+    if res then
+        local svpd = Duel.GetFirstMatchingCard(Card.IsCode,tp,LOCATION_MZONE,0,nil,CARD_STARVING_VENOM_PENDULUM_DRAGON)
+        if svpd and svpd:IsFaceup() and not sg:IsContains(svpd) then
+            -- Disable SVPD's continuous field effects temporarily
+            svpd:RegisterFlagEffect(CARD_STARVING_VENOM_PENDULUM_DRAGON,0,0,1)
+            -- Re-verify the group without the buffs
+            local g2 = Group.CreateGroup()
+            local valid_without_buff = sg:IsExists(Fusion.CheckMix,1,nil,sg,g2,fc,sub,sub2,contact,sumtype,tp,...)
+            svpd:ResetFlagEffect(CARD_STARVING_VENOM_PENDULUM_DRAGON)
+            if not valid_without_buff then return false end
+        end
+    end
+    return res
+end
+function Fusion.CheckMixRepGoal(tp,sg,mustg,fc,sub,sub2,contact,sumtype,chkf,fun1,minc,maxc,...)
+    if #sg<minc+#{...} or #sg>maxc+#{...} then return false end
+    local g=Group.CreateGroup()
+    local res = Fusion.CheckMixRep(sg,g,fc,sub,sub2,contact,sumtype,chkf,tp,fun1,minc,maxc,...) 
+		and (chkf==PLAYER_NONE or Duel.GetLocationCountFromEx(chkf,tp,sg,fc,ForcedUseZone)>0)
+        and (not Fusion.CheckAdditional or Fusion.CheckAdditional(tp,sg,fc,sumtype,tp))
+    -- CUSTOM INJECTION: Verify Starving Venom Pendulum Dragon (CARD_STARVING_VENOM_PENDULUM_DRAGON)
+    if res then
+        local svpd = Duel.GetFirstMatchingCard(Card.IsCode,tp,LOCATION_MZONE,0,nil,CARD_STARVING_VENOM_PENDULUM_DRAGON)
+        if svpd and svpd:IsFaceup() and not sg:IsContains(svpd) then
+            svpd:RegisterFlagEffect(CARD_STARVING_VENOM_PENDULUM_DRAGON,0,0,1)
+            local g2 = Group.CreateGroup()
+            local valid_without_buff = Fusion.CheckMixRep(sg,g2,fc,sub,sub2,contact,sumtype,chkf,tp,fun1,minc,maxc,...)
+            svpd:ResetFlagEffect(CARD_STARVING_VENOM_PENDULUM_DRAGON)
+            if not valid_without_buff then return false end
+        end
+    end
+    return res
+end
