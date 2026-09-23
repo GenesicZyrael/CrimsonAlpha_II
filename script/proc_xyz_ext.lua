@@ -1,4 +1,4 @@
-local infToken={}
+local infToken=100
 Xyz.InfiniteMats=infToken
 function Xyz.MatFilter2(c,f,lv,xyz,tp)
     if f and not f(c,xyz,SUMMON_TYPE_XYZ|MATERIAL_XYZ,tp) then return false end
