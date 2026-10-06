@@ -1,5 +1,4 @@
 --Corrupted Pendulum
-
 local s,id=GetID()
 function s.initial_effect(c)
 	--Activate
@@ -28,7 +27,8 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.checkop(e,tp)
 	local lpz=Duel.GetFieldCard(tp,LOCATION_PZONE,0)
-	if lpz~=nil and lpz:GetFlagEffect(id)<=0 then
+	local rpz=Duel.GetFieldCard(tp,LOCATION_PZONE,1)
+	if lpz~=nil and rpz~=nil and lpz:GetFlagEffect(id)<=0 then
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetDescription(aux.Stringid(id,0))
 		e1:SetType(EFFECT_TYPE_FIELD)
@@ -62,7 +62,16 @@ function s.checkop(e,tp)
 	end
 end
 function s.penfilter(c,e,tp,lscale,rscale)
-	return Pendulum.Filter(c,e,tp,lscale,rscale)
+	if lscale>rscale then lscale,rscale=rscale,lscale end
+	local lv=0
+	if c.pendulum_level then
+		lv=c.pendulum_level
+	else
+		lv=c:GetLevel()
+	end
+	return (lvchk or (lv>lscale and lv<rscale) or c:IsHasEffect(511004423)) 
+		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_PENDULUM,tp,false,false)
+		and not c:IsForbidden()
 end
 function s.pencon1(e,c,og)
 	if c==nil then return true end
