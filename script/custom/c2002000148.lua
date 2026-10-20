@@ -105,7 +105,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp,c)
 	g:DeleteGroup()
 end
 function s.distg(e,c)
-	return c:IsType(TYPE_MONSTER)
+	return c:IsType(TYPE_MONSTER) and not c:IsAbleToHandAsCost()
 end
 function s.discon(e,tp,eg,ep,ev,re,r,rp)
 	if e:GetHandler():IsStatus(STATUS_BATTLE_DESTROYED) then return false end
