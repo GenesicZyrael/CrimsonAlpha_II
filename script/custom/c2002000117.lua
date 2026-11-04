@@ -1,5 +1,4 @@
 --Red-Eyes Zombie Necro Dragon/Assault Mode
-
 local s,id=GetID()
 function s.initial_effect(c)
 	c:EnableReviveLimit()

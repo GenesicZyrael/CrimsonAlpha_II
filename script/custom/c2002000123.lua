@@ -4,7 +4,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 	Pendulum.AddProcedure(c)
 	--maintenance cost
-	aux.AmorphageMCost(c)
+	Effect.AddAmorphageCost(c)
 	--Special Summon condition
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_SINGLE)

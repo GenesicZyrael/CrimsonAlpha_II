@@ -1,7 +1,8 @@
 --Cyber Dragon Fünf
-
 local s,id=GetID()
 function s.initial_effect(c)
+	local e0=Effect.ChangeCode(c,CARD_CYBER_DRAGON,LOCATION_MZONE|LOCATION_GRAVE|LOCATION_DECK)
+	c:RegisterEffect(e0)
 	--search
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
@@ -22,21 +23,13 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 	local e2=e1:Clone()
 	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
-	c:RegisterEffect(e2)	
-	--Name becomes "Cyber Dragon" while on the field or in GY
-	local e4=Effect.CreateEffect(c)
-	e4:SetType(EFFECT_TYPE_SINGLE)
-	e4:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e4:SetCode(EFFECT_CHANGE_CODE)
-	e4:SetRange(LOCATION_MZONE+LOCATION_GRAVE+LOCATION_DECK)
-	e4:SetValue(CARD_CYBER_DRAGON)
-	c:RegisterEffect(e4)	
+	c:RegisterEffect(e2)		
 end
 s.listed_names={CARD_CYBER_DRAGON}
-s.listed_series={0x1093}
+s.listed_series={CARD_CYBER_DRAGON}
 
 function s.thfilter(c)
-	return c:IsSetCard(0x1093) and c:IsMonster() and not c:IsCode(id) and c:IsAbleToHand()
+	return c:IsSetCard(CARD_CYBER_DRAGON) and c:IsMonster() and not c:IsCode(id) and c:IsAbleToHand()
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil) end

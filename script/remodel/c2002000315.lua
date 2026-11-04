@@ -11,7 +11,7 @@ function s.initial_effect(c)
 	e1:SetRange(LOCATION_HAND)
 	e1:SetCondition(s.spcon)
 	c:RegisterEffect(e1)
-	Toon.SummoningSickness(c)
+	Toon.AddSummoningSickness(c)
 end
 s.listed_names={CARD_TOON_WORLD}
 function s.spcon(e,c)

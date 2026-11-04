@@ -1,6 +1,5 @@
 --Worm Erokin
 --Modified for CrimsonRemodels
-
 local s,id=GetID()
 function s.initial_effect(c)
 	c:EnableReviveLimit()
@@ -69,7 +68,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 			e1:SetReset(RESET_EVENT|RESETS_STANDARD)
 			tc:RegisterEffect(e1)
 			--Cannot be used as material for a monster from the Extra Deck, unless all other materials are "Worm" monsters
-			aux.XenoMatCheckOthers(c,s.matfilter,RESET_EVENT|RESETS_STANDARD)
+			Effect.AddXenoRestricted(c,s.matfilter,RESET_EVENT|RESETS_STANDARD)
 		end
 	end
 	Duel.SpecialSummonComplete()

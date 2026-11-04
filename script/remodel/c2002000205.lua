@@ -4,7 +4,7 @@
 local s,id=GetID()
 function s.initial_effect(c)
 	--Cannot be used as material, except for the Special Summon of a Reptile "Worm" monster
-	aux.XenoMatCheckSummoned(c,s.matfilter)
+	Effect.AddXenoCompatible(c,s.matfilter)
 	--Special Summon as many "Worm Apocalypse" as possible from your hand, Deck, or GY in face-up or face-down Defense Position
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))

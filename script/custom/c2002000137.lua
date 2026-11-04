@@ -3,7 +3,7 @@ local s,id=GetID()
 function s.initial_effect(c)
 	c:SetLimitOnField(3,id)
 	--Change its name to "Ra's Disciple"
-	local e0=aux.ChangeCode(c,74875003,LOCATION_MZONE+LOCATION_HAND+LOCATION_DECK)
+	local e0=Effect.ChangeCode(c,74875003,LOCATION_MZONE|LOCATION_HAND|LOCATION_DECK)
 	c:RegisterEffect(e0)
 	--extra summon
 	local e1=Effect.CreateEffect(c)

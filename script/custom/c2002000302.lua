@@ -1,15 +1,10 @@
 -- Horus the Ebon Flame Dragon
 local s,id=GetID()
-local LCL_CARD_HORUS_LV8=48229808
+local CARD_HORUS_LV8=48229808
 function s.initial_effect(c)
     -- Name becomes "Horus the Black Flame Dragon LV8" everywhere
-    local e0=Effect.CreateEffect(c)
-    e0:SetType(EFFECT_TYPE_SINGLE)
-    e0:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-    e0:SetCode(EFFECT_CHANGE_CODE)
-    e0:SetRange(LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE+LOCATION_MZONE)
-    e0:SetValue(LCL_CARD_HORUS_LV8)
-    c:RegisterEffect(e0)
+	local e0=Effect.ChangeCode(c,CARD_HORUS_LV8,LOCATION_HAND|LOCATION_DECK|LOCATION_GRAVE|LOCATION_MZONE)
+	c:RegisterEffect(e0)
     -- Quick Effect: Change opponent's Spell effect
     local e1=Effect.CreateEffect(c)
     e1:SetDescription(aux.Stringid(id,0))
@@ -36,7 +31,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 s.listed_series={SET_HORUS}
-s.listed_names={CARD_KING_SARCOPHAGUS, LCL_CARD_HORUS_LV8}
+s.listed_names={CARD_KING_SARCOPHAGUS, CARD_HORUS_LV8}
 
 -- Check for King's Sarcophagus on field
 function s.sarc_filter(c)

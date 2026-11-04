@@ -1,5 +1,4 @@
 --Majestic Synchron
-
 local s,id=GetID()
 function s.initial_effect(c)
 	--synchro summon
@@ -36,17 +35,17 @@ function s.initial_effect(c)
 	e3:SetOperation(s.operation)
 	c:RegisterEffect(e3)
 end
-s.listed_series={0x3f}
+s.listed_series={SET_MAJESTIC}
 --
 function s.thcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	return c:IsSummonType(SUMMON_TYPE_SYNCHRO) and c:GetMaterial():IsExists(s.pmfilter,1,nil,c)
 end
 function s.thfilter(c)
-	return c:IsSetCard(0x3f) and c:IsAbleToHand()
+	return c:IsSetCard(SET_MAJESTIC) and c:IsAbleToHand()
 end
 function s.pmfilter(c,sc)
-	return c:IsSetCard(0x3f)
+	return c:IsSetCard(SET_MAJESTIC)
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil) end
@@ -70,7 +69,7 @@ function s.cfilter2(c,e,tp,tc)
 		and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,c:GetLevel()+tc:GetLevel(),Group.FromCards(c,tc))
 end
 function s.spfilter(c,e,tp,lv,mg)
-	return c:IsSetCard(0x3f) and c:IsType(TYPE_SYNCHRO) and (not chk or Duel.GetLocationCountFromEx(tp,tp,nil,c)>0)
+	return c:IsSetCard(SET_MAJESTIC) and c:IsType(TYPE_SYNCHRO) and (not chk or Duel.GetLocationCountFromEx(tp,tp,nil,c)>0)
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_SYNCHRO,tp,false,false)
 		and c:IsLevel(lv)
 end

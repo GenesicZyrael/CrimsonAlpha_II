@@ -1,5 +1,4 @@
 --Buster Synchron
-
 local s,id=GetID()
 function s.initial_effect(c)
 	--Activate
@@ -9,7 +8,7 @@ function s.initial_effect(c)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,{id,0})
-	e1:SetCost(aux.AND(aux.selfreleasecost,AssaultMode.Cost))
+	e1:SetCost(aux.AND(Cost.SelfTribute,AssaultMode.Cost))
 	c:RegisterEffect(e1)
 	--Special Summon itself from the GY
 	local e2=Effect.CreateEffect(c)

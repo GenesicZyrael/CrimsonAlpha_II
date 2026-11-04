@@ -3,13 +3,8 @@ local s,id=GetID()
 local alias=20721928 -- Elemental HERO Sparkman
 function s.initial_effect(c)
     -- This card's name becomes "Elemental HERO Sparkman" while in hand, Deck, or on the field.
-    local e1=Effect.CreateEffect(c)
-    e1:SetType(EFFECT_TYPE_SINGLE)
-    e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-    e1:SetCode(EFFECT_CHANGE_CODE)
-    e1:SetRange(LOCATION_HAND+LOCATION_DECK+LOCATION_MZONE+LOCATION_GRAVE)
-    e1:SetValue(alias)
-    c:RegisterEffect(e1)
+	local e0=Effect.ChangeCode(c,alias,LOCATION_HAND|LOCATION_DECK|LOCATION_MZONE|LOCATION_GRAVE)
+	c:RegisterEffect(e0)
     -- Reveal 1 Fusion Monster; Special Summon from hand, then add 1 material
     local e2=Effect.CreateEffect(c)
     e2:SetDescription(aux.Stringid(id,0))

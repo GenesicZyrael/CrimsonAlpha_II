@@ -1,6 +1,5 @@
 --バスター・モード
 --Modified for CrimsonAlpha
-
 local s,id=GetID()
 function s.initial_effect(c)
 	--Activate
@@ -8,4 +7,4 @@ function s.initial_effect(c)
 	e1:SetHintTiming(0,TIMING_END_PHASE)
 	c:RegisterEffect(e1)
 end
-s.listed_series={0x104f}
+s.listed_series={SET_ASSAULT_MODE}

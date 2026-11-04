@@ -28,7 +28,7 @@ function s.initial_effect(c)
 	e2:SetTarget(s.rmtg)
 	e2:SetOperation(s.rmop)
 	c:RegisterEffect(e2)
-	Toon.SummoningSickness(c)
+	Toon.AddSummoningSickness(c)
 end
 s.listed_names={CARD_TOON_WORLD}
 function s.spfilter(c)

@@ -13,7 +13,7 @@ function s.initial_effect(c)
 	e1:SetOperation(s.flipop)
 	c:RegisterEffect(e1)
 	--Maintenance cost
-	aux.AmorphageMCost(c)
+	Effect.AddAmorphageCost(c)
 	--special summon limit
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_FIELD)

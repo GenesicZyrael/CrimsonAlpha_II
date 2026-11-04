@@ -1,5 +1,4 @@
 --Descend! Elemental HERO Terra Firma!
-
 local s,id=GetID()
 function s.initial_effect(c)
 	--Change its name to "Polymerization"

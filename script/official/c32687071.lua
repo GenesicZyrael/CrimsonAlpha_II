@@ -6,7 +6,7 @@ function s.initial_effect(c)
 	--pendulum summon
 	Pendulum.AddProcedure(c)
 	--Maintenance cost
-	aux.AmorphageMCost(c)
+	Effect.AddAmorphageCost(c)
 	--special summon limit
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)

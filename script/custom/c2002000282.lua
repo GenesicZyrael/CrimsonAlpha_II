@@ -1,7 +1,6 @@
 -- Nemleria Dream Princess - Lucidulce
 local s,id=GetID()
 local CARD_DREAMING_NEMLERIA=70155677
-
 function s.initial_effect(c)
     -- Xyz & Pendulum Summon Procedures
     Pendulum.AddProcedure(c,false)
@@ -19,17 +18,10 @@ function s.initial_effect(c)
     e1:SetTarget(s.ptg)
     e1:SetOperation(s.pop)
     c:RegisterEffect(e1)
-
     -- [Monster Effect 1] Name becomes "Dreaming Nemleria" while face-up in Extra Deck
-    local e2=Effect.CreateEffect(c)
-    e2:SetType(EFFECT_TYPE_SINGLE)
-    e2:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_UNCOPYABLE)
-    e2:SetCode(EFFECT_CHANGE_CODE)
-    e2:SetRange(LOCATION_EXTRA)
-    e2:SetCondition(s.nmcon)
-    e2:SetValue(CARD_DREAMING_NEMLERIA)
-    c:RegisterEffect(e2)
-
+	local e2=Effect.ChangeCode(c,CARD_DREAMING_NEMLERIA,LOCATION_EXTRA)
+	e2:SetCondition(s.nmcon)
+	c:RegisterEffect(e2)
     -- [Monster Effect 2] Detach to Banish 3 FD, Banish 1 FD, Set 1 Spell/Trap
     local e3=Effect.CreateEffect(c)
     e3:SetDescription(aux.Stringid(id,3))
@@ -43,7 +35,6 @@ function s.initial_effect(c)
     e3:SetTarget(s.rmtg)
     e3:SetOperation(s.rmop)
     c:RegisterEffect(e3)
-
     -- [Monster Effect 3] Place in Pendulum Zone
     -- Condition A: Leaves the Monster Zone
     local e4=Effect.CreateEffect(c)
@@ -55,7 +46,6 @@ function s.initial_effect(c)
     e4:SetTarget(s.pztg)
     e4:SetOperation(s.pzop)
     c:RegisterEffect(e4)
-    
     -- Condition B: If you control "Dreaming Nemleria"
     local e5=Effect.CreateEffect(c)
     e5:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)

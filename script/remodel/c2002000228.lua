@@ -1,10 +1,9 @@
 --Worm Xex
 --Modified for CrimsonRemodels
-
 local s,id=GetID()
 function s.initial_effect(c)
 	--Cannot be used as material for a monster from the Extra Deck, unless all other materials are "Worm" monsters
-	aux.XenoMatCheckOthers(c,s.matfilter)
+	Effect.AddXenoRestricted(c,s.matfilter)
 	--Change 1 monster on the field to face-up or face-down Defense Position 
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))

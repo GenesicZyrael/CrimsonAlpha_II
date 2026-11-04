@@ -1,6 +1,5 @@
 --バスター・モード・ゼロ
 --Modified for CrimsonAlpha
-
 local s,id=GetID()
 function s.initial_effect(c)
 	--Activate
@@ -19,7 +18,7 @@ function s.initial_effect(c)
 	e2:SetOperation(s.setop)
 	c:RegisterEffect(e2)
 end
-s.listed_series={0x104f}
+s.listed_series={SET_ASSAULT_MODE}
 s.listed_names={CARD_ASSAULT_MODE}
 function s.setfilter(c,cd)
 	return c:IsCode(CARD_ASSAULT_MODE) and c:IsSSetable()

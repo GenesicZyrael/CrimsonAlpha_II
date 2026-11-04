@@ -1,13 +1,12 @@
 --Worm Ugly
 --Modified for CrimsonRemodels
-
 local s,id=GetID()
 function s.initial_effect(c)
 	c:EnableReviveLimit()
 	Fusion.AddProcMixN(c,false,false,s.ffilter,2)
 	Fusion.AddContactProc(c,s.contactfil,s.contactop,nil,aux.TRUE,1)
 	--Cannot be used as material for a monster from the Extra Deck, unless all other materials are "Worm" monsters
-	aux.XenoMatCheckOthers(c,s.matfilter)
+	Effect.AddXenoRestricted(c,s.matfilter)
 	--Special Summon 1 Reptile "Worm" monster from your Deck
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))

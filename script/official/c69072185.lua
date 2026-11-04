@@ -25,7 +25,7 @@ function s.initial_effect(c)
 	e1:SetValue(LOCATION_REMOVED)
 	c:RegisterEffect(e1)
 	--Maintenance cost
-	aux.AmorphageMCost(c)
+	Effect.AddAmorphageCost(c)
 	--Neither player can Special Summon monsters from the Extra Deck, except "Amorphage" monsters
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_FIELD)
