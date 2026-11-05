@@ -175,23 +175,23 @@ if not AssaultMode then
 end
 
 AssaultMode.CreateProc = aux.FunctionWithNamedArgs(
-function(c,location)
+function(c,location,stage2)
 	-- Special Summon
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetCost(function(e,tp,eg,ep,ev,re,r,rp,chk) e:SetLabel(1) return true end)
-	e1:SetTarget(AssaultMode.Target(c,location))
-	e1:SetOperation(AssaultMode.Operation(c,location))
+	e1:SetTarget(AssaultMode.Target(c,location,stage2))
+	e1:SetOperation(AssaultMode.Operation(c,location,stage2))
 	c:RegisterEffect(e1)
 	return e1
 end,"handler","location")
 
--- function AssaultMode.Cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	-- e:SetLabel(1)
-	-- return true
--- end
+function AssaultMode.Cost(e,tp,eg,ep,ev,re,r,rp,chk)
+	e:SetLabel(1)
+	return true
+end
 function AssaultMode.spfilter(c,tc,e,tp)
 	local code=tc:GetCode()
 	local ocode=tc:GetOriginalCode()
@@ -209,30 +209,33 @@ function AssaultMode.costfilter(c,e,tp,location)
 	return c:IsSynchroMonster() and Duel.GetMZoneCount(tp,c)>0
 		and Duel.IsExistingMatchingCard(AssaultMode.spfilter,tp,location,0,1,nil,c,e,tp)		
 end
-function AssaultMode.Target(c,location)
+function AssaultMode.Target(c,location,stage2)
 	return function(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 		if chk==0 then
 			if e:GetLabel()~=1 then return false end
 			e:SetLabel(0)
 			return Duel.CheckReleaseGroupCost(tp,AssaultMode.costfilter,1,false,nil,nil,e,tp,location)
 		end
+		stage2 = stage2 or aux.TRUE
 		local rg=Duel.SelectReleaseGroupCost(tp,AssaultMode.costfilter,1,1,false,nil,nil,e,tp,location)
 		Duel.SetTargetCard(rg:GetFirst())
 		Duel.Release(rg,REASON_COST)
 		Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,location)
 	end
 end
-function AssaultMode.Operation(c,location)
+function AssaultMode.Operation(c,location,stage2)
 	return function(e,tp,eg,ep,ev,re,r,rp)
 		if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
 		local c=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS):GetFirst()
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 		local tc=Duel.SelectMatchingCard(tp,AssaultMode.spfilter,tp,location,0,1,1,nil,c,e,tp,location):GetFirst()
 		local nocheck=false
+		stage2 = stage2 or aux.TRUE
 		if tc:IsLocation(LOCATION_GRAVE) then nocheck=true end
-		if tc and Duel.SpecialSummonStep(tc,0,tp,tp,true,nocheck,POS_FACEUP)>0 then  
+		if tc and Duel.SpecialSummonStep(tc,0,tp,tp,true,nocheck,POS_FACEUP) then  
 			Duel.SpecialSummonComplete()
 			tc:CompleteProcedure()
+			stage2(e,tc,tp,1)
 		end
 	end
 end

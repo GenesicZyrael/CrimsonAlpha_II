@@ -1,6 +1,9 @@
 --Buster Synchron
 local s,id=GetID()
 function s.initial_effect(c)
+	--synchro summon
+	Synchro.AddProcedure(c,nil,1,1,Synchro.NonTuner(nil),1,1)
+	c:EnableReviveLimit()
 	--Activate
 	local e1=AssaultMode.CreateProc(c,LOCATION_DECK+LOCATION_HAND,s.stage2)
 	e1:SetDescription(aux.Stringid(id,0))
@@ -40,8 +43,13 @@ function s.stage2(e,tc,tp,chk)
 		end
 	end
 end
+function s.filter(c,tp)
+	return c:IsType(TYPE_SYNCHRO)
+		and c:IsControler(tp)
+		and c:IsLocation(LOCATION_MZONE) and c:IsPreviousPosition(POS_FACEUP)
+end
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(Card.IsControler,1,nil,tp)
+	return eg:IsExists(s.filter,1,nil,tp)
 end
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
