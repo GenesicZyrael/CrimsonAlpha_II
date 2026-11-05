@@ -18,7 +18,7 @@ function s.initial_effect(c)
 	e1:SetTarget(s.target)
 	e1:SetOperation(s.operation)
 	c:RegisterEffect(e1)
-	--Special Summon 1 Winged-Beast monster from the Deck
+	--Special Summon during the End Phase
 	local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e2:SetDescription(aux.Stringid(id,0))
